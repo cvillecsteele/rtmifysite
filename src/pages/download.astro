@@ -11,7 +11,8 @@ import DownloadButton from '../components/DownloadButton.astro';
 >
   <Nav />
 
-  <main class="flex-1 py-16 px-4">
+  <main class="flex-1">
+    <div class="py-16 px-4">
     <div class="max-w-3xl mx-auto">
       <h1 class="text-3xl md:text-4xl font-bold text-[#1A1A2E] mb-3">Downloads</h1>
       <p class="text-[#555555] text-lg mb-12">Everything is free. Nothing requires an account or an email address.</p>
@@ -53,46 +54,24 @@ import DownloadButton from '../components/DownloadButton.astro';
         </div>
       </div>
 
-      <!-- Future: RTMify Binary -->
-      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
+      <!-- RTMify Trace -->
+      <a href="/trace" class="block bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6 hover:shadow-md transition-shadow group">
         <div class="flex items-start gap-4">
           <div class="w-12 h-12 bg-[#2A2A4E] rounded-lg flex items-center justify-center shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/>
-              <line x1="12" y1="17" x2="12" y2="21"/>
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
             </svg>
           </div>
           <div class="flex-1">
-            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Binary</h2>
+            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1 group-hover:underline">RTMify Trace</h2>
             <p class="text-[#555555] mb-1">Mac / Windows / Linux. <span class="font-medium">Coming soon.</span></p>
-            <p class="text-sm text-[#555555] mb-5">
-              Drop your .xlsx on it. Get a PDF RTM. Runs locally with nothing uploaded and no account required.
-              Notify me when it ships:
+            <p class="text-sm text-[#555555]">
+              Drop your .xlsx on RTMify Trace. Get a PDF, Markdown, or DOCX traceability matrix. Runs locally with nothing uploaded and no account required.
             </p>
-            <form
-              action="https://submit-form.com/rtmify-binary-waitlist"
-              method="POST"
-              class="flex gap-3 max-w-md"
-            >
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@company.com"
-                class="flex-1 px-4 py-2 border border-[#DDDDDD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1A1A2E] focus:border-transparent"
-              />
-              <button
-                type="submit"
-                class="px-4 py-2 bg-[#1A1A2E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A2A4E] transition-colors"
-              >
-                Notify me
-              </button>
-            </form>
-            <p class="text-xs text-[#555555] mt-2">One email when the binary ships. No marketing.</p>
+            <p class="text-sm text-[#1A1A2E] font-semibold mt-4">Join the waitlist →</p>
           </div>
         </div>
-      </div>
+      </a>
 
       <!-- Future: Validation Package -->
       <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 opacity-60">
@@ -111,6 +90,50 @@ import DownloadButton from '../components/DownloadButton.astro';
       </div>
     </div>
   </main>
+
+    </div><!-- /max-w-3xl -->
+    </div><!-- /py-16 px-4 -->
+
+    <!-- Product ladder -->
+    <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">The RTMify product ladder</h2>
+        <div class="space-y-4">
+          <div class="bg-white border-2 border-[#1A1A2E] rounded-lg p-5 flex items-start gap-4">
+            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <span class="font-semibold text-[#1A1A2E]">RTMify Template</span>
+              <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
+              <p class="text-sm text-[#555555] mt-0.5">Build your RTM in a spreadsheet. Free download, no account.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4">
+            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <a href="/trace" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Trace</a>
+              <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming soon</span>
+              <p class="text-sm text-[#555555] mt-0.5">Generate a complete traceability artifact from your spreadsheet. Local, offline, no account.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4 opacity-60">
+            <div class="shrink-0 w-8 h-8 bg-[#2A2A4E] rounded flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <a href="/live" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Live</a>
+              <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming later</span>
+              <p class="text-sm text-[#555555] mt-0.5">Maintain traceability continuously. Live sync to your Google Sheet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
 
   <Footer />
 </BaseLayout>
