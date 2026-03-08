@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+---
+
+<BaseLayout
+  title="Download — RTMify"
+  description="Download the RTMify Requirements Tracking Template. Free .xlsx for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE."
+>
+  <Nav />
+
+  <main class="flex-1 py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold text-[#1A1A2E] mb-3">Downloads</h1>
+      <p class="text-[#555555] text-lg mb-12">Everything is free. Nothing requires an account or an email address.</p>
+
+      <!-- Primary: XLSX Template -->
+      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-[#1A1A2E] rounded-lg flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Requirements Tracking Template</h2>
+            <p class="text-[#555555] mb-1">Version 1.0 &middot; .xlsx format</p>
+            <p class="text-sm text-[#555555] mb-5">
+              Four tabs: User Needs, Requirements, Tests, Risks. Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
+              Works in Microsoft Excel and Google Sheets. The README tab explains the schema.
+            </p>
+            <DownloadButton size="md" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Future: Google Sheets -->
+      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6 opacity-60">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-[#2E7D32] rounded-lg flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">Google Sheets Version</h2>
+            <p class="text-sm text-[#555555]">Make a copy directly in Google Sheets. Coming soon.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Future: RTMify Binary -->
+      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-[#2A2A4E] rounded-lg flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Binary</h2>
+            <p class="text-[#555555] mb-1">Mac / Windows / Linux. <span class="font-medium">Coming soon.</span></p>
+            <p class="text-sm text-[#555555] mb-5">
+              Drop your .xlsx on it. Get a PDF RTM. Runs locally with nothing uploaded and no account required.
+              Notify me when it ships:
+            </p>
+            <form
+              action="https://submit-form.com/rtmify-binary-waitlist"
+              method="POST"
+              class="flex gap-3 max-w-md"
+            >
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="you@company.com"
+                class="flex-1 px-4 py-2 border border-[#DDDDDD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1A1A2E] focus:border-transparent"
+              />
+              <button
+                type="submit"
+                class="px-4 py-2 bg-[#1A1A2E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A2A4E] transition-colors"
+              >
+                Notify me
+              </button>
+            </form>
+            <p class="text-xs text-[#555555] mt-2">One email when the binary ships. No marketing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Future: Validation Package -->
+      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 opacity-60">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-[#BF360C] rounded-lg flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">Validation Package (IQ/OQ)</h2>
+            <p class="text-sm text-[#555555]">For teams that need documented installation and operational qualification. <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">Contact us.</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import StandardsLayout from '../../layouts/StandardsLayout.astro';
+
+export async function getStaticPaths() {
+  const standards = await getCollection('standards');
+  return standards.map(entry => ({
+    params: { standard: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, standard, badge_color, clauses } = entry.data;
+---
+
+<StandardsLayout
+  title={title}
+  description={description}
+  standard={standard}
+  badge_color={badge_color}
+  clauses={clauses}
+>
+  <Content />
+</StandardsLayout>

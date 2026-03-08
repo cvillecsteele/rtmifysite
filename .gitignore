@@ -1,0 +1,62 @@
+# Astro
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Emacs
+*~
+\#*\#
+.\#*
+*.elc
+/auto-save-list
+/tramp
+.org-id-locations
+*_archive
+.emacs.desktop
+.emacs.desktop.lock
+eshell/history
+eshell/lastdir
+elpa/
+.saveplace
+.org-id-locations
+
+# Vim
+*.swp
+*.swo
+*.swn
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+Session.vim
+.netrwhist
+
+# VSCode
+.vscode/
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Cloudflare Pages
+.wrangler/

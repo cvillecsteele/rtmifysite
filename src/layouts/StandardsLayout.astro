@@ -1,0 +1,132 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+
+interface Clause {
+  ref: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  standard: string;
+  badge_color: string;
+  clauses: Clause[];
+}
+
+const { title, description, standard, badge_color, clauses } = Astro.props;
+
+const standardLabels: Record<string, string> = {
+  'as9100': 'AS9100',
+  'iso-13485': 'ISO 13485',
+  'do-178c': 'DO-178C',
+  'iec-62304': 'IEC 62304',
+  'iso-26262': 'ISO 26262',
+  'aspice': 'Automotive SPICE',
+};
+
+const relatedStandards = [
+  { slug: 'as9100', label: 'AS9100', color: '#1565C0' },
+  { slug: 'iso-13485', label: 'ISO 13485', color: '#2E7D32' },
+  { slug: 'do-178c', label: 'DO-178C', color: '#6A1B9A' },
+  { slug: 'iec-62304', label: 'IEC 62304', color: '#BF360C' },
+  { slug: 'iso-26262', label: 'ISO 26262', color: '#E65100' },
+  { slug: 'aspice', label: 'ASPICE', color: '#004D40' },
+].filter(s => s.slug !== standard).slice(0, 3);
+
+const standardLabel = standardLabels[standard] ?? standard;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={`/og/${standard}.png`}
+>
+  <Nav />
+
+  <main class="flex-1">
+    <!-- Hero -->
+    <section class="py-12 px-4" style={`background-color: ${badge_color};`}>
+      <div class="max-w-6xl mx-auto">
+        <span class="inline-block text-white/70 text-sm font-mono mb-3">Standards / {standardLabel}</span>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h1>
+        <p class="text-white/80 text-lg mb-6 max-w-2xl">{description}</p>
+        <DownloadButton size="lg" />
+      </div>
+    </section>
+
+    <!-- Content + Sidebar -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="lg:grid lg:grid-cols-[1fr_260px] lg:gap-12">
+        <!-- Main content -->
+        <article class="prose prose-slate max-w-none">
+          <slot />
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="mt-10 lg:mt-0">
+          <div class="sticky top-6 space-y-6">
+            <!-- Clause Reference -->
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Key Clauses</h2>
+              <ul class="space-y-2">
+                {clauses.map(clause => (
+                  <li class="flex items-start gap-2">
+                    <code
+                      class="font-mono text-xs px-1.5 py-0.5 rounded text-white shrink-0 mt-0.5"
+                      style={`background-color: ${badge_color};`}
+                    >
+                      {clause.ref}
+                    </code>
+                    <span class="text-sm text-[#1A1A1A]">{clause.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Download CTA -->
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Free Template</h2>
+              <p class="text-sm text-[#555555] mb-4">RTMify Requirements Tracking Template (.xlsx). No form. No email. Direct download.</p>
+              <DownloadButton size="sm" />
+            </div>
+
+            <!-- Related standards -->
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Related Standards</h2>
+              <ul class="space-y-2">
+                {relatedStandards.map(s => (
+                  <li>
+                    <a
+                      href={`/standards/${s.slug}`}
+                      class="inline-flex items-center gap-2 text-sm hover:underline"
+                      style={`color: ${s.color};`}
+                    >
+                      <span
+                        class="inline-block w-2 h-2 rounded-full shrink-0"
+                        style={`background-color: ${s.color};`}
+                      ></span>
+                      {s.label} RTM Template
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-16 border-t border-[#DDDDDD] pt-12 text-center">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-3">Ready to close your traceability gaps?</h2>
+        <p class="text-[#555555] mb-6 max-w-lg mx-auto">Free download. Works in Excel and Google Sheets. Nothing leaves your machine.</p>
+        <DownloadButton size="lg" />
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+---
+
+<BaseLayout
+  title="About RTMify"
+  description="What RTMify is, what the free template does, and what the live sync version adds. Built for engineers who've been in the audit room."
+>
+  <Nav />
+
+  <main class="flex-1">
+    <!-- Hero -->
+    <section class="bg-[#1A1A2E] text-white py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">About RTMify</h1>
+        <p class="text-gray-300 text-lg">Compliance-Aware Lifecycle Manager. Starting with the tool every regulated-industry engineer already uses: the spreadsheet.</p>
+      </div>
+    </section>
+
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
+
+      <!-- The Problem -->
+      <section>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">The problem</h2>
+        <div class="prose prose-slate max-w-none">
+          <p>Requirements live in spreadsheets. That's not going to change.</p>
+          <p>
+            Every ALM tool that tried to replace the spreadsheet either failed to gain adoption or became something engineers actively work around. The reasons are structural: spreadsheets are flexible, offline-capable, diffable, and understood by every engineer, QA manager, and auditor on the planet. Nobody needs a training session to open an .xlsx file.
+          </p>
+          <p>
+            The problem isn't the spreadsheet. The problem is that spreadsheets don't have opinions about what goes in them. No required fields. No status computation. No way to know, at a glance, which requirements have no test coverage. You find out when the auditor does.
+          </p>
+          <p>
+            RTMify doesn't replace the spreadsheet. It makes the spreadsheet smarter by giving it a schema that maps to what auditors actually look for, and tooling that surfaces gaps before they become findings.
+          </p>
+        </div>
+      </section>
+
+      <hr class="border-[#DDDDDD]" />
+
+      <!-- The free template -->
+      <section>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">The free template</h2>
+        <div class="prose prose-slate max-w-none">
+          <p>
+            The RTMify Requirements Tracking Template is an .xlsx file with four tabs: User Needs, Requirements, Tests, Risks. The schema is designed to satisfy the traceability requirements of AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE simultaneously. Use it for all six, or use it for one.
+          </p>
+          <p>
+            It's a point-in-time snapshot. You fill it in, you use it, it reflects the state of your program at the moment you touch it. That's useful; it's what the audit artifact is. The template is good for tonight's RTM.
+          </p>
+          <p>
+            It's not good for keeping 47 requirements current across a 6-month program. When requirements change (and they always change) the template doesn't know. You have to update it manually. If you don't, you find out your test coverage has drifted when the auditor checks the traceability chain.
+          </p>
+        </div>
+        <div class="mt-6">
+          <DownloadButton />
+        </div>
+      </section>
+
+      <hr class="border-[#DDDDDD]" />
+
+      <!-- The local binary -->
+      <section>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">The local binary <span class="text-sm font-normal text-[#555555] ml-2">(current phase)</span></h2>
+        <div class="prose prose-slate max-w-none">
+          <p>
+            Drop your .xlsx on the RTMify binary. Get a PDF RTM with requirements, tests, risks, and a full traceability matrix.
+          </p>
+          <p>
+            It runs on your laptop. Nothing is uploaded. There's no account. For engineers at companies where "upload it to a cloud service" is not an option (defense contractors, medical device companies, regulated financial firms), this matters.
+          </p>
+          <p>
+            The binary is in development. <a href="/download" class="underline">Join the waitlist</a> to be notified when it ships.
+          </p>
+        </div>
+      </section>
+
+      <hr class="border-[#DDDDDD]" />
+
+      <!-- The live version -->
+      <section>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">The live version <span class="text-sm font-normal text-[#555555] ml-2">(paid, post-launch)</span></h2>
+        <div class="prose prose-slate max-w-none">
+          <p>
+            RTMify connected to your Google Sheet. 30-second sync. The RTMify Status column in your spreadsheet updates automatically as requirements, tests, and risks change.
+          </p>
+          <p>
+            When a requirement changes, RTMify identifies which tests now need re-evaluation and flags them in the sheet. Your RTM always reflects the current state of your program, not the state it was in the last time someone remembered to update the spreadsheet.
+          </p>
+          <p>
+            This is the paid product. It exists because the alternative (paying for an ALM platform, migrating your team to a new tool, training everyone, and still exporting a spreadsheet for every audit) is worse in every dimension except one: the ALM vendor charges more money. We think there's a better trade-off.
+          </p>
+          <p class="text-[#555555]">
+            The live version is not available yet. Demand is being validated through the free template first.
+          </p>
+        </div>
+      </section>
+
+      <hr class="border-[#DDDDDD]" />
+
+      <!-- Contact -->
+      <section>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-3">Contact</h2>
+        <p class="text-[#555555]">
+          Questions, feedback, or a specific standard we haven't covered:
+          <a href="mailto:hello@rtmify.io" class="text-[#1A1A2E] font-semibold underline hover:no-underline">hello@rtmify.io</a>
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

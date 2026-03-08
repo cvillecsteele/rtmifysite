@@ -1,0 +1,45 @@
+---
+const standards = [
+  { href: '/standards/as9100', label: 'AS9100' },
+  { href: '/standards/iso-13485', label: 'ISO 13485' },
+  { href: '/standards/do-178c', label: 'DO-178C' },
+  { href: '/standards/iec-62304', label: 'IEC 62304' },
+  { href: '/standards/iso-26262', label: 'ISO 26262' },
+  { href: '/standards/aspice', label: 'ASPICE' },
+];
+---
+
+<footer class="bg-[#1A1A2E] text-gray-400 mt-auto">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="text-white font-semibold text-lg">RTMify</a>
+        <p class="mt-2 text-sm">Requirements traceability templates for regulated-industry engineers.</p>
+      </div>
+      <div>
+        <h3 class="text-white text-sm font-semibold mb-3">Standards</h3>
+        <ul class="space-y-2 text-sm">
+          {standards.map(s => (
+            <li><a href={s.href} class="hover:text-white transition-colors">{s.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-white text-sm font-semibold mb-3">Product</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/download" class="hover:text-white transition-colors">Download Template</a></li>
+          <li><a href="/about" class="hover:text-white transition-colors">About RTMify</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-white text-sm font-semibold mb-3">Contact</h3>
+        <p class="text-sm">
+          <a href="mailto:hello@rtmify.io" class="hover:text-white transition-colors">hello@rtmify.io</a>
+        </p>
+      </div>
+    </div>
+    <div class="mt-10 pt-8 border-t border-white/10 text-sm text-center">
+      &copy; {new Date().getFullYear()} RTMify. Built for engineers who've been in the audit room.
+    </div>
+  </div>
+</footer>

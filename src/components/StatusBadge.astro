@@ -1,0 +1,25 @@
+---
+type Status = 'OK' | 'NO_TEST_LINKED' | 'UNRESOLVED' | 'MISSING_ID';
+
+interface Props {
+  status: Status;
+}
+
+const { status } = Astro.props;
+
+const config: Record<Status, { label: string; bg: string; text: string }> = {
+  OK: { label: 'OK', bg: '#DCFCE7', text: '#166534' },
+  NO_TEST_LINKED: { label: 'NO_TEST_LINKED', bg: '#FEF9C3', text: '#854D0E' },
+  UNRESOLVED: { label: 'UNRESOLVED', bg: '#FEF9C3', text: '#854D0E' },
+  MISSING_ID: { label: 'MISSING_ID', bg: '#FEE2E2', text: '#991B1B' },
+};
+
+const { label, bg, text } = config[status];
+---
+
+<code
+  class="font-mono text-xs font-semibold px-2 py-0.5 rounded"
+  style={`background-color: ${bg}; color: ${text};`}
+>
+  {label}
+</code>

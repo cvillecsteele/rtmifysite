@@ -1,0 +1,15 @@
+---
+interface Props {
+  ref: string;
+  color?: string;
+}
+
+const { ref, color = '#1A1A2E' } = Astro.props;
+---
+
+<code
+  class="font-mono text-sm px-1.5 py-0.5 rounded text-white"
+  style={`background-color: ${color};`}
+>
+  {ref}
+</code>
