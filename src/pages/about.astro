@@ -50,7 +50,7 @@ import DownloadButton from '../components/DownloadButton.astro';
             It's a point-in-time snapshot. You fill it in, you use it, it reflects the state of your program at the moment you touch it. That's useful; it's what the audit artifact is. The template is good for tonight's RTM.
           </p>
           <p>
-            It's not good for keeping 47 requirements current across a 6-month program. When requirements change (and they always change) the template doesn't know. You have to update it manually. If you don't, you find out your test coverage has drifted when the auditor checks the traceability chain.
+            It's not good for keeping 400 — or 4,000 — requirements current across a 6-month program. When requirements change (and they always change) the template doesn't know. You have to update it manually. If you don't, you find out your test coverage has drifted when the auditor checks the traceability chain. That's whey you need <a href="/trace">RTMify Trace</a>. Scroll down and keep reading.
           </p>
         </div>
         <div class="mt-6">
@@ -60,35 +60,77 @@ import DownloadButton from '../components/DownloadButton.astro';
 
       <!-- RTMify Trace -->
       <section class="border-t border-[#DDDDDD] pt-12 mt-12">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">RTMify Trace <span class="text-sm font-normal text-[#555555] ml-2">(current phase)</span></h2>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">RTMify: Trace</h2>
         <div class="prose prose-slate max-w-none">
           <p>
-            Drop your .xlsx on RTMify Trace. Get a PDF, Markdown, or DOCX requirements traceability matrix — with requirements, tests, risks, and the full traceability chain resolved.
+            Drop your .xlsx on RTMify Trace. Get a PDF, Markdown, or DOCX requirements traceability matrix, with requirements, tests, risks, and the full traceability chain resolved.
           </p>
           <p>
             It runs on your laptop. Nothing is uploaded. There's no account. For engineers at companies where "upload it to a cloud service" is not an option (defense contractors, medical device companies, regulated financial firms), this matters.
           </p>
           <p>
-            RTMify Trace is in development. <a href="/trace" class="underline">Join the waitlist</a> to be notified when it ships.
+            Your data stays local.  Your Requirements Traceability Matrix is created instantly.
           </p>
         </div>
       </section>
 
       <!-- The live version -->
       <section class="border-t border-[#DDDDDD] pt-12 mt-12">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">The live version <span class="text-sm font-normal text-[#555555] ml-2">(paid, post-launch)</span></h2>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-5">RTMify: Live</h2>
         <div class="prose prose-slate max-w-none">
           <p>
-            RTMify connected to your Google Sheet. 30-second sync. The RTMify Status column in your spreadsheet updates automatically as requirements, tests, and risks change.
+            RTMify Live connects to your Google Sheet and keeps it current — automatically. Every 30 seconds it re-evaluates the full traceability chain. When a requirement changes, Live identifies which tests need re-evaluation, flags them in the sheet, and color-codes every row: green for covered, yellow for gaps, red for errors. No manual updates. No stale RTMs.
           </p>
           <p>
-            When a requirement changes, RTMify identifies which tests now need re-evaluation and flags them in the sheet. Your RTM always reflects the current state of your program, not the state it was in the last time someone remembered to update the spreadsheet.
+            But the sheet sync is just the start.
           </p>
           <p>
-            This is the paid product. It exists because the alternative (paying for an ALM platform, migrating your team to a new tool, training everyone, and still exporting a spreadsheet for every audit) is worse in every dimension except one: the ALM vendor charges more money. We think there's a better trade-off.
+            <strong>Live reads your git repository.</strong> It walks your source tree, finds every comment where a developer referenced a requirement ID — a simple tag like <code>// REQ-047</code>, no special tooling required — and runs <code>git blame</code> on each one. The result: a live map from requirement → source file → author → commit. One convention, no process change, and you can see exactly which requirements have been implemented, by whom, and when — and which haven't been touched since the spec was written.
           </p>
-          <p class="text-[#555555]">
-            The live version is not available yet. Demand is being validated through the free template first.
+          <p>
+            <strong>Live runs an MCP server.</strong> MCP (Model Context Protocol) is the standard that lets AI assistants connect to live data. With RTMify Live running, you can open Claude, Cursor, or any MCP-compatible client and have a real conversation with your requirements: <em>"Which requirements have no test coverage?" "What breaks if I change REQ-047?" "Show me the full traceability chain for this user need." "Who implemented this and when?"</em> Your RTM becomes a knowledge base you can actually talk to.
+          </p>
+          <p>
+            <strong>Live knows your standard.</strong> Pick a profile — Medical (ISO 13485 / IEC 62304 / FDA), Aerospace (AS9100 / DO-178C), Automotive (ISO 26262 / ASPICE), or Generic — and Live enforces the right traceability chain. Medical needs Design Inputs and Outputs. Aerospace requires HLR/LLR decomposition. Automotive checks ASIL inheritance. Live surfaces the right gaps for your regulatory context, not a generic list.
+          </p>
+          <p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Legacy ALM (Jama / Polarion)</th>
+                  <th>RTMify</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Learning curve</td>
+                  <td>2-week "certification"</td>
+                  <td>0 minutes — it's Excel</td>
+                </tr>
+                <tr>
+                  <td>Data privacy</td>
+                  <td>Cloud, or complex on-prem</td>
+                  <td>100% local / your repo</td>
+                </tr>
+                <tr>
+                  <td>Traceability</td>
+                  <td>Manual linking</td>
+                  <td>Auto-mapped via git blame</td>
+                </tr>
+                <tr>
+                  <td>AI-ready?</td>
+                  <td>No / "Beta"</td>
+                  <td>Native MCP server</td>
+                </tr>
+                <tr>
+                  <td>What engineers actually use</td>
+                  <td>Excel (on the side)</td>
+                  <td>Excel (that's the whole point)</td>
+                </tr>
+              </tbody>
+            </table>
+            The alternative is a $50,000/year ALM platform, a six-month migration, and three months of training — after which half your team quietly keeps a parallel spreadsheet because the tool is too slow for daily use. This is so common it has a name: shelfware. You pay for Jama or Polarion, the program manager uses it for reports, and every engineer on the floor has an Excel file they actually trust. RTMify Live is a local process that runs on one machine, connects to the spreadsheet your team is already using, and makes your requirements queryable by AI. It doesn't replace the spreadsheet. It makes the spreadsheet the source of truth it was always supposed to be.
           </p>
         </div>
       </section>

@@ -3,11 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import ProductLadder from '../components/ProductLadder.astro';
+import DownloadButton from '../components/DownloadButton.astro';
 ---
 
 <BaseLayout
-  title="RTMify Trace — Generate a Requirements Traceability Matrix from Your Spreadsheet"
-  description="RTMify Trace is a local tool that reads your .xlsx requirements spreadsheet and generates a complete PDF, Markdown, or DOCX traceability matrix. Nothing uploaded. No account."
+  title="RTMify Trace — Requirements Traceability Matrix Generator for Regulated Industries"
+  description="Drop your .xlsx on RTMify Trace. Get a PDF, Word Doc, or Markdown RTM with full gap analysis — requirements to tests to risks. Runs locally. Nothing uploaded. Mac, Windows, Linux."
 >
   <Nav />
 
@@ -19,83 +20,93 @@ import ProductLadder from '../components/ProductLadder.astro';
         <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
           Drag. Drop. Done.
         </h1>
-        <p class="text-lg text-gray-300 mb-6 max-w-2xl">
-          A local tool that generates a complete requirements traceability matrix from your spreadsheet.
-          Drag your <code class="text-white bg-white/10 px-1.5 py-0.5 rounded text-base" style="font-family: var(--font-family-mono);">.xlsx</code> file onto RTMify Trace and get a PDF, Markdown, or DOCX traceability artifact — on your machine, with nothing uploaded.
+        <p class="text-lg text-gray-300 mb-8 max-w-2xl">
+          Drop your <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">.xlsx</code> on RTMify Trace. Get a complete requirements traceability matrix — with gap analysis, risk register, and full chain resolution — as a PDF, Word Doc, or Markdown file. Runs on your machine. Nothing uploaded.
         </p>
-        <p class="text-gray-400 text-sm">RTMify Trace is in development. Join the waitlist below.</p>
-      </div>
-    </section>
-
-    <!-- Waitlist -->
-    <section class="py-12 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
-      <div class="max-w-md mx-auto">
-        <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 text-center">
-          <h2 class="text-2xl font-bold text-[#1A1A2E] mb-3">Get notified when it ships</h2>
-          <p class="text-[#555555] mb-8">Mac, Windows, and Linux. One email when it's ready. No marketing.</p>
-          <form
-            action="https://submit-form.com/rtmify-binary-waitlist"
-            method="POST"
-            class="flex gap-3"
-          >
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@company.com"
-              class="flex-1 px-4 py-2.5 border border-[#DDDDDD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1A1A2E] focus:border-transparent"
-            />
-            <button
-              type="submit"
-              class="px-5 py-2.5 bg-[#1A1A2E] text-white text-sm font-semibold rounded-lg hover:bg-[#2A2A4E] transition-colors whitespace-nowrap"
-            >
-              Notify me
-            </button>
-          </form>
-        </div>
+        <DownloadButton href="/download" label="Download RTMify Trace" size="lg" variant="light" />
       </div>
     </section>
 
     <!-- What it does -->
-    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
+    <section class="py-16 px-4 bg-white">
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">What RTMify Trace does</h2>
-        <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-10">What Trace does</h2>
+        <div class="space-y-10">
+
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">1</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] mb-1">Read your spreadsheet</h3>
-              <p class="text-[#555555]">Trace reads the four-tab schema from your RTMify Template: User Needs, Requirements, Tests, Risks — and all the cross-reference IDs between them.</p>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Reads your spreadsheet — even if the columns aren't perfect</h3>
+              <p class="text-[#555555]">
+                Trace runs a 7-layer validation pipeline on your file. It handles the usual spreadsheet entropy: renamed tabs, reordered columns, BOM characters, smart quotes, stray whitespace. Tab names are matched by synonym (<code class="text-[#1A1A2E] bg-gray-100 px-1 rounded text-sm" style="font-family: var(--font-family-mono);">Reqs</code> finds <code class="text-[#1A1A2E] bg-gray-100 px-1 rounded text-sm" style="font-family: var(--font-family-mono);">Requirements</code>; <code class="text-[#1A1A2E] bg-gray-100 px-1 rounded text-sm" style="font-family: var(--font-family-mono);">V&V</code> finds <code class="text-[#1A1A2E] bg-gray-100 px-1 rounded text-sm" style="font-family: var(--font-family-mono);">Tests</code>), and even caught by fuzzy matching if there's a typo. Every warning carries a diagnostic code with a link to the documentation — no mystery errors.
+              </p>
             </div>
           </div>
+
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">2</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] mb-1">Resolve the traceability chain</h3>
-              <p class="text-[#555555]">Every requirement is linked to its originating user need, covering tests, and associated risks. Trace resolves the full bidirectional chain and surfaces any gaps.</p>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Resolves the traceability chain and finds the gaps</h3>
+              <p class="text-[#555555] mb-3">
+                Trace builds a directed graph from your requirements, tests, user needs, and risks — then walks it. Every requirement is checked for test coverage and user need derivation. Every risk is checked for mitigation linkage. Every gap is flagged.
+              </p>
+              <p class="text-[#555555]">
+                It also does semantic quality checks: requirements without a "shall" clause, compound requirements that should be split, high-risk items with no mitigation, residual risk that exceeds initial risk. These are the things auditors actually look for — and the things that slip through a manual review.
+              </p>
             </div>
           </div>
+
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">3</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] mb-1">Generate the artifact</h3>
-              <p class="text-[#555555]">Output a PDF, Markdown, or DOCX requirements traceability matrix — formatted for inclusion in a technical file, design history file, or audit package. Print it. Email it. Archive it.</p>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Generates the artifact — in whatever format you need</h3>
+              <p class="text-[#555555] mb-4">
+                One command, three formats. The output contains: User Needs table, full RTM (requirements → tests → coverage status), Risk Register, and a Gap Summary with every unresolved issue. Gap rows are marked and highlighted so reviewers can find them instantly.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <div class="border border-[#DDDDDD] rounded-lg px-4 py-3">
+                  <code class="text-sm font-semibold" style="background-color: #DBEAFE; color: #1E40AF; font-family: var(--font-family-mono); padding: 2px 6px; border-radius: 4px;">.docx</code>
+                  <p class="text-xs text-[#555555] mt-1.5">Word document. Tables, colored cells, page breaks. Hand it to the QA manager.</p>
+                </div>
+                <div class="border border-[#DDDDDD] rounded-lg px-4 py-3">
+                  <code class="text-sm font-semibold" style="background-color: #FEE2E2; color: #991B1B; font-family: var(--font-family-mono); padding: 2px 6px; border-radius: 4px;">.pdf</code>
+                  <p class="text-xs text-[#555555] mt-1.5">US Letter, 1-inch margins, page numbers. Goes straight into the technical file.</p>
+                </div>
+                <div class="border border-[#DDDDDD] rounded-lg px-4 py-3">
+                  <code class="text-sm font-semibold" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono); padding: 2px 6px; border-radius: 4px;">.md</code>
+                  <p class="text-xs text-[#555555] mt-1.5">Pipe-delimited Markdown. Diff it in git. Render it in your wiki.</p>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Why local -->
+    <!-- Local / privacy -->
     <section class="py-12 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Runs locally. Nothing uploaded.</h2>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Runs locally. Nothing leaves your machine.</h2>
         <p class="text-[#555555] mb-4">
-          For engineers at companies where "upload it to a cloud service" isn't an option — defense contractors, medical device manufacturers, regulated financial firms — this is the point. Trace runs on your machine. No network connection required. No account. No telemetry.
+          For engineers at defense contractors, medical device companies, and regulated financial firms — "upload it to a cloud service" is not an option. Trace is a binary that runs on your laptop. No network connection. No account. No telemetry. Your requirements data never touches a server.
         </p>
         <p class="text-[#555555]">
-          RTMify Trace is a self-serve tool provided as-is. It does one thing well: turns your spreadsheet relationships into a properly formatted traceability document. No support or configuration needed.
+          Mac, Windows, and Linux. Single binary. No installer, no dependencies, no IT ticket. Download it, drop a file on it, get an RTM.
         </p>
+      </div>
+    </section>
+
+    <!-- CI integration -->
+    <section class="py-12 px-4 bg-white border-t border-[#DDDDDD]">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Works in CI too</h2>
+        <p class="text-[#555555] mb-4">
+          Run Trace headless in your pipeline with <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">--strict</code> and the exit code equals the number of traceability gaps. Zero gaps, zero exit code — your build passes. Non-zero gaps, your build fails. Ship it in your CI the same day you download it.
+        </p>
+        <div class="bg-[#1A1A2E] rounded-lg px-5 py-4 overflow-x-auto">
+          <code class="text-green-400 text-sm whitespace-pre" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format pdf --strict --gaps-json gaps.json</code>
+        </div>
       </div>
     </section>
 
