@@ -8,6 +8,7 @@ interface Props {
   ogDescription?: string;
   ogImage?: string;
   canonical?: string;
+  jsonLd?: object;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
   ogDescription,
   ogImage = '/og/default.png',
   canonical,
+  jsonLd,
 } = Astro.props;
 
 const siteUrl = 'https://rtmify.io';
@@ -47,8 +49,16 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).href;
     <meta name="twitter:description" content={ogDescription ?? description} />
     <meta name="twitter:image" content={new URL(ogImage, siteUrl).href} />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Structured Data -->
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
     <!-- Plausible Analytics (privacy-first, no cookie banner) -->
     <script defer data-domain="rtmify.io" src="https://plausible.io/js/script.file-downloads.js" is:inline></script>

@@ -1,5 +1,5 @@
 ---
-title: "Automotive SPICE Requirements Traceability Matrix — Free Template"
+title: "ASPICE Traceability Template — Automotive SPICE Requirements RTM (Free Download)"
 description: "Free RTM template for Automotive SPICE. Covers SWE.1–SWE.6, SYS.2 traceability requirements. Download .xlsx, generate PDF."
 standard: aspice
 badge_color: "#004D40"

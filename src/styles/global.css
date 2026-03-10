@@ -17,8 +17,9 @@
   --color-iso26262: #E65100;
   --color-aspice: #004D40;
 
-  --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-family-mono: ui-monospace, "Cascadia Code", monospace;
+  --font-family-sans: 'DM Sans', system-ui, sans-serif;
+  --font-family-display: 'Syne', system-ui, sans-serif;
+  --font-family-mono: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 body {
@@ -26,3 +27,16 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
 }
+
+.hero-texture {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-hero-1 { animation: fadeUp 0.5s ease both; }
+.animate-hero-2 { animation: fadeUp 0.5s ease 0.1s both; }
+.animate-hero-3 { animation: fadeUp 0.5s ease 0.2s both; }
