@@ -3,12 +3,14 @@ interface Props {
   href?: string;
   label?: string;
   size?: 'sm' | 'md' | 'lg';
+  variant?: 'dark' | 'light';
 }
 
 const {
   href = '/RTMify_Requirements_Tracking_Template.xlsx',
   label = 'Download Template (.xlsx)',
   size = 'md',
+  variant = 'dark',
 } = Astro.props;
 
 const sizeClasses = {
@@ -16,15 +18,20 @@ const sizeClasses = {
   md: 'px-6 py-3 text-base',
   lg: 'px-8 py-4 text-lg',
 };
+
+const variantClasses = {
+  dark: 'bg-[#1A1A2E] text-white hover:bg-[#2A2A4E]',
+  light: 'bg-white text-[#1A1A2E] hover:bg-gray-100',
+};
 ---
 
 <a
   href={href}
   download
-  class={`inline-flex items-center gap-2 bg-[#1A1A2E] text-white font-semibold rounded-lg hover:bg-[#2A2A4E] transition-colors ${sizeClasses[size]}`}
+  class={`group inline-flex items-center gap-2 font-semibold rounded-lg transition-colors ${sizeClasses[size]} ${variantClasses[variant]}`}
   data-plausible-event="Download Template"
 >
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="group-hover:translate-y-0.5 transition-transform duration-150">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
     <polyline points="7 10 12 15 17 10"/>
     <line x1="12" y1="15" x2="12" y2="3"/>

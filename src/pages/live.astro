@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import ProductLadder from '../components/ProductLadder.astro';
 ---
 
 <BaseLayout
@@ -15,7 +16,7 @@ import Footer from '../components/Footer.astro';
     <section class="bg-[#1A1A2E] text-white py-20 px-4">
       <div class="max-w-3xl mx-auto">
         <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">RTMify Live</p>
-        <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight">
+        <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
           Your RTM. Always current.
         </h1>
         <p class="text-lg text-gray-300 mb-6 max-w-2xl">
@@ -70,43 +71,7 @@ import Footer from '../components/Footer.astro';
       </div>
     </section>
 
-    <!-- Product ladder -->
-    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">The RTMify product ladder</h2>
-        <div class="space-y-4">
-          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4">
-            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </div>
-            <div>
-              <a href="/download" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Template</a>
-              <p class="text-sm text-[#555555] mt-0.5">Build your RTM in a spreadsheet. Free download, no account.</p>
-            </div>
-          </div>
-          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4">
-            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            </div>
-            <div>
-              <a href="/trace" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Trace</a>
-              <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming soon</span>
-              <p class="text-sm text-[#555555] mt-0.5">Generate a complete traceability artifact from your spreadsheet. Local, offline, no account.</p>
-            </div>
-          </div>
-          <div class="bg-white border-2 border-[#1A1A2E] rounded-lg p-5 flex items-start gap-4">
-            <div class="shrink-0 w-8 h-8 bg-[#2A2A4E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div>
-              <span class="font-semibold text-[#1A1A2E]">RTMify Live</span>
-              <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
-              <p class="text-sm text-[#555555] mt-0.5">Maintain traceability continuously. Live sync to your Google Sheet.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ProductLadder current="live" />
   </main>
 
   <Footer />

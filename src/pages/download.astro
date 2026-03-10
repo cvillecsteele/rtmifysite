@@ -3,137 +3,105 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import DownloadButton from '../components/DownloadButton.astro';
+import ProductLadder from '../components/ProductLadder.astro';
+
+const softwareSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'RTMify Requirements Tracking Template',
+  description: 'Free requirements traceability matrix template for regulated industries. Four-tab schema covering User Needs, Requirements, Tests, and Risks.',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Windows, macOS, Linux',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  url: 'https://rtmify.io/download',
+};
 ---
 
 <BaseLayout
-  title="Download — RTMify"
-  description="Download the RTMify Requirements Tracking Template. Free .xlsx for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE."
+  title="Free RTM Template Download — RTMify Requirements Tracking Spreadsheet"
+  description="Download the free RTMify Requirements Tracking Template (.xlsx). Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE."
+  jsonLd={softwareSchema}
 >
   <Nav />
 
   <main class="flex-1">
-    <div class="py-16 px-4">
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-3xl md:text-4xl font-bold text-[#1A1A2E] mb-3">Downloads</h1>
-      <p class="text-[#555555] text-lg mb-12">Everything is free. Nothing requires an account or an email address.</p>
-
-      <!-- Primary: XLSX Template -->
-      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-[#1A1A2E] rounded-lg flex items-center justify-center shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Requirements Tracking Template</h2>
-            <p class="text-[#555555] mb-1">Version 1.0 &middot; .xlsx format</p>
-            <p class="text-sm text-[#555555] mb-5">
-              Four tabs: User Needs, Requirements, Tests, Risks. Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
-              Works in Microsoft Excel and Google Sheets. The README tab explains the schema.
-            </p>
-            <DownloadButton size="md" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Future: Google Sheets -->
-      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6 opacity-60">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-[#2E7D32] rounded-lg flex items-center justify-center shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">Google Sheets Version</h2>
-            <p class="text-sm text-[#555555]">Make a copy directly in Google Sheets. Coming soon.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- RTMify Trace -->
-      <a href="/trace" class="block bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6 hover:shadow-md transition-shadow group">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-[#2A2A4E] rounded-lg flex items-center justify-center shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1 group-hover:underline">RTMify Trace</h2>
-            <p class="text-[#555555] mb-1">Mac / Windows / Linux. <span class="font-medium">Coming soon.</span></p>
-            <p class="text-sm text-[#555555]">
-              Drop your .xlsx on RTMify Trace. Get a PDF, Markdown, or DOCX traceability matrix. Runs locally with nothing uploaded and no account required.
-            </p>
-            <p class="text-sm text-[#1A1A2E] font-semibold mt-4">Join the waitlist →</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Future: Validation Package -->
-      <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 opacity-60">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-[#BF360C] rounded-lg flex items-center justify-center shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M9 11l3 3L22 4"/>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">Validation Package (IQ/OQ)</h2>
-            <p class="text-sm text-[#555555]">For teams that need documented installation and operational qualification. <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">Contact us.</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-    </div><!-- /max-w-3xl -->
-    </div><!-- /py-16 px-4 -->
-
-    <!-- Product ladder -->
-    <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+    <!-- Hero -->
+    <section class="bg-[#1A1A2E] text-white py-16 px-4">
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">The RTMify product ladder</h2>
-        <div class="space-y-4">
-          <div class="bg-white border-2 border-[#1A1A2E] rounded-lg p-5 flex items-start gap-4">
-            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </div>
-            <div>
-              <span class="font-semibold text-[#1A1A2E]">RTMify Template</span>
-              <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
-              <p class="text-sm text-[#555555] mt-0.5">Build your RTM in a spreadsheet. Free download, no account.</p>
-            </div>
-          </div>
-          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4">
-            <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            </div>
-            <div>
-              <a href="/trace" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Trace</a>
-              <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming soon</span>
-              <p class="text-sm text-[#555555] mt-0.5">Generate a complete traceability artifact from your spreadsheet. Local, offline, no account.</p>
-            </div>
-          </div>
-          <div class="bg-white border border-[#DDDDDD] rounded-lg p-5 flex items-start gap-4 opacity-60">
-            <div class="shrink-0 w-8 h-8 bg-[#2A2A4E] rounded flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div>
-              <a href="/live" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Live</a>
-              <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming later</span>
-              <p class="text-sm text-[#555555] mt-0.5">Maintain traceability continuously. Live sync to your Google Sheet.</p>
-            </div>
-          </div>
-        </div>
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Downloads</h1>
+        <p class="text-gray-300 text-lg">Everything is free. Nothing requires an account or an email address.</p>
       </div>
     </section>
-  </main>
 
+    <!-- Cards -->
+    <div class="py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+
+        <!-- Primary: XLSX Template -->
+        <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-[#1A1A2E] rounded-lg flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Requirements Tracking Template</h2>
+              <p class="text-[#555555] mb-1">Version 1.0 &middot; .xlsx format</p>
+              <p class="text-sm text-[#555555] mb-5">
+                Four tabs: User Needs, Requirements, Tests, Risks. Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
+                Works in Microsoft Excel and Google Sheets. The README tab explains the schema.
+              </p>
+              <DownloadButton size="md" />
+            </div>
+          </div>
+        </div>
+
+        <!-- RTMify Trace -->
+        <a href="/trace" class="block bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6 hover:shadow-md transition-shadow group">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-[#2A2A4E] rounded-lg flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-[#1A1A2E] mb-1 group-hover:underline">RTMify Trace</h2>
+              <p class="text-[#555555] mb-1">Mac / Windows / Linux. <span class="font-medium">Coming soon.</span></p>
+              <p class="text-sm text-[#555555]">
+                Drop your .xlsx on RTMify Trace. Get a PDF, Markdown, or DOCX traceability matrix. Runs locally with nothing uploaded and no account required.
+              </p>
+              <p class="text-sm text-[#1A1A2E] font-semibold mt-4">Join the waitlist →</p>
+            </div>
+          </div>
+        </a>
+
+        <!-- Future: Validation Package -->
+        <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 opacity-60">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-[#BF360C] rounded-lg flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">Validation Package (IQ/OQ)</h2>
+              <p class="text-sm text-[#555555]">For teams that need documented installation and operational qualification. <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">Contact us.</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <ProductLadder current="template" />
+  </main>
 
   <Footer />
 </BaseLayout>

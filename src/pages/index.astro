@@ -6,34 +6,47 @@ import DownloadButton from '../components/DownloadButton.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 
 const standards = [
-  { slug: 'as9100', label: 'AS9100', color: '#1565C0' },
-  { slug: 'iso-13485', label: 'ISO 13485', color: '#2E7D32' },
-  { slug: 'do-178c', label: 'DO-178C', color: '#6A1B9A' },
-  { slug: 'iec-62304', label: 'IEC 62304', color: '#BF360C' },
-  { slug: 'iso-26262', label: 'ISO 26262', color: '#E65100' },
-  { slug: 'aspice', label: 'ASPICE', color: '#004D40' },
+  { slug: 'as9100', label: 'AS9100', color: '#1565C0', desc: 'Aerospace quality management. §8.3 design controls, traceability, and configuration management.' },
+  { slug: 'iso-13485', label: 'ISO 13485', color: '#2E7D32', desc: 'Medical device QMS. §7.3 design inputs, outputs, V&V, and risk per ISO 14971.' },
+  { slug: 'do-178c', label: 'DO-178C', color: '#6A1B9A', desc: 'Airborne software. HLR/LLR traceability, DAL annotation, bidirectional coverage.' },
+  { slug: 'iec-62304', label: 'IEC 62304', color: '#BF360C', desc: 'Medical device software lifecycle. §5.2–5.7, safety class, SOUP tracking.' },
+  { slug: 'iso-26262', label: 'ISO 26262', color: '#E65100', desc: 'Automotive functional safety. HARA, ASIL assignment, V-model traceability.' },
+  { slug: 'aspice', label: 'ASPICE', color: '#004D40', desc: 'Automotive SPICE. SYS.2/SWE.1–6 bidirectional traceability and capability evidence.' },
 ];
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'RTMify',
+  url: 'https://rtmify.io',
+  description: 'Free requirements traceability matrix templates for regulated industries. Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.',
+};
 ---
 
 <BaseLayout
-  title="RTMify — Requirements Traceability Matrix Templates for Regulated Industries"
+  title="RTMify — Free Requirements Traceability Matrix Template for Regulated Industries"
   description="Free RTM template for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE. Download .xlsx, generate PDF. Nothing leaves your machine."
+  jsonLd={organizationSchema}
 >
   <Nav />
 
   <main class="flex-1">
     <!-- Hero -->
-    <section class="bg-[#1A1A2E] text-white py-20 px-4">
+    <section class="hero-texture bg-[#1A1A2E] text-white py-20 px-4">
       <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-6xl font-bold mb-5 tracking-tight">
-          Your RTM.<br />Done tonight.
-        </h1>
-        <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-          A requirements traceability template that works the way you actually work, in a spreadsheet.
-          Free download. Nothing leaves your machine.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <DownloadButton size="lg" />
+        <div class="animate-hero-1">
+          <h1 class="text-4xl md:text-[60px] md:leading-[1.15] font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            Your RTM.<br />Done tonight.
+          </h1>
+        </div>
+        <div class="animate-hero-2">
+          <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            A requirements traceability template that works the way you actually work, in a spreadsheet.
+            Free download. Nothing leaves your machine.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-hero-3">
+          <DownloadButton size="lg" variant="light" />
           <a href="#how-it-works" class="text-gray-300 hover:text-white transition-colors text-base">
             Learn more ↓
           </a>
@@ -42,10 +55,10 @@ const standards = [
     </section>
 
     <!-- Standards Coverage Bar -->
-    <section class="bg-[#2A2A4E] py-5 px-4">
+    <section class="bg-white border-b border-[#DDDDDD] py-5 px-4">
       <div class="max-w-4xl mx-auto">
         <div class="flex flex-wrap gap-3 justify-center items-center">
-          <span class="text-gray-400 text-sm mr-1">Covers:</span>
+          <span class="text-[#555555] text-sm mr-1">Covers:</span>
           {standards.map(s => (
             <a
               href={`/standards/${s.slug}`}
@@ -62,24 +75,29 @@ const standards = [
     <!-- What It Does (3-column) -->
     <section class="py-16 px-4 bg-white">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] text-center mb-10">What the template does</h2>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] text-center mb-10">How to make audits not suck</h2>
         <div class="grid md:grid-cols-3 gap-8">
           <div class="border border-[#DDDDDD] rounded-lg p-6">
             <h3 class="font-bold text-[#1A1A2E] text-lg mb-2">Four tabs. One schema.</h3>
             <p class="text-[#555555]">User Needs, Requirements, Tests, Risks. The relationships that every audit cares about, in a structure your team already knows how to use.</p>
           </div>
           <div class="border border-[#DDDDDD] rounded-lg p-6">
-            <h3 class="font-bold text-[#1A1A2E] text-lg mb-2">RTMify Status column.</h3>
-            <p class="text-[#555555] mb-3">After each sync, every row gets a status. Gaps surface before the auditor does.</p>
+            <h3 class="font-bold text-[#1A1A2E] text-lg mb-2">Generate an RTM.</h3>
+            <p class="text-[#555555] mb-3">Check your audit status: just drag &amp; drop the file onto <a href="/trace" class="underline hover:text-[#1A1A2E]">RTMify Trace</a>. Get a full analysis and your RTM.</p>
+            <div class="flex flex-wrap gap-2">
+              <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DBEAFE; color: #1E40AF; font-family: var(--font-family-mono);">.docx</code>
+              <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #FEE2E2; color: #991B1B; font-family: var(--font-family-mono);">.pdf</code>
+              <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">.md</code>
+            </div>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-lg p-6">
+            <h3 class="font-bold text-[#1A1A2E] text-lg mb-2">Live traceability updates.</h3>
+            <p class="text-[#555555] mb-3">Using <a href="/trace" class="underline hover:text-[#1A1A2E]">RTMify Live</a>: whenever anyone touches a cell in the sheet, every row gets a realtime status update. Gaps surface <i>before the auditor does.</i></p>
             <div class="flex flex-wrap gap-2">
               <StatusBadge status="OK" />
               <StatusBadge status="NO_TEST_LINKED" />
               <StatusBadge status="MISSING_ID" />
             </div>
-          </div>
-          <div class="border border-[#DDDDDD] rounded-lg p-6">
-            <h3 class="font-bold text-[#1A1A2E] text-lg mb-2">Generate an RTM.</h3>
-            <p class="text-[#555555]">Drop the file on <a href="/trace" class="underline hover:text-[#1A1A2E]">RTMify Trace</a>. Get a PDF with requirements, tests, risks, and a full traceability matrix. Nothing leaves your laptop.</p>
           </div>
         </div>
       </div>
@@ -89,15 +107,18 @@ const standards = [
     <section id="how-it-works" class="py-16 px-4 bg-[#F5F5F5]">
       <div class="max-w-3xl mx-auto">
         <h2 class="text-2xl font-bold text-[#1A1A2E] text-center mb-10">How it works</h2>
-        <ol class="space-y-6">
+        <ol class="relative">
           {[
             { n: 1, title: 'Download the template', desc: 'Free .xlsx file. No account, no email, no friction.' },
             { n: 2, title: 'Fill in your requirements, tests, risks', desc: 'Use the four tabs: User Needs, Requirements, Tests, Risks. Add your IDs, descriptions, and cross-references.' },
-            { n: 3, title: 'Drop the file on RTMify Trace', desc: 'Local tool. Runs on your machine. No internet connection required.' },
-            { n: 4, title: 'Get a PDF RTM', desc: 'Full traceability matrix from requirements to tests to risks. Print it. Email it. Put it in your technical file.' },
-          ].map(step => (
-            <li class="flex gap-5 items-start">
-              <span class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">
+            { n: 3, title: <>Drop the file on <a href="/trace" class="underline hover:text-[#1A1A2E]">RTMify Trace</a></>, desc: 'Runs on your machine. No need to call IT, your data always stays local.' },
+            { n: 4, title: 'Get an RTM as a PDF / Word Doc / Markdown', desc: 'Full traceability matrix from requirements to tests to risks. Print it. Email it. Put it in your technical file. Dazzle your friends.' },
+          ].map((step, i) => (
+            <li class="flex gap-5 items-start relative pb-6 last:pb-0">
+              {i < 3 && (
+                <div class="absolute left-[17px] top-9 bottom-0 w-px bg-[#DDDDDD]" aria-hidden="true"></div>
+              )}
+              <span class="relative z-10 w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">
                 {step.n}
               </span>
               <div>
@@ -110,29 +131,13 @@ const standards = [
       </div>
     </section>
 
-    <!-- RTM Template SEO Section -->
-    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Free Requirements Traceability Matrix (RTM) Template</h2>
-        <p class="text-[#555555] mb-4">
-          The RTMify spreadsheet is a free requirements traceability matrix template for Excel and Google Sheets,
-          built for engineers working under regulated-industry standards. It structures your requirements, tests,
-          and risks in the four-tab schema that auditors expect—no custom tooling, no setup, no data leaving your machine.
-        </p>
-        <p class="text-[#555555]">
-          Download the .xlsx, fill in your data, and have a complete RTM ready for review.
-          Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
-        </p>
-      </div>
-    </section>
-
     <!-- Social Proof / Credibility -->
-    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
-      <div class="max-w-3xl mx-auto text-center">
-        <blockquote class="text-xl text-[#1A1A2E] font-medium italic">
-          "Built for engineers who've been in the audit room."
-        </blockquote>
-        <p class="mt-4 text-[#555555] text-sm">Designed by people who've written RTMs at 11pm the night before an audit. We know what actually gets flagged.</p>
+    <section class="py-10 px-4 bg-[#1A1A2E]">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-white/80 text-base">
+          Used by quality engineers at medical device, aerospace, and automotive companies.
+          Built by people who've written RTMs at 11pm the night before an audit.
+        </p>
       </div>
     </section>
 
@@ -145,35 +150,19 @@ const standards = [
           {standards.map(s => (
             <a
               href={`/standards/${s.slug}`}
-              class="group block border border-[#DDDDDD] rounded-lg p-5 bg-white hover:shadow-md transition-shadow"
+              class="group block border border-[#DDDDDD] rounded-lg p-5 bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+              style={`border-left: 4px solid ${s.color};`}
             >
               <div
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold text-white mb-3"
+                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold text-white mb-3"
                 style={`background-color: ${s.color};`}
               >
                 {s.label}
               </div>
-              <h3 class="font-semibold text-[#1A1A2E] group-hover:underline">{s.label} RTM Template</h3>
-              <p class="text-sm text-[#555555] mt-1">Clause references, common audit gaps, and traceability guidance.</p>
+              <h3 class="font-semibold text-[#1A1A2E] group-hover:underline mb-1">{s.label} RTM Template</h3>
+              <p class="text-sm text-[#555555]">{s.desc}</p>
             </a>
           ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">Common questions</h2>
-        <div class="space-y-6">
-          <div>
-            <h3 class="font-semibold text-[#1A1A2E] mb-1">Is support available?</h3>
-            <p class="text-[#555555]">RTMify is a self-serve tool. The template and RTMify Trace are provided as-is, with no onboarding, customization, or support included. If you can fill in a spreadsheet, you can use it.</p>
-          </div>
-          <div>
-            <h3 class="font-semibold text-[#1A1A2E] mb-1">What if we need expert help?</h3>
-            <p class="text-[#555555]">Consulting engagements are available at $5,000/day with a signed MSA. <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">Email us</a> with a brief description of the engagement.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -184,7 +173,7 @@ const standards = [
         <h2 class="text-2xl font-bold text-white mb-3">Download the template</h2>
         <p class="text-gray-300 mb-6">Free. No account. No email. Works in Excel and Google Sheets.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <DownloadButton size="lg" />
+          <DownloadButton size="lg" variant="light" />
           <a href="/about" class="text-gray-300 hover:text-white transition-colors">
             Learn about RTMify →
           </a>

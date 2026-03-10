@@ -1,0 +1,72 @@
+---
+interface Props {
+  current: 'template' | 'trace' | 'live';
+}
+const { current } = Astro.props;
+---
+<section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">The RTMify product ladder</h2>
+    <div class="space-y-4">
+
+      <!-- Template -->
+      <div class={`bg-white rounded-lg p-5 flex items-start gap-4 ${current === 'template' ? 'border-2 border-[#1A1A2E]' : 'border border-[#DDDDDD]'}`}>
+        <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div>
+          {current === 'template' ? (
+            <span class="font-semibold text-[#1A1A2E]">RTMify Template</span>
+          ) : (
+            <a href="/download" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Template</a>
+          )}
+          {current === 'template' && (
+            <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
+          )}
+          <p class="text-sm text-[#555555] mt-0.5">Build your RTM in a spreadsheet. Free download, no account.</p>
+        </div>
+      </div>
+
+      <!-- Trace -->
+      <div class={`bg-white rounded-lg p-5 flex items-start gap-4 ${current === 'trace' ? 'border-2 border-[#1A1A2E]' : 'border border-[#DDDDDD]'}`}>
+        <div class="shrink-0 w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          {current === 'trace' ? (
+            <span class="font-semibold text-[#1A1A2E]">RTMify Trace</span>
+          ) : (
+            <a href="/trace" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Trace</a>
+          )}
+          {current === 'trace' ? (
+            <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
+          ) : (
+            <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming soon</span>
+          )}
+          <p class="text-sm text-[#555555] mt-0.5">Generate a complete traceability artifact from your spreadsheet. Local, offline, no account.</p>
+        </div>
+      </div>
+
+      <!-- Live -->
+      <div class={`bg-white rounded-lg p-5 flex items-start gap-4 ${current === 'live' ? 'border-2 border-[#1A1A2E]' : 'border border-[#DDDDDD] opacity-60'}`}>
+        <div class="shrink-0 w-8 h-8 bg-[#2A2A4E] rounded flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          {current === 'live' ? (
+            <span class="font-semibold text-[#1A1A2E]">RTMify Live</span>
+          ) : (
+            <a href="/live" class="font-semibold text-[#1A1A2E] hover:underline">RTMify Live</a>
+          )}
+          {current === 'live' ? (
+            <span class="ml-2 text-xs font-medium text-white bg-[#1A1A2E] px-2 py-0.5 rounded-full">You are here</span>
+          ) : (
+            <span class="ml-2 text-xs font-medium text-[#555555] border border-[#DDDDDD] px-2 py-0.5 rounded-full">Coming later</span>
+          )}
+          <p class="text-sm text-[#555555] mt-0.5">Maintain traceability continuously. Live sync to your Google Sheet.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -38,12 +38,32 @@ const relatedStandards = [
 ].filter(s => s.slug !== standard).slice(0, 3);
 
 const standardLabel = standardLabels[standard] ?? standard;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  author: {
+    '@type': 'Organization',
+    name: 'RTMify',
+    url: 'https://rtmify.io',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'RTMify',
+    url: 'https://rtmify.io',
+  },
+  datePublished: '2024-11-01',
+  url: `https://rtmify.io/standards/${standard}`,
+};
 ---
 
 <BaseLayout
   title={title}
   description={description}
   ogImage={`/og/${standard}.png`}
+  jsonLd={articleSchema}
 >
   <Nav />
 
@@ -52,11 +72,20 @@ const standardLabel = standardLabels[standard] ?? standard;
     <section class="py-12 px-4" style={`background-color: ${badge_color};`}>
       <div class="max-w-6xl mx-auto">
         <span class="inline-block text-white/70 text-sm font-mono mb-3">Standards / {standardLabel}</span>
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4" style="font-family: var(--font-family-display);">{title}</h1>
         <p class="text-white/80 text-lg mb-6 max-w-2xl">{description}</p>
-        <DownloadButton size="lg" />
+        <DownloadButton size="lg" variant="light" />
       </div>
     </section>
+
+    <!-- Summary stat bar -->
+    <div class="border-b border-[#DDDDDD] bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex gap-6 text-sm text-[#555555]">
+        <span><strong class="text-[#1A1A2E]">{clauses.length}</strong> key clauses</span>
+        <span>Common audit gaps covered</span>
+        <span>Free .xlsx download</span>
+      </div>
+    </div>
 
     <!-- Content + Sidebar -->
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -77,7 +106,7 @@ const standardLabel = standardLabels[standard] ?? standard;
                   <li class="flex items-start gap-2">
                     <code
                       class="font-mono text-xs px-1.5 py-0.5 rounded text-white shrink-0 mt-0.5"
-                      style={`background-color: ${badge_color};`}
+                      style={`background-color: ${badge_color}; font-family: var(--font-family-mono);`}
                     >
                       {clause.ref}
                     </code>
