@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+---
+
+<BaseLayout
+  title="Pricing — RTMify"
+  description="RTMify Template is free. RTMify Trace from $79. RTMify Live from $599. Perpetual licenses. No subscription required. Source code escrow."
+>
+  <Nav />
+
+  <main class="flex-1">
+    <!-- Hero -->
+    <section class="bg-[#1A1A2E] text-white py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Pricing</h1>
+        <p class="text-gray-300 text-lg">Perpetual licenses. No subscriptions. If we ever abandon the product, the source goes to escrow and becomes open source.</p>
+      </div>
+    </section>
+
+    <!-- Template -->
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#1A1A2E]">RTMify Template</h2>
+        </div>
+        <div class="border border-[#DDDDDD] rounded-xl p-8 flex flex-col sm:flex-row sm:items-center gap-6">
+          <div class="flex-1">
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">Free</p>
+            <p class="text-[#555555]">Forever. No account, no email, no friction. Four-tab .xlsx schema covering all six standards.</p>
+          </div>
+          <DownloadButton size="lg" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Trace -->
+    <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-8 h-8 bg-[#1A1A2E] rounded flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#1A1A2E]">RTMify Trace</h2>
+        </div>
+        <p class="text-[#555555] mb-8 ml-11">Single binary. Drag-and-drop RTM generation. <a href="/trace" class="underline hover:text-[#1A1A2E]">Learn more →</a></p>
+
+        <div class="grid sm:grid-cols-3 gap-5">
+
+          <!-- Lab -->
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6 flex flex-col">
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Lab / Non-Commercial</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$79</p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$10/yr maintenance</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Universities, research labs</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Personal non-commercial use</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> PDF, DOCX, Markdown output</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Mac, Windows, Linux</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=trace-lab" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $79</a>
+          </div>
+
+          <!-- Individual -->
+          <div class="bg-white border-2 border-[#1A1A2E] rounded-xl p-6 flex flex-col relative">
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1A1A2E] text-white text-xs font-semibold px-3 py-1 rounded-full">Most popular</span>
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Individual</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$99</p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$20/yr maintenance</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Commercial use, one person</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> PDF, DOCX, Markdown output</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Mac, Windows, Linux</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> CI/CD <code class="bg-gray-100 px-1 rounded text-xs" style="font-family: var(--font-family-mono);">--strict</code> mode</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=trace-individual" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $99</a>
+          </div>
+
+          <!-- Team -->
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6 flex flex-col">
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Team / Commercial</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$199</p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$40/yr maintenance</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Unlimited seats, one org</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> PDF, DOCX, Markdown output</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Mac, Windows, Linux</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> CI/CD <code class="bg-gray-100 px-1 rounded text-xs" style="font-family: var(--font-family-mono);">--strict</code> mode</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=trace-team" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $199</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Live -->
+    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-8 h-8 bg-[#2A2A4E] rounded flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-[#1A1A2E]">RTMify Live</h2>
+        </div>
+        <p class="text-[#555555] mb-8 ml-11">Live sheet sync, git blame traceability, native MCP server. <a href="/live" class="underline hover:text-[#1A1A2E]">Learn more →</a></p>
+
+        <div class="grid sm:grid-cols-3 gap-5">
+
+          <!-- Individual -->
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6 flex flex-col">
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Individual</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$599</p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$120/yr maintenance</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> One machine, one user</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Google Sheets sync</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Git blame traceability</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Native MCP server</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=live-individual" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $599</a>
+          </div>
+
+          <!-- Per Seat -->
+          <div class="bg-white border-2 border-[#1A1A2E] rounded-xl p-6 flex flex-col relative">
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1A1A2E] text-white text-xs font-semibold px-3 py-1 rounded-full">Most popular</span>
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Per Seat</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$1,499<span class="text-lg font-normal text-[#555555]">/seat</span></p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$300/yr per seat</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Named user, any machine</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Google Sheets sync</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Git blame traceability</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Native MCP server</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=live-seat" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $1,499/seat</a>
+          </div>
+
+          <!-- Site -->
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6 flex flex-col">
+            <p class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Site License</p>
+            <p class="text-4xl font-bold text-[#1A1A2E] mb-1">$4,999</p>
+            <p class="text-sm text-[#555555] mb-5">one-time &middot; +$1,000/yr maintenance</p>
+            <ul class="space-y-2 text-sm text-[#555555] mb-8 flex-1">
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Unlimited users, one org</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Google Sheets sync</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Git blame traceability</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Native MCP server</li>
+              <li class="flex gap-2"><span class="text-[#1A1A2E] font-bold shrink-0">✓</span> Perpetual license</li>
+            </ul>
+            <a href="/order?product=live-site" class="block text-center bg-[#1A1A2E] text-white font-semibold rounded-lg px-5 py-3 hover:bg-[#2A2A4E] transition-colors text-sm">Buy — $4,999</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Our commitments -->
+    <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">Our commitments</h2>
+        <div class="grid sm:grid-cols-3 gap-6">
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-2">Perpetual license</h3>
+            <p class="text-sm text-[#555555]">You buy it once, you own it. The version you purchase works forever. Annual maintenance is optional. It covers updates and bug fixes.</p>
+          </div>
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-2">Source code escrow</h3>
+            <p class="text-sm text-[#555555]">This compliance tooling will never disappear out from under you.</p>
+          </div>
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-2">No subscription creep</h3>
+            <p class="text-sm text-[#555555]">We will never convert a perpetual license to a subscription, or raise maintenance prices on licenses already issued. The terms you buy under are the terms that apply.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-8">Questions</h2>
+        <div class="space-y-6">
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-1">What does annual maintenance cover?</h3>
+            <p class="text-[#555555]">New features, bug fixes, and compatibility updates for the year. If you skip a year, your license keeps working. You can renew at any time.</p>
+          </div>
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-1">What counts as "commercial use" for Trace?</h3>
+            <p class="text-[#555555]">If you're using it at work (even at a non-profit) that's commercial. Lab/Non-Commercial is for students, academic researchers, and personal projects with no commercial application.</p>
+          </div>
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-1">We need a purchase order or invoice. Can you do that?</h3>
+            <p class="text-[#555555]">Yes. <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">Email us</a> with your org name and the license you need. We'll issue an invoice.</p>
+          </div>
+
+          <div class="pl-4 border-l-2 border-[#DDDDDD]">
+            <h3 class="font-semibold text-[#1A1A2E] mb-1">Is there a trial?</h3>
+            <p class="text-[#555555]">The free requirements traceability template spreadsheet is the trial. Download it, use it, understand the schema. RTMify Trace reads that exact file.  If the template works for you, Trace will too. RTMify Live connects to your Google Sheet and has a 30-day money-back policy if it doesn't do what you need.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>

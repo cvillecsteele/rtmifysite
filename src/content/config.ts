@@ -17,4 +17,15 @@ const standards = defineCollection({
   }),
 });
 
-export const collections = { standards };
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.string(),
+    author: z.string().optional(),
+    draft: z.boolean().optional().default(false),
+  }),
+});
+
+export const collections = { standards, blog };
