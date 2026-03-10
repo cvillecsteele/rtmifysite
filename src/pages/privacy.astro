@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy — RTMify"
+  description="RTMify Privacy Policy. What we collect, what we don't, and why. Last updated March 2026."
+>
+  <Nav />
+
+  <main class="flex-1">
+    <section class="bg-[#1A1A2E] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Privacy Policy</h1>
+        <p class="text-gray-400 text-sm" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC &nbsp;&middot;&nbsp; Last updated March 2026</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex gap-12 items-start">
+
+          <!-- Sidebar TOC -->
+          <aside class="hidden lg:block w-52 shrink-0">
+            <nav class="sticky top-8">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-4 uppercase" style="font-family: var(--font-family-mono);">Contents</p>
+              <ul class="space-y-1 text-sm">
+                {[
+                  ['#short-version', 'The short version'],
+                  ['#website',    '01 — The website'],
+                  ['#purchases',  '02 — License purchases'],
+                  ['#trace',      '03 — RTMify Trace'],
+                  ['#live',       '04 — RTMify Live'],
+                  ['#support',    '05 — Support'],
+                  ['#retention',  '06 — Data retention'],
+                  ['#rights',     '07 — Your rights'],
+                  ['#changes',    '08 — Changes'],
+                  ['#contact',    '09 — Contact'],
+                ].map(([href, label]) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="block py-1 pl-3 border-l-2 border-transparent text-[#555555] hover:text-[#1A1A2E] hover:border-[#1A1A2E] transition-colors"
+                      style="font-family: var(--font-family-mono); font-size: 0.75rem;"
+                    >{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0 max-w-prose">
+
+            <!-- Last updated anchor -->
+            <div class="border-l-2 border-[#DDDDDD] pl-4 mb-10">
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Last updated: March 2026</p>
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC</p>
+            </div>
+
+            <p class="text-[#555555] mb-10 leading-relaxed">We built RTMify for engineers at companies where data privacy isn't optional. This policy explains what we collect, what we don't, and why.</p>
+
+            <!-- Short version card -->
+            <div id="short-version" class="bg-[#F5F5F5] border border-[#DDDDDD] rounded-xl p-6 mb-14">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-5 uppercase" style="font-family: var(--font-family-mono);">The short version</p>
+              <ul class="space-y-4">
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">RTMify Template:</strong> We collect nothing. It's a file download.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">RTMify Trace:</strong> Runs entirely on your machine. Your requirements data never leaves your computer.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">RTMify Live:</strong> Runs on your machine. Your requirements data stays local. We do not have access to your Google Sheet or your repository.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">This website:</strong> We use counter.dev — privacy-first, no cookies, no cross-site tracking, no personal data collected.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Sections -->
+            <div class="space-y-12">
+
+              <div id="website">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">01 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">The RTMify website (rtmify.io)</h2>
+                  <p>We use <a href="https://counter.dev" target="_blank" rel="noopener">counter.dev</a> for site analytics. counter.dev does not use cookies, does not collect personal data, and does not track users across sites. It counts page views and referrers in aggregate. We cannot identify individual visitors.</p>
+                  <p>When you download the free template, your browser makes a standard HTTP request. We do not log IP addresses or associate downloads with individuals.</p>
+                </div>
+              </div>
+
+              <div id="purchases">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">02 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">License purchases</h2>
+                  <p>License purchases are processed by LemonSqueezy, our payment processor. When you buy a license, LemonSqueezy collects your name, email address, and payment information. We receive your email address and order details to issue and verify your license key. We do not store payment card information.</p>
+                  <p>We use your email address to deliver your license key and, if you have active maintenance, to notify you of updates. We do not send marketing email. We do not sell or share your email address with third parties.</p>
+                </div>
+              </div>
+
+              <div id="trace">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">03 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">RTMify Trace</h2>
+                  <p>RTMify Trace is a local binary. It reads your .xlsx file, processes it in memory, and writes output to your local filesystem. No data is transmitted to any server. No telemetry is collected. No analytics are reported. The binary operates entirely offline.</p>
+                  <p>License key activation makes a single HTTPS request to LemonSqueezy to validate your key. After activation, the key is stored locally in <code>~/.rtmify/license.json</code> and re-validated periodically. No requirements data is included in these requests.</p>
+                </div>
+              </div>
+
+              <div id="live">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">04 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">RTMify Live</h2>
+                  <p>RTMify Live runs as a local process on your machine. It connects to Google Sheets using a service account credential you provide. That credential is stored locally on your machine; we do not have access to it.</p>
+                  <p>Your requirements data — the contents of your Google Sheet — is fetched to your local machine, processed locally, and stored in a local SQLite database (<code>graph.db</code>) on your machine. It is never transmitted to RTMify servers. We have no access to your requirements, tests, risks, or any content of your sheet.</p>
+                  <p>The MCP server runs locally on your machine and responds to requests from local clients only (e.g., Claude Desktop, Cursor). MCP traffic does not pass through RTMify servers.</p>
+                  <p>Git repository scanning operates entirely locally. No source code, commit history, or annotation data leaves your machine.</p>
+                  <p>License activation works the same as for RTMify Trace — a validation request to LemonSqueezy containing only the license key and a machine fingerprint.</p>
+                </div>
+              </div>
+
+              <div id="support">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">05 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Support and contact</h2>
+                  <p>If you contact us at <a href="mailto:hello@rtmify.io">hello@rtmify.io</a>, we will use your email address to respond. We do not add support contacts to any mailing list.</p>
+                </div>
+              </div>
+
+              <div id="retention">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">06 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Data retention</h2>
+                  <p>We retain license purchase records (email, order ID, license key) for as long as the license may be active — which, given our perpetual license model, means indefinitely. You may request deletion of your email address from our records by contacting us; note that deletion will void your license key.</p>
+                </div>
+              </div>
+
+              <div id="rights">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">07 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Your rights</h2>
+                  <p>If you are in the EU or UK, you have rights under GDPR including the right to access, correct, or delete personal data we hold about you. Contact <a href="mailto:hello@rtmify.io">hello@rtmify.io</a> to exercise these rights.</p>
+                </div>
+              </div>
+
+              <div id="changes">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">08 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Changes to this policy</h2>
+                  <p>We will post updates to this policy at rtmify.io/privacy with an updated date. We will not retroactively change how we handle data already collected.</p>
+                </div>
+              </div>
+
+              <div id="contact">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">09 —</p>
+                <h2 class="text-xl font-bold text-[#1A1A2E] mb-5" style="font-family: var(--font-family-display);">Contact</h2>
+                <div class="border border-[#DDDDDD] rounded-xl p-6 bg-[#F5F5F5]">
+                  <p class="text-xs font-semibold tracking-widest text-[#555555] mb-3 uppercase" style="font-family: var(--font-family-mono);">Privacy questions</p>
+                  <p class="text-[#1A1A2E] font-semibold mb-1"><a href="mailto:hello@rtmify.io" class="hover:underline">hello@rtmify.io</a></p>
+                  <p class="text-sm text-[#555555]">Iron Brothers Ventures, LLC</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

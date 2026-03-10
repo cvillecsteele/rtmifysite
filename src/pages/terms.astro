@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Terms of Service — RTMify"
+  description="RTMify Terms of Service. Plain English. Last updated March 2026."
+>
+  <Nav />
+
+  <main class="flex-1">
+    <section class="bg-[#1A1A2E] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Terms of Service</h1>
+        <p class="text-gray-400 text-sm" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC &nbsp;&middot;&nbsp; Last updated March 2026</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex gap-12 items-start">
+
+          <!-- Sidebar TOC -->
+          <aside class="hidden lg:block w-52 shrink-0">
+            <nav class="sticky top-8">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-4 uppercase" style="font-family: var(--font-family-mono);">Contents</p>
+              <ul class="space-y-1 text-sm">
+                {[
+                  ['#template',  '01 — Free template'],
+                  ['#conduct',   '02 — Conduct'],
+                  ['#accounts',  '03 — Accounts'],
+                  ['#ip',        '04 — Intellectual property'],
+                  ['#eula',      '05 — Software license'],
+                  ['#law',       '06 — Governing law'],
+                ].map(([href, label]) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="block py-1 pl-3 border-l-2 border-transparent text-[#555555] hover:text-[#1A1A2E] hover:border-[#1A1A2E] transition-colors"
+                      style="font-family: var(--font-family-mono); font-size: 0.75rem;"
+                    >{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0 max-w-prose">
+
+            <!-- Last updated anchor -->
+            <div class="border-l-2 border-[#DDDDDD] pl-4 mb-10">
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Last updated: March 2026</p>
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC</p>
+            </div>
+
+            <p class="text-[#555555] mb-12 leading-relaxed">These terms govern your use of the rtmify.io website and free resources (the "Site") operated by Iron Brothers Ventures, LLC. By using the Site, you agree to these terms.</p>
+
+            <!-- Sections -->
+            <div class="space-y-12">
+
+              <div id="template">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">01 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">The RTMify Template (Free)</h2>
+                  <p>The RTMify Requirements Tracking Template (.xlsx) is a free resource. You may download and use it for any purpose, commercial or otherwise, without restriction or account creation. We provide this "as-is" and make no warranties regarding its fitness for any specific regulatory audit.</p>
+                </div>
+              </div>
+
+              <div id="conduct">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">02 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Website use and conduct</h2>
+                  <p>You agree to use the Site only for lawful purposes. You may not:</p>
+                  <ul>
+                    <li>Attempt to interfere with the Site's hosting or security.</li>
+                    <li>Use automated systems (crawlers/bots) to scrape Site content for competitive purposes.</li>
+                    <li>Misrepresent your identity when contacting support or requesting invoices.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="accounts">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">03 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Accounts</h2>
+                  <p>If you create an account to manage license keys or maintenance renewals, you are responsible for the security of your credentials. We reserve the right to suspend accounts used for fraudulent activity.</p>
+                </div>
+              </div>
+
+              <div id="ip">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">04 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Intellectual property</h2>
+                  <p>The Site design, branding, and original content are owned by Iron Brothers Ventures, LLC. The "RTMify" name and logo are trademarks of the Licensor.</p>
+                </div>
+              </div>
+
+              <div id="eula">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">05 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Relationship to software license</h2>
+                  <p>These Site Terms govern your browsing experience. Any purchase of RTMify Trace or RTMify Live is governed by the Software License Agreement (EULA), which contains the specific terms regarding licensing, payments, refunds, and source code escrow.</p>
+                </div>
+              </div>
+
+              <div id="law">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">06 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Governing law</h2>
+                  <p>These terms are governed by the laws of the Commonwealth of Virginia, USA.</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Contact closing card -->
+            <div class="mt-14 border border-[#DDDDDD] rounded-xl p-6 bg-[#F5F5F5]">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-3 uppercase" style="font-family: var(--font-family-mono);">Questions about these terms?</p>
+              <p class="text-[#1A1A2E] font-semibold mb-1"><a href="mailto:hello@rtmify.io" class="hover:underline">hello@rtmify.io</a></p>
+              <p class="text-sm text-[#555555]">We respond within one business day.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

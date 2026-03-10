@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Software License Agreement — RTMify"
+  description="RTMify EULA. Perpetual licensing, optional maintenance, source code escrow. Last updated March 2026."
+>
+  <Nav />
+
+  <main class="flex-1">
+    <section class="bg-[#1A1A2E] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Software License Agreement</h1>
+        <p class="text-gray-400 text-sm" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC &nbsp;&middot;&nbsp; Last updated March 2026</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex gap-12 items-start">
+
+          <!-- Sidebar TOC -->
+          <aside class="hidden lg:block w-52 shrink-0">
+            <nav class="sticky top-8">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-4 uppercase" style="font-family: var(--font-family-mono);">Contents</p>
+              <ul class="space-y-1">
+                {[
+                  ['#commitments',      'Key commitments'],
+                  ['#definitions',      '01 — Definitions'],
+                  ['#template',         '02 — Free template'],
+                  ['#license-grant',    '03 — License grant'],
+                  ['#tiers',            '04 — License tiers'],
+                  ['#license-model',    '05 — License model'],
+                  ['#restrictions',     '06 — Restrictions'],
+                  ['#data',             '07 — Data & verification'],
+                  ['#escrow',           '08 — Source code escrow'],
+                  ['#ip',               '09 — IP indemnification'],
+                  ['#security',         '10 — Security updates'],
+                  ['#warranty',         '11 — Disclaimer'],
+                  ['#liability',        '12 — Liability'],
+                  ['#termination',      '13 — Termination'],
+                  ['#entire-agreement', '14 — Entire agreement'],
+                  ['#severability',     '15 — Severability'],
+                  ['#refunds',          '16 — Refund policy'],
+                  ['#law',              '17 — Governing law'],
+                ].map(([href, label]) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="block py-1 pl-3 border-l-2 border-transparent text-[#555555] hover:text-[#1A1A2E] hover:border-[#1A1A2E] transition-colors"
+                      style="font-family: var(--font-family-mono); font-size: 0.72rem;"
+                    >{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0 max-w-prose">
+
+            <!-- Last updated anchor -->
+            <div class="border-l-2 border-[#DDDDDD] pl-4 mb-10">
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Last updated: March 2026</p>
+              <p class="text-sm text-[#555555]" style="font-family: var(--font-family-mono);">Iron Brothers Ventures, LLC</p>
+            </div>
+
+            <p class="text-[#555555] mb-10 leading-relaxed">RTMify is designed as a perpetual-license engineering tool. This Agreement is intended to clearly describe how the Software may be used while preserving the guarantees described on the RTMify pricing page, including perpetual licensing, optional maintenance, and source code escrow.</p>
+
+            <p class="text-[#555555] mb-12 leading-relaxed">This Software License Agreement ("Agreement") is a legal agreement between Iron Brothers Ventures, LLC ("Licensor") and the individual or legal entity ("Licensee") that has purchased or otherwise obtained a license to use RTMify Trace or RTMify Live (the "Software"). By downloading, installing, or using the Software, Licensee agrees to be bound by the terms of this Agreement.</p>
+
+            <!-- Key commitments card -->
+            <div id="commitments" class="bg-[#F5F5F5] border border-[#DDDDDD] rounded-xl p-6 mb-14">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-5 uppercase" style="font-family: var(--font-family-mono);">Key commitments (§5)</p>
+              <ul class="space-y-4">
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">No mandatory subscription.</strong> Licensor will not require an ongoing subscription to continue using the version of the Software already purchased.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">Maintenance price cap.</strong> Annual maintenance renewal pricing will not increase by more than 5% or CPI, whichever is greater, per annum.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#2E7D32] font-bold shrink-0 mt-0.5 text-base leading-snug">✓</span>
+                  <span class="text-sm text-[#1A1A1A] leading-relaxed"><strong class="text-[#1A1A2E] font-semibold">No subscription conversion.</strong> Existing perpetual licenses will not be converted into a subscription-only model for core purchased functionality.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Sections -->
+            <div class="space-y-12">
+
+              <div id="definitions">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">01 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Definitions</h2>
+                  <p><strong>"Software"</strong> means the RTMify Trace or RTMify Live executable binaries and any accompanying documentation provided by Licensor.</p>
+                  <p><strong>"Licensee"</strong> means the individual person or legal entity that purchases or otherwise obtains a license to use the Software.</p>
+                  <p><strong>"Legal Entity"</strong> means a single corporation, limited liability company, partnership, government organization, or other legally recognized entity. Affiliates, subsidiaries, and parent companies are not included unless separately licensed.</p>
+                  <p><strong>"Maintenance"</strong> means optional updates, bug fixes, compatibility updates, and support services offered by Licensor after purchase.</p>
+                  <p><strong>"Critical Support"</strong> means addressing defects or security vulnerabilities that prevent the Software from operating on supported platforms or cause loss of core functionality.</p>
+                </div>
+              </div>
+
+              <div id="template">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">02 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">The RTMify Template (Free)</h2>
+                  <p>The RTMify Requirements Tracking Template (.xlsx) is provided free of charge.</p>
+                  <p><strong>Grant.</strong> Licensee is granted a perpetual, worldwide, royalty-free right to use, modify, and distribute the template for any purpose.</p>
+                  <p><strong>Trial Purpose.</strong> The template serves as the functional trial for RTMify Trace. Licensee acknowledges that RTMify Trace is designed to read this specific schema and has evaluated the schema's utility prior to purchase.</p>
+                </div>
+              </div>
+
+              <div id="license-grant">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">03 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Software License Grant</h2>
+                  <p>Subject to the terms of this Agreement and the purchased license tier, Licensor grants Licensee a non-exclusive, non-transferable, perpetual license to install, run, and use the Software for Licensee's internal business purposes. Licensee may make one (1) copy of the Software solely for backup or archival purposes.</p>
+                  <p>This Agreement applies only to the specific Software version purchased by Licensee and does not obligate Licensor to provide future products or services under the same terms.</p>
+                </div>
+              </div>
+
+              <div id="tiers">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">04 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">License Tiers and Scope</h2>
+                  <p><strong>RTMify Trace (Lab / Non-Commercial).</strong> Restricted to students, academic researchers, and personal projects. Commercial use is not permitted.</p>
+                  <p><strong>RTMify Trace (Individual).</strong> Licensed to one named individual. The Software may be installed on multiple machines owned or controlled by that individual.</p>
+                  <p><strong>RTMify Trace (Team / Commercial).</strong> Licensed for use by employees and contractors of the purchasing Legal Entity. Use by affiliated entities, including subsidiaries or parent companies, requires separate licenses.</p>
+                  <p><strong>RTMify Live (Individual / Per-Seat / Site).</strong> Licensed as specified at the time of purchase (Named User or single Legal Entity). Use is permitted for employees and contractors of the licensed Legal Entity.</p>
+                </div>
+              </div>
+
+              <div id="license-model">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">05 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">License Model Commitments</h2>
+                  <p><strong>No Mandatory Subscription.</strong> Licensor will not require an ongoing subscription to continue using the version of the Software already purchased by Licensee.</p>
+                  <p><strong>Maintenance Price Cap.</strong> Annual Maintenance is optional. Renewal pricing for an existing license will not increase by more than five percent (5%) or the Consumer Price Index (CPI), whichever is greater, per annum.</p>
+                  <p><strong>No Subscription Conversion.</strong> Licensor will not convert existing perpetual licenses into a subscription-only model for the core functionality included in the purchased Software version.</p>
+                </div>
+              </div>
+
+              <div id="restrictions">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">06 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Restrictions</h2>
+                  <p>Licensee shall not:</p>
+                  <ul>
+                    <li>Sublicense, rent, lease, distribute, or otherwise make the Software available to third parties.</li>
+                    <li>Reverse engineer, decompile, or disassemble the Software except where such restriction is prohibited by applicable law.</li>
+                    <li>Provide the Software as a hosted service, managed service, or integrate it into a commercial product without a separate written agreement with Licensor.</li>
+                    <li>Use the Software in violation of applicable United States export control laws or regulations.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="data">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">07 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Data Transmission and License Verification</h2>
+                  <p>The Software may periodically contact license verification servers operated by Licensor solely for the purpose of validating the Licensee's software license. This verification may occur approximately once every thirty (30) days.</p>
+                  <p>During license verification, the Software transmits only the information necessary to validate the license, such as a license key or installation identifier.</p>
+                  <p>The Software does not transmit Licensee project data, requirements, test artifacts, source code, or other engineering content to Licensor.</p>
+                  <p>The Software does not perform telemetry, analytics, or usage monitoring beyond license verification.</p>
+                  <p>The Software remains fully functional between license verification intervals and does not require continuous internet connectivity.</p>
+                  <p>When configured by the Licensee, the Software may perform bidirectional data transfer with third-party services (such as spreadsheet or collaboration systems) for the purpose of importing spreadsheet data and writing updates to those systems. Licensor is not responsible for the operation, availability, or security of third-party services used in conjunction with the Software.</p>
+                </div>
+              </div>
+
+              <div id="escrow">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">08 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Source Code Escrow</h2>
+                  <p>Licensor maintains the Software source code in escrow. The source code will be released to current paid license holders under an open-source license (MIT or Apache 2.0) if:</p>
+                  <ul>
+                    <li>Licensor dissolves or files for bankruptcy without a successor; or</li>
+                    <li>Licensor ceases commercial distribution and Critical Support for the Software for a period of twelve (12) consecutive months.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="ip">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">09 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Intellectual Property Indemnification</h2>
+                  <p>Licensor represents and warrants that it is the owner of the Software and that, to its knowledge, the Software does not infringe upon the intellectual property rights of any third party.</p>
+                  <p>Licensor shall defend and indemnify Licensee against any final judgment arising from a claim that the Software infringes a third-party copyright or patent, provided that Licensee promptly notifies Licensor of the claim in writing and permits Licensor to control the defense and settlement of such claim.</p>
+                </div>
+              </div>
+
+              <div id="security">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">10 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Security Updates</h2>
+                  <p>Licensor will make reasonable efforts to provide security updates for supported versions of the Software when security vulnerabilities are identified.</p>
+                </div>
+              </div>
+
+              <div id="warranty">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">11 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Disclaimer of Warranties</h2>
+                  <p>THE SOFTWARE IS PROVIDED "AS IS." TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p>
+                  <p>LICENSOR DOES NOT WARRANT THAT THE SOFTWARE WILL ENSURE REGULATORY COMPLIANCE OR GUARANTEE SUCCESSFUL AUDIT OUTCOMES. COMPLIANCE AND TOOL QUALIFICATION ARE THE SOLE RESPONSIBILITY OF THE LICENSEE.</p>
+                </div>
+              </div>
+
+              <div id="liability">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">12 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Limitation of Liability</h2>
+                  <p>IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY CONSEQUENTIAL, INDIRECT, SPECIAL, OR INCIDENTAL DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA LOSS, BUSINESS INTERRUPTION, OR FAILED REGULATORY AUDITS.</p>
+                  <p>LICENSOR'S TOTAL LIABILITY UNDER THIS AGREEMENT SHALL NOT EXCEED THE ACTUAL AMOUNT PAID BY LICENSEE FOR THE SOFTWARE LICENSE.</p>
+                </div>
+              </div>
+
+              <div id="termination">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">13 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Termination</h2>
+                  <p>This Agreement and the licenses granted herein terminate automatically if Licensee fails to comply with any material term of this Agreement. Upon termination, Licensee must cease all use of the Software and destroy or permanently disable all copies in their possession.</p>
+                  <p>Sections relating to intellectual property, warranty disclaimer, limitation of liability, and governing law shall survive termination.</p>
+                </div>
+              </div>
+
+              <div id="entire-agreement">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">14 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Entire Agreement</h2>
+                  <p>This Agreement constitutes the entire agreement between Licensor and Licensee regarding the Software and supersedes all prior or contemporaneous communications, representations, or agreements.</p>
+                </div>
+              </div>
+
+              <div id="severability">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">15 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Severability</h2>
+                  <p>If any provision of this Agreement is held to be invalid or unenforceable by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect.</p>
+                </div>
+              </div>
+
+              <div id="refunds">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">16 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Refund Policy</h2>
+                  <p>Because the Software is delivered as downloadable binary software, refund eligibility depends on the product purchased.</p>
+                  <p>RTMify Trace licenses are generally non-refundable once the Software has been downloaded or activated. The RTMify Template is provided as a free functional evaluation prior to purchase.</p>
+                  <p>RTMify Live licenses include a thirty (30) day money-back guarantee from the date of purchase if the Software does not operate as described.</p>
+                  <p>Licensor may grant refunds at its sole discretion in exceptional circumstances.</p>
+                </div>
+              </div>
+
+              <div id="law">
+                <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">17 —</p>
+                <div class="prose prose-slate max-w-none">
+                  <h2 class="mt-0">Governing Law</h2>
+                  <p>This Agreement is governed by the laws of the Commonwealth of Virginia, USA. Any disputes arising under this Agreement shall be heard in the state or federal courts located within the Commonwealth of Virginia.</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Contact closing card -->
+            <div class="mt-14 border border-[#DDDDDD] rounded-xl p-6 bg-[#F5F5F5]">
+              <p class="text-xs font-semibold tracking-widest text-[#555555] mb-3 uppercase" style="font-family: var(--font-family-mono);">Questions about this agreement?</p>
+              <p class="text-[#1A1A2E] font-semibold mb-1"><a href="mailto:hello@rtmify.io" class="hover:underline">hello@rtmify.io</a></p>
+              <p class="text-sm text-[#555555]">We respond within one business day.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
