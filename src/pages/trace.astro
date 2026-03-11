@@ -23,7 +23,10 @@ import DownloadButton from '../components/DownloadButton.astro';
         <p class="text-lg text-gray-300 mb-8 max-w-2xl">
           Drop your <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">.xlsx</code> on RTMify Trace. Get a complete requirements traceability matrix — with gap analysis, risk register, and full chain resolution — as a PDF, Word Doc, or Markdown file. Runs on your machine. Nothing uploaded.
         </p>
-        <DownloadButton href="/download" label="Download RTMify Trace" size="lg" variant="light" />
+        <div class="flex items-center gap-4 flex-wrap">
+          <DownloadButton href="/download" label="Download RTMify Trace" size="lg" variant="light" />
+          <a href="/pricing#trace" class="text-sm text-gray-300 hover:text-white underline underline-offset-4 transition-colors">See pricing →</a>
+        </div>
       </div>
     </section>
 
@@ -107,6 +110,19 @@ import DownloadButton from '../components/DownloadButton.astro';
         <div class="bg-[#1A1A2E] rounded-lg px-5 py-4 overflow-x-auto">
           <code class="text-green-400 text-sm whitespace-pre" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format pdf --strict --gaps-json gaps.json</code>
         </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-16 px-4 bg-[#1A1A2E] text-white">
+      <div class="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div>
+          <p class="text-lg font-semibold mb-1">Ready to buy?</p>
+          <p class="text-gray-400 text-sm">Perpetual license. From $79. No subscription.</p>
+        </div>
+        <a href="/pricing#trace" class="shrink-0 px-6 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
+          See Trace pricing →
+        </a>
       </div>
     </section>
 
