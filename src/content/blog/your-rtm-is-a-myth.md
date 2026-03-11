@@ -144,8 +144,6 @@ Sure, these are just diagnostics. Turns out, really important ones.
 
 ## The evidence graph is not the RTM
 
-Precision matters here because it separates a compliance tool from a toy.
-
 The evidence graph distinguishes three kinds of evidence. Current artifact annotations are present-state evidence: what the working tree says right now. Commit messages are historical evidence: what a developer explicitly claimed at a point in time. File change history is change evidence: which files moved and when.
 
 Those categories stay separate. A commit message that says `REQ-047` does not, by itself, prove that the files touched by that commit still satisfy that requirement today. The developer might have refactored the code since then. The present-state evidence comes from what's in the current source tree. The historical evidence tells you when and by whom. Both matter. They answer different questions.
