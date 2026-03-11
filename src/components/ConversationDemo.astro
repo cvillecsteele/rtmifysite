@@ -1,0 +1,234 @@
+---
+interface Props {
+  mini?: boolean;
+}
+const { mini = false } = Astro.props;
+---
+
+<div class="cdemo">
+  <div class="cdemo-window">
+
+    <!-- Title bar -->
+    <div class="cdemo-bar">
+      <div class="cdemo-dots">
+        <span style="background:#FF5F57;width:12px;height:12px;border-radius:50%;display:block"></span>
+        <span style="background:#FEBC2E;width:12px;height:12px;border-radius:50%;display:block"></span>
+        <span style="background:#28C840;width:12px;height:12px;border-radius:50%;display:block"></span>
+      </div>
+      <span class="cdemo-bar-title">Claude Code — ~/Projects/security-system</span>
+      <div style="width:60px"></div>
+    </div>
+
+    <!-- Body -->
+    <div class="cdemo-body">
+
+      <!-- Welcome box (full mode only) -->
+      {!mini && (
+        <div class="cdemo-welcome" aria-hidden="true">
+          <div class="wl">╭─── Claude Code v2.1.72 ────────────────────────────╮</div>
+          <div class="wl">│  <span class="ww">Welcome back Colin!</span>                              │</div>
+          <div class="wl">│  <span class="wd">Sonnet 4.6 · Claude Max · ~/Projects/rtmify</span>     │</div>
+          <div class="wl">╰────────────────────────────────────────────────────╯</div>
+        </div>
+      )}
+
+      <!-- ── Exchange 1: How many user needs? (full only) ── -->
+      {!mini && (
+        <div class="cdemo-ex">
+          <div class="pr"><span class="pa">❯</span> How many user needs do we have?</div>
+          <div class="tc"><span class="cb">⏺</span> <span class="tn">rtmify-live · get_user_needs</span> <span class="tb">(MCP)</span></div>
+          <div class="rs">
+            <div class="rl"><span class="cb">⏺</span> You have <strong>12 user needs</strong> (UN-001 through UN-012).</div>
+            <div class="rl i">Breakdown by priority:</div>
+            <div class="rl i2"><span class="bd">·</span> <strong>High (6):</strong> UN-001, UN-002, UN-005, UN-006, UN-010, UN-011</div>
+            <div class="rl i2"><span class="bd">·</span> <strong>Medium (4):</strong> UN-003, UN-004, UN-007, UN-009</div>
+            <div class="rl i2"><span class="bd">·</span> <strong>Low (2):</strong> UN-008, UN-012</div>
+          </div>
+        </div>
+      )}
+
+      <!-- ── Exchange 2: Gap — UN-010 ── -->
+      <div class="cdemo-ex">
+        <div class="pr"><span class="pa">❯</span> Which user needs have no requirements?</div>
+        <div class="tc"><span class="cb">⏺</span> <span class="tn">rtmify-live · get_rtm</span> <span class="tb">(MCP)</span></div>
+        <div class="rs">
+          <div class="rl"><span class="cb">⏺</span> Only <strong>UN-010</strong> has no requirements linked to it:</div>
+          <div class="rl i gf">"The system shall provide an audible alarm &gt; 85dB at 3 meters."</div>
+          <div class="rl i dm">Priority: <strong class="hp">High</strong> · Source: Safety</div>
+          <div class="rl i wn">⚠ High priority Safety need — worth addressing soon.</div>
+        </div>
+      </div>
+
+      <!-- ── Exchange 3: Goosebumps ── -->
+      <div class="cdemo-ex cdemo-gb">
+        <div class="pr"><span class="pa">❯</span> I know you don't have enough context to get why, but I have goosebumps. I'm literally talking to my requirements. Jama, Polarion — nobody has this feature. This is game changing.</div>
+        <div class="rs">
+          <div class="rl"><span class="cb">⏺</span> That's the whole point of rtmify — your RTM isn't a static document</div>
+          <div class="rl i">you query with a form. It's a <strong>live knowledge graph</strong> you can just <em class="qi">talk to</em>.</div>
+          <div class="rl">&nbsp;</div>
+          <div class="rl i dm">You can ask things like:</div>
+          <div class="rl i2"><span class="bd">·</span> <em class="qi">"What's the impact if UN-002 changes?"</em></div>
+          <div class="rl i2"><span class="bd">·</span> <em class="qi">"Who last touched the code linked to REQ-001?"</em></div>
+          <div class="rl i2"><span class="bd">·</span> <em class="qi">"Which requirements have no code implementation yet?"</em></div>
+          <div class="rl">&nbsp;</div>
+          <div class="rl i dm">No form. No export. No pivot table. Just ask.</div>
+        </div>
+      </div>
+
+      <!-- ── Exchange 4: Impact analysis (full only) ── -->
+      {!mini && (
+        <div class="cdemo-ex">
+          <div class="pr"><span class="pa">❯</span> What's the impact if UN-002 changes?</div>
+          <div class="tc"><span class="cb">⏺</span> <span class="tn">rtmify-live · get_impact</span> <span class="tb">(MCP)</span> <span class="ta">(id: "UN-002")</span></div>
+          <div class="rs">
+            <div class="rl"><span class="cb">⏺</span> If UN-002 changes, here's everything affected:</div>
+            <div class="rl">&nbsp;</div>
+            <div class="rl i"><strong>Directly derived:</strong></div>
+            <div class="rl i2"><span class="bd">·</span> <strong>REQ-014</strong> — "The sirens SHALL produce a sound level of 90dB."</div>
+            <div class="rl">&nbsp;</div>
+            <div class="rl i"><strong>Cascading into testing:</strong></div>
+            <div class="rl i2"><span class="bd">·</span> <strong>TG-005</strong> — the entire test group</div>
+            <div class="rl i2"><span class="bd">·</span> T-005-01 through T-005-04 — all 4 tests</div>
+            <div class="rl">&nbsp;</div>
+            <div class="rl i dm">Blast radius: one requirement, one test group, four tests.</div>
+          </div>
+        </div>
+      )}
+
+      <!-- Fade-out veil for mini mode -->
+      {mini && <div class="cdemo-veil" aria-hidden="true"></div>}
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Base ── */
+  .cdemo {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  @media (max-width: 640px) {
+    .cdemo { font-size: 11.5px; }
+  }
+
+  /* ── Window shell ── */
+  .cdemo-window {
+    background: #18181B;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.07),
+      0 32px 64px -16px rgba(0,0,0,0.75);
+  }
+
+  /* ── Title bar ── */
+  .cdemo-bar {
+    background: #27272A;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .cdemo-dots { display: flex; gap: 7px; align-items: center; }
+  .cdemo-bar-title { color: #52525B; font-size: 11px; }
+  @media (max-width: 480px) { .cdemo-bar-title { display: none; } }
+
+  /* ── Body ── */
+  .cdemo-body {
+    padding: 20px 22px 26px;
+    color: #E4E4E7;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  /* ── Welcome box ── */
+  .cdemo-welcome { margin: 0 0 18px; }
+  .wl {
+    color: #3F3F46;
+    white-space: pre;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .ww { color: #71717A; }
+  .wd { color: #52525B; }
+
+  /* ── Exchanges ── */
+  .cdemo-ex {
+    margin-bottom: 22px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .cdemo-ex:last-of-type { margin-bottom: 0; }
+  .cdemo-ex.cdemo-on { opacity: 1; transform: translateY(0); }
+
+  /* Goosebumps highlight */
+  .cdemo-gb {
+    background: linear-gradient(90deg, rgba(251,146,60,0.07) 0%, rgba(251,146,60,0.02) 60%, transparent 100%);
+    border-left: 2px solid rgba(251,146,60,0.4);
+    padding: 10px 12px 10px 14px;
+    margin-left: -16px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ── Prompt ── */
+  .pr { color: #86EFAC; margin-bottom: 5px; word-break: break-word; }
+  .pa { color: #4ADE80; font-weight: 700; margin-right: 7px; }
+
+  /* ── Tool call ── */
+  .tc { margin-bottom: 6px; font-size: 12px; }
+  .cb  { color: #FB923C; }
+  .tn  { color: #A78BFA; }
+  .tb  { color: #52525B; }
+  .ta  { color: #52525B; }
+
+  /* ── Response lines ── */
+  .rs { padding-left: 0; }
+  .rl { color: #D4D4D8; word-break: break-word; }
+  .rl strong { color: #F4F4F5; font-weight: 600; }
+  .i  { display: block; padding-left: 22px; }
+  .i2 { display: block; padding-left: 36px; }
+  .bd { color: #52525B; margin-right: 5px; }
+  .dm { color: #71717A; }
+  .gf { color: #FDE68A; font-style: italic; }
+  .hp { color: #F87171; }
+  .wn { color: #FCD34D; }
+  .qi { color: #C4B5FD; font-style: normal; }
+
+  /* ── Mini fade veil ── */
+  .cdemo-veil {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 90px;
+    background: linear-gradient(to bottom, transparent, #18181B);
+    pointer-events: none;
+  }
+
+  /* ── Scrollbar ── */
+  .cdemo-body::-webkit-scrollbar { height: 4px; width: 4px; }
+  .cdemo-body::-webkit-scrollbar-track { background: transparent; }
+  .cdemo-body::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 2px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.cdemo').forEach(demo => {
+    const exchanges = demo.querySelectorAll<HTMLElement>('.cdemo-ex');
+    const baseDelays = [0, 180, 450, 820];
+    let fired = false;
+
+    const obs = new IntersectionObserver(entries => {
+      if (fired || !entries[0].isIntersecting) return;
+      fired = true;
+      exchanges.forEach((el, i) => {
+        setTimeout(() => el.classList.add('cdemo-on'), baseDelays[i] ?? i * 220);
+      });
+      obs.disconnect();
+    }, { threshold: 0.12 });
+
+    obs.observe(demo);
+  });
+</script>
