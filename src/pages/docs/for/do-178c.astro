@@ -1,0 +1,516 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify DO-178C Quick Start Guide';
+const description = 'Complete walkthrough of filling in the RTMify template for DO-178C, the airborne software certification standard.';
+const canonical = 'https://rtmify.io/docs/for/do-178c/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'DO-178C', url: '/docs/for/do-178c/' }
+];
+
+const userNeedsExample = [
+  { id: 'UN-001', description: 'The flight management system shall compute and display the aircraft position', source: 'System PSAC', priority: 'High' },
+  { id: 'UN-002', description: 'The system shall alert the crew within 1 second of any navigation sensor failure', source: 'Safety Assessment', priority: 'High' },
+  { id: 'UN-003', description: 'The pilot shall be able to enter a flight plan via the CDU', source: 'Operational', priority: 'Medium' }
+];
+
+const requirementsExample = [
+  { id: 'SYS-001', description: 'The FMS SHALL compute aircraft position using GPS and IRS data', traces: 'UN-001', priority: 'High', testGroup: 'TG-001', status: 'Approved', notes: 'DAL A' },
+  { id: 'HLR-001', description: 'The navigation module SHALL fuse GPS and IRS position data using a Kalman filter', traces: 'SYS-001', priority: 'High', testGroup: 'TG-002', status: 'Approved', notes: 'DAL A' },
+  { id: 'HLR-002', description: 'The alerting module SHALL generate a crew alert within 500ms of sensor failure detection', traces: 'UN-002', priority: 'High', testGroup: 'TG-003', status: 'Approved', notes: 'DAL A' },
+  { id: 'LLR-001', description: 'The Kalman filter SHALL update at 10 Hz with measurement noise covariance R ≤ 0.01', traces: 'HLR-001', priority: 'High', testGroup: 'TG-004', status: 'Approved', notes: 'DAL A' }
+];
+
+const testsExample = [
+  { testGroup: 'TG-001', testId: 'T-001', type: 'Verification', method: 'Test', description: 'FMS position accuracy bench test per ATP-NAV-001' },
+  { testGroup: 'TG-002', testId: 'T-002', type: 'Verification', method: 'Test', description: 'Kalman filter convergence test — simulated GPS/IRS input' },
+  { testGroup: 'TG-002', testId: 'T-003', type: 'Verification', method: 'Analysis', description: 'Kalman filter stability analysis — eigenvalue analysis' },
+  { testGroup: 'TG-003', testId: 'T-004', type: 'Verification', method: 'Test', description: 'Alert latency test — sensor failure injection' },
+  { testGroup: 'TG-004', testId: 'T-005', type: 'Verification', method: 'Inspection', description: 'LLR-001 code review — filter update rate verification' }
+];
+
+const risksExample = [
+  { id: 'RSK-101', description: 'GPS signal loss over ocean — position degrades to IRS-only', severity: '4', occurrence: '3', mitigation: 'Dual-redundant IRS with cross-check, reversion logic', linkedReq: 'SYS-001', residualSeverity: '4', residualOccurrence: '1' },
+  { id: 'RSK-102', description: 'Kalman filter divergence due to sensor bias', severity: '5', occurrence: '2', mitigation: 'Covariance monitoring with automatic filter reset', linkedReq: 'HLR-001', residualSeverity: '5', residualOccurrence: '1' }
+];
+
+const faqItems = [
+  {
+    question: 'How do I handle the SYS/HLR/LLR hierarchy in one Requirements tab?',
+    answer: 'Use the traceability chain: SYS (system-level requirements) trace to User Needs, HLR (high-level requirements) trace to SYS, and LLR (low-level requirements) trace to HLR. In the "Traces" column, reference the parent requirement ID (e.g., HLR-001 traces to SYS-001). RTMify\'s Requirements tab will automatically chain these upward to verify that all LLRs eventually connect to User Needs. This hierarchical structure satisfies DO-178C §5.5 bidirectional traceability.'
+  },
+  {
+    question: 'Where do I record DAL?',
+    answer: 'Record Design Assurance Level (DAL A through E) in the Notes column of your Requirements table. DO-178C Table A specifies which verification objectives (§6.3 reviews, §6.4 testing) apply per DAL. RTMify does not enforce DAL-specific verification counts, but tracking DAL in Requirements helps you cross-reference your verification plan. For DAL A (catastrophic), ensure your test methods cover 100% Modified Condition/Decision Coverage (MC/DC); for DAL E, coverage criteria are relaxed. Document this in your Software Accomplishment Summary (SAS), a separate artifact outside RTMify.'
+  },
+  {
+    question: 'What about derived requirements?',
+    answer: 'Derived requirements are LLRs or HLRs that emerge during design but were not explicitly stated in the User Needs or higher-level requirements. DO-178C §5.5.d allows derived requirements provided they are: (1) justified and documented, (2) compatible with parent requirements, (3) verified. In RTMify, create a derived requirement with a "Traces" entry pointing to the parent, and add a Notes field marking it as "Derived" with justification (e.g., "Derived: Required to eliminate Kalman filter divergence identified in risk analysis RSK-102"). Ensure verification is linked via Test Group.'
+  },
+  {
+    question: 'Do I need separate templates for DAL A vs DAL D?',
+    answer: 'No. Use a single Requirements tab with all DAL levels mixed. Record DAL in the Notes column. The difference is in your verification and code coverage rigor (documented in your test procedures and SAS), not in the RTMify template structure. A DAL A requirement will have more test cases, analysis depth, and code coverage instrumentation than a DAL D requirement, but they coexist in the same matrix.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "url": canonical,
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "datePublished": "2024-02-20",
+      "dateModified": "2026-03-12"
+    },
+    {
+      "@type": "HowTo",
+      "name": title,
+      "description": description,
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Define User Needs",
+          "text": "Capture system-level requirements from the Plan for Software Aspects of Certification (PSAC) and Safety Assessment. Sources include operational needs, regulatory requirements, and safety-critical functions. Use ID format UN-nnn."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Write Requirements",
+          "text": "Create the SYS/HLR/LLR hierarchy per §5.5. Each requirement traces to a parent (or User Need for SYS), is verifiable, and records Design Assurance Level (DAL A through E). Use SYS/HLR/LLR prefixes."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Define Tests",
+          "text": "Document verification per §6.3 (reviews and analyses) and §6.4 (testing). Link each test to a requirement via test group IDs. Methods include Test, Analysis, Inspection, and Demonstration."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Document Risks",
+          "text": "Identify failure modes, assess severity and occurrence, document mitigations built into requirements. Track residual risk post-mitigation. Link risks to requirements to show bidirectional traceability."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Check Status and Generate RTM",
+          "text": "Run RTMify Trace to validate the matrix. Every requirement should be linked to a parent, a verification activity, and preferably a risk or operational scenario. Ensure bidirectional traceability per §5.5.e."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((bc, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": bc.name,
+        "item": bc.url
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="do-178c"
+>
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <!-- Hero Section -->
+    <div class="mb-12 pb-8 border-b border-[#DDDDDD]">
+      <h1 class="text-4xl font-bold text-[#1A1A2E] mb-4">{title}</h1>
+      <p class="text-lg text-[#555555]">{description}</p>
+    </div>
+
+    <!-- About This Guide -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">About This Guide</h2>
+      <div class="space-y-4 text-[#555555] leading-relaxed">
+        <p>
+          This guide walks you through filling in the RTMify template for <strong>DO-178C</strong> (RTCA/DO-178C, Software Considerations in Airborne Systems and Equipment Certification). DO-178C is the regulatory standard for airborne software used in civil aviation, military, and rotorcraft. It mandates bidirectional traceability from system requirements through high-level requirements (HLR), low-level requirements (LLR), source code, and tests.
+        </p>
+        <p>
+          This template covers the <strong>requirements-to-test traceability portion</strong> (§5.5 Software Requirements Process and §6.3–6.4 Verification), the core of every DO-178C software development plan (SDP). You will not find source code or structural coverage metrics here; those are addressed in separate tools and reports (Software Accomplishment Summary, SAS).
+        </p>
+        <p>
+          By the end of this guide, you'll have a complete requirements traceability matrix (RTM) that demonstrates bidirectional traceability per §5.5.e and links design decisions to verification methods and risk mitigation. This RTM is evidence for your certification authority (FAA, EASA, or national equivalent).
+        </p>
+      </div>
+    </section>
+
+    <!-- What DO-178C Requires -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">What DO-178C Requires for Traceability</h2>
+
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">Software Requirements (§5.5)</h3>
+          <p class="text-[#555555] mb-4">
+            DO-178C §5.5 requires a structured Software Requirements Process that produces:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-4">
+            <li><strong>High-Level Requirements (HLR)</strong> — derived from system requirements, describe what the software shall do at a functional/architectural level, independent of implementation</li>
+            <li><strong>Low-Level Requirements (LLR)</strong> — derived from HLR, describe implementation details sufficient for testing and code review, at or near source-code level</li>
+            <li><strong>Bidirectional Traceability (§5.5.e)</strong> — every LLR traces upward to an HLR; every HLR traces upward to a system requirement; every system requirement traces downward to at least one HLR or LLR; every test traces to a requirement</li>
+          </ul>
+          <p class="text-[#555555] mt-4">
+            RTMify captures this hierarchy through the "Traces" column: SYS-001 traces to User Needs, HLR-001 traces to SYS-001, LLR-001 traces to HLR-001, and tests trace to test groups linked to requirements.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">Design Assurance Level (DAL, §2.0 & Table A)</h3>
+          <p class="text-[#555555] mb-4">
+            Each requirement is assigned a Design Assurance Level (DAL) based on failure mode effects analysis (FMEA) and safety assessment:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-4">
+            <li><strong>DAL A</strong> — Catastrophic failure condition (loss of aircraft or fatalities). Maximum rigor: §6.3 formal reviews, §6.4 full statement/branch testing, MC/DC coverage ≥100%, independent verification required.</li>
+            <li><strong>DAL B</strong> — Hazardous failure condition. High rigor: reviews, testing, MC/DC ≥ 100%, independent verification.</li>
+            <li><strong>DAL C</strong> — Major failure condition. Moderate rigor: reviews, testing, branch coverage, independent verification not always required.</li>
+            <li><strong>DAL D</strong> — Minor failure condition. Basic rigor: testing, code inspection, branch coverage.</li>
+            <li><strong>DAL E</strong> — No safety effect. Minimal rigor: statement testing or inspection.</li>
+          </ul>
+          <p class="text-[#555555] mt-4">
+            Table A (§2.0) specifies which verification objectives apply to each DAL. RTMify does not enforce these; document your DAL assignments in the Notes column and justify them in your Software Accomplishment Summary (SAS).
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">Reviews and Analyses (§6.3)</h3>
+          <p class="text-[#555555]">
+            §6.3 requires software requirements review and architecture review by an independent party (for DAL A/B). Capture these as verification methods (Inspection type) in your Tests table. Example: "T-005 | Inspection | LLR-001 code review — filter update rate verification".
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">Testing (§6.4)</h3>
+          <p class="text-[#555555]">
+            §6.4 mandates testing at the HLR and LLR levels. For DAL A/B, testing must achieve Modified Condition/Decision Coverage (MC/DC); for DAL C, branch coverage; for DAL D/E, statement or branch. RTMify links tests to requirements via Test Group; your test procedures document coverage metrics separately.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step Walkthrough -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Step-by-Step Walkthrough</h2>
+
+      <div class="space-y-12">
+        <!-- Step 1 -->
+        <div class="border-l-4 border-[#6A1B9A] pl-6">
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#6A1B9A] text-white font-bold mr-3">1</span>
+            Define User Needs (System Requirements)
+          </h3>
+          <div class="space-y-4 text-[#555555]">
+            <p>
+              Capture system-level design inputs from the <strong>Plan for Software Aspects of Certification (PSAC)</strong> and Safety Assessment. These are often not truly "user" needs but rather system-level requirements that flow down to software. Sources include:
+            </p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+              <li>Operational requirements (crew interface, flight management, navigation)</li>
+              <li>Safety assessment findings (failure conditions, mitigation strategies)</li>
+              <li>Regulatory requirements (14 CFR Part 23/25, EASA CS-23/CS-25, DO-160G environmental)</li>
+            </ul>
+            <p>Use ID format <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">UN-nnn</code> (or tag as SYS-level if you prefer explicit "system" labeling).</p>
+
+            <!-- Table -->
+            <div class="overflow-x-auto mt-6">
+              <table class="w-full text-sm border-collapse">
+                <caption class="text-left font-semibold text-[#1A1A2E] mb-3">User Needs / System Requirements Example</caption>
+                <thead>
+                  <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Source</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Priority</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userNeedsExample.map(row => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 text-[#555555]">{row.id}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.description}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.source}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.priority}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-sm text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              <strong>Tips:</strong> Be specific and measurable. "The system shall alert the crew <strong>within 1 second</strong>" is better than "shall alert promptly". Link each User Need to at least one SYS or HLR requirement; unlinked needs indicate incomplete design coverage and will fail RTMify Trace.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="border-l-4 border-[#6A1B9A] pl-6">
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#6A1B9A] text-white font-bold mr-3">2</span>
+            Write Requirements (SYS → HLR → LLR Hierarchy)
+          </h3>
+          <div class="space-y-4 text-[#555555]">
+            <p>
+              Create the three-level requirement hierarchy per <strong>§5.5</strong>. Record Design Assurance Level (DAL A–E) in the Notes column.
+            </p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+              <li><strong>SYS (System)</strong> — Top-level requirements derived from User Needs. Trace to UN-nnn.</li>
+              <li><strong>HLR (High-Level Requirements)</strong> — Functional/architectural requirements derived from SYS. Trace to SYS-nnn. Independent of implementation.</li>
+              <li><strong>LLR (Low-Level Requirements)</strong> — Implementation-level requirements derived from HLR. Trace to HLR-nnn. Directly testable or reviewable at code level.</li>
+            </ul>
+
+            <!-- Table -->
+            <div class="overflow-x-auto mt-6">
+              <table class="w-full text-sm border-collapse">
+                <caption class="text-left font-semibold text-[#1A1A2E] mb-3">Requirements Example (SYS/HLR/LLR with DAL)</caption>
+                <thead>
+                  <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Traces</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Priority</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Test Group</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Status</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requirementsExample.map(row => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.id}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.description}</td>
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.traces}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.priority}</td>
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.testGroup}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.status}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-sm text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              <strong>Tips:</strong> Use SHALL (mandatory). Every HLR must have at least one LLR; every LLR must trace to an HLR (no orphans). Every requirement must have a Test Group link for verification traceability (§6.4). Record DAL in Notes; this ties to your verification plan (§6.3 Table A). See <a href="/docs/requirements" class="text-[#6A1B9A] hover:underline">Requirements</a> for detailed guidance on traceability depth.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="border-l-4 border-[#6A1B9A] pl-6">
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#6A1B9A] text-white font-bold mr-3">3</span>
+            Define Tests (§6.3 Reviews & §6.4 Testing)
+          </h3>
+          <div class="space-y-4 text-[#555555]">
+            <p>
+              Document verification activities per <strong>§6.3</strong> (reviews, analyses) and <strong>§6.4</strong> (testing). Link each test to a requirement via Test Group. Methods include:
+            </p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+              <li><strong>Test</strong> — Functional/integration testing, Monte Carlo simulations, hardware-in-loop (HIL), bench testing</li>
+              <li><strong>Analysis</strong> — Engineering analysis (thermal, stress, Kalman filter eigenvalue analysis, static code analysis)</li>
+              <li><strong>Inspection</strong> — Code review, formal inspection, dimensional check, FAI (First Article Inspection)</li>
+              <li><strong>Demonstration</strong> — Crew trials, operational scenario walk-throughs, bench demonstrations</li>
+            </ul>
+
+            <!-- Table -->
+            <div class="overflow-x-auto mt-6">
+              <table class="w-full text-sm border-collapse">
+                <caption class="text-left font-semibold text-[#1A1A2E] mb-3">Tests & Verification Example (§6.3–§6.4)</caption>
+                <thead>
+                  <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Test Group</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Test ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Type</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Method</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {testsExample.map(row => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.testGroup}</td>
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.testId}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.type}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.method}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-sm text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              <strong>Tips:</strong> Link every Test Group to a Requirement. One requirement may have multiple tests (especially DAL A): for example, HLR-001 Kalman filter is verified by both T-002 (convergence test) and T-003 (eigenvalue analysis). Include test procedure references and coverage metrics in description. For DAL A, document MC/DC coverage; for DAL D, statement coverage. See <a href="/docs/tests" class="text-[#6A1B9A] hover:underline">Tests & Verification</a> for coverage details.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="border-l-4 border-[#6A1B9A] pl-6">
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#6A1B9A] text-white font-bold mr-3">4</span>
+            Document Risks (Failure Mode Effects, §5.2)
+          </h3>
+          <div class="space-y-4 text-[#555555]">
+            <p>
+              Per <strong>§5.2</strong> (Software Safety Assessment) and <strong>§5.3</strong> (Software Failure Conditions and Verification), identify failure modes, assess severity (catastrophic to no effect) and likelihood, document mitigations, and track residual risk. Link risks to requirements that implement mitigation.
+            </p>
+
+            <!-- Table -->
+            <div class="overflow-x-auto mt-6">
+              <table class="w-full text-sm border-collapse">
+                <caption class="text-left font-semibold text-[#1A1A2E] mb-3">Risks & Mitigations Example</caption>
+                <thead>
+                  <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Risk ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Severity</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Occurrence</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Mitigation</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Linked Req</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Residual Severity</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Residual Occurrence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {risksExample.map(row => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.id}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.description}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.severity}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.occurrence}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.mitigation}</td>
+                      <td class="px-4 py-3 text-[#555555] font-mono">{row.linkedReq}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.residualSeverity}</td>
+                      <td class="px-4 py-3 text-[#555555]">{row.residualOccurrence}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-sm text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              <strong>Tips:</strong> Use a severity/occurrence matrix to justify DAL assignments. High-severity failure modes (catastrophic/hazardous) drive DAL A/B requirements and rigorous testing. Mitigation is typically built into design: for example, dual-redundant IRS with cross-check is captured in SYS-001 and verified by tests TG-001. Track residual risk post-mitigation; audit expects mitigation to reduce risk to acceptable levels. See <a href="/docs/risks" class="text-[#6A1B9A] hover:underline">Risk Management</a> for FMEA guidance.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="border-l-4 border-[#6A1B9A] pl-6">
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#6A1B9A] text-white font-bold mr-3">5</span>
+            Check Status and Generate RTM (Bidirectional Traceability §5.5.e)
+          </h3>
+          <div class="space-y-4 text-[#555555]">
+            <p>
+              Run <strong>RTMify Trace</strong> to validate the complete matrix. Every row should show <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">OK</code> status. The trace checks bidirectional traceability per §5.5.e:
+            </p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">MISSING_USER_NEED</code> — HLR/LLR with no parent requirement link (traceability upward broken)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">NO_TEST_LINKED</code> — Requirement with no Test Group (§6.4 verification missing)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">ORPHAN_TEST</code> — Test Group with no Requirement (scope creep or obsolete test)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">INCOMPLETE_RISK</code> — Risk with no mitigation or residual risk still unacceptable</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">ORPHAN_USER_NEED</code> — User Need with no SYS/HLR link (design input not addressed)</li>
+            </ul>
+            <p class="mt-4">
+              Fix all issues before formal design completion. A clean RTM demonstrates compliance with §5.5 bidirectional traceability and is a key artifact in the Software Accomplishment Summary (SAS) submitted to the certification authority.
+            </p>
+            <p class="text-sm text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              <strong>Pro tip:</strong> Generate a traceability report (Requirements → Tests matrix) and include it in your SAS. This is often requested by FAA/EASA auditors. See <a href="/docs/status-codes" class="text-[#6A1B9A] hover:underline">Status Codes</a> for full error definitions and remediation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coverage vs Doesn't Cover -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">What This Template Covers vs. Doesn't Cover</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">Covered</h3>
+          <ul class="list-disc list-inside space-y-3 text-[#555555] ml-4">
+            <li><strong>Software Requirements (§5.5)</strong> — SYS/HLR/LLR hierarchy with bidirectional traceability from system requirements through requirements and tests</li>
+            <li><strong>Design Assurance Level (DAL)</strong> — A through E assignment per failure effects assessment (§5.2–5.3)</li>
+            <li><strong>Reviews and Analyses (§6.3)</strong> — Software requirements review, architecture review, design review, code inspection, verification analysis (Kalman filter stability, eigenvalue, etc.)</li>
+            <li><strong>Testing (§6.4)</strong> — HLR-level and LLR-level testing, coverage metrics (MC/DC, branch, statement), test traceability</li>
+            <li><strong>Risk Management (§5.2–5.3)</strong> — Failure mode identification, severity/occurrence assessment, mitigation design, residual risk tracking</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-[#1A1A2E] mb-4">NOT Covered (separate DO-178C documentation)</h3>
+          <ul class="list-disc list-inside space-y-3 text-[#555555] ml-4">
+            <li><strong>Source Code Traceability (§7.0)</strong> — RTMify traces requirements to tests. Source code comments linking LLRs to code lines are managed in your code repository and static analysis tools (e.g., Coverity, Polyspace). Your SAS must include a code traceability matrix; RTMify provides the requirements backbone.</li>
+            <li><strong>Structural Coverage Analysis (§6.4.4.2, MC/DC)</strong> — For DAL A/B, you must achieve ≥100% Modified Condition/Decision Coverage. RTMify does not measure or enforce coverage; use instrumented test harnesses (e.g., VectorCAST, Tessy, Bullseye) to collect and report coverage metrics. Link coverage results to test descriptions.</li>
+            <li><strong>Plan for Software Aspects of Certification (PSAC, §2.0)</strong> — RTMify supports the design phase; PSAC is a contractual/planning document describing the entire V&V strategy. Reference PSAC in RTMify's "Source" fields where applicable.</li>
+            <li><strong>Software Configuration Management (§8.0)</strong> — Use your configuration management tool (Git, SVN, CM tools) to version requirements, code, and test artifacts. RTMify helps track change impact; your CM procedures govern baseline, version control, and release.</li>
+            <li><strong>Software Accomplishment Summary (SAS, §2.0)</strong> — The SAS is the final compliance artifact submitted to FAA/EASA. It summarizes how your design, verification, and configuration management satisfy each objective in DO-178C Table A. RTMify generates the RTM portion of the SAS; you author the narrative and executive summary separately.</li>
+            <li><strong>Problem Reports and Corrective Action (§10.0)</strong> — Defect tracking, root cause analysis, and corrective action are managed in your QMS defect system. Link problem report IDs to requirements if they drive derived requirements.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Frequently Asked Questions</h2>
+
+      <div class="space-y-4">
+        {faqItems.map(item => (
+          <details class="bg-[#F5F5F5] rounded border border-[#DDDDDD] p-6 cursor-pointer group">
+            <summary class="font-semibold text-[#1A1A2E] flex items-center justify-between">
+              {item.question}
+              <span class="text-[#6A1B9A] group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="mt-4 text-[#555555] leading-relaxed">
+              {item.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related Resources -->
+    <section class="mb-12 p-8 bg-[#F5F5F5] rounded border border-[#DDDDDD]">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Related Resources</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/standards/do-178c" class="text-[#6A1B9A] hover:underline font-medium">DO-178C Standard Overview</a>
+        <a href="/docs/user-needs" class="text-[#6A1B9A] hover:underline font-medium">User Needs</a>
+        <a href="/docs/requirements" class="text-[#6A1B9A] hover:underline font-medium">Requirements</a>
+        <a href="/docs/tests" class="text-[#6A1B9A] hover:underline font-medium">Tests & Verification</a>
+        <a href="/docs/risks" class="text-[#6A1B9A] hover:underline font-medium">Risk Management</a>
+        <a href="/docs/status-codes" class="text-[#6A1B9A] hover:underline font-medium">Status Codes</a>
+      </div>
+    </section>
+  </div>
+</DocsLayout>

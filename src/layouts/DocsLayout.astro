@@ -1,0 +1,155 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  jsonLd?: object;
+  breadcrumbs?: BreadcrumbItem[];
+  activeSlug?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  jsonLd,
+  breadcrumbs = [],
+  activeSlug,
+} = Astro.props;
+
+const sidebarLinks = [
+  { slug: 'docs', href: '/docs/', label: 'Documentation Hub' },
+  { slug: 'user-needs', href: '/docs/user-needs/', label: 'User Needs Tab' },
+  { slug: 'requirements', href: '/docs/requirements/', label: 'Requirements Tab' },
+  { slug: 'tests', href: '/docs/tests/', label: 'Tests Tab' },
+  { slug: 'risks', href: '/docs/risks/', label: 'Risks Tab' },
+  { slug: 'status-codes', href: '/docs/status-codes/', label: 'Status Codes' },
+  { slug: 'traceability', href: '/docs/traceability/', label: 'Traceability Chain' },
+];
+
+const standardLinks = [
+  { slug: 'as9100', href: '/docs/for/as9100/', label: 'AS9100', color: '#1565C0' },
+  { slug: 'iso-13485', href: '/docs/for/iso-13485/', label: 'ISO 13485', color: '#2E7D32' },
+  { slug: 'do-178c', href: '/docs/for/do-178c/', label: 'DO-178C', color: '#6A1B9A' },
+  { slug: 'iec-62304', href: '/docs/for/iec-62304/', label: 'IEC 62304', color: '#BF360C' },
+  { slug: 'iso-26262', href: '/docs/for/iso-26262/', label: 'ISO 26262', color: '#E65100' },
+  { slug: 'aspice', href: '/docs/for/aspice/', label: 'ASPICE', color: '#004D40' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+    {/* Breadcrumb bar */}
+    {breadcrumbs.length > 0 && (
+      <div class="border-b border-[#DDDDDD] bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <nav aria-label="Breadcrumb" class="text-sm text-[#555555]">
+            <ol class="flex items-center gap-1">
+              {breadcrumbs.map((crumb, idx) => (
+                <li class="flex items-center gap-1">
+                  {idx > 0 && <span class="text-[#DDDDDD]">/</span>}
+                  {idx === breadcrumbs.length - 1 ? (
+                    <span class="text-[#1A1A2E] font-medium">{crumb.name}</span>
+                  ) : (
+                    <a href={crumb.url} class="hover:text-[#1A1A2E] transition-colors">{crumb.name}</a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </div>
+      </div>
+    )}
+
+    {/* Content + Sidebar grid */}
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
+
+        {/* Main content */}
+        <article class="prose prose-slate max-w-none">
+          <slot />
+        </article>
+
+        {/* Sidebar */}
+        <aside class="mt-10 lg:mt-0">
+          <div class="sticky top-6 space-y-6">
+
+            {/* Docs nav */}
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Template Docs</h2>
+              <ul class="space-y-1.5">
+                {sidebarLinks.map(link => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class={`block text-sm px-2 py-1 rounded transition-colors ${
+                        activeSlug === link.slug
+                          ? 'bg-[#1A1A2E] text-white font-medium'
+                          : 'text-[#555555] hover:text-[#1A1A2E] hover:bg-[#F5F5F5]'
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick starts */}
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Quick Starts</h2>
+              <ul class="space-y-1.5">
+                {standardLinks.map(link => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class={`flex items-center gap-2 text-sm px-2 py-1 rounded transition-colors ${
+                        activeSlug === link.slug
+                          ? 'font-medium'
+                          : 'hover:bg-[#F5F5F5]'
+                      }`}
+                      style={activeSlug === link.slug ? `color: ${link.color}; background-color: ${link.color}11;` : `color: ${link.color};`}
+                    >
+                      <span
+                        class="inline-block w-2 h-2 rounded-full shrink-0"
+                        style={`background-color: ${link.color};`}
+                      ></span>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Download CTA */}
+            <div class="border border-[#DDDDDD] rounded-lg p-5 bg-white">
+              <h2 class="text-sm font-semibold text-[#555555] uppercase tracking-wide mb-3">Free Template</h2>
+              <p class="text-sm text-[#555555] mb-4">Requirements Traceability Template (.xlsx).</p>
+              <DownloadButton size="sm" />
+            </div>
+
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

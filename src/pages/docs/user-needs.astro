@@ -1,0 +1,269 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'User Needs Tab Documentation | RTMify';
+const description = 'Complete guide to the User Needs tab in the RTMify requirements traceability template for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE compliance.';
+const canonical = 'https://rtmify.io/docs/user-needs/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'User Needs', url: '/docs/user-needs/' }
+];
+
+const standards = [
+  {
+    name: 'AS9100 Rev D',
+    clause: '§8.3.3 Design Inputs',
+    description: 'User needs represent the initial design inputs that establish baseline requirements for aerospace product development. They capture stakeholder expectations, operational constraints, and performance parameters before design begins.',
+    guidance: 'Document all customer requirements, operational needs, and regulatory constraints as design inputs. Ensure traceability from each design input through design outputs and verification activities.'
+  },
+  {
+    name: 'ISO 13485:2016',
+    clause: '§7.3.3 Design Inputs',
+    description: 'User needs encompass both clinical/user expectations and regulatory requirements. Distinguish between intended use needs, performance expectations, and regulatory input requirements (labeling, standards, applicable regulations).',
+    guidance: 'Separate user needs into customer needs and regulatory inputs. For medical devices, explicitly identify clinical user needs and regulatory constraints (510(k), PMA, classification). Document the source for traceability.'
+  },
+  {
+    name: 'DO-178C',
+    clause: 'System Requirements Foundation',
+    description: 'User needs form the operational and safety foundation that feeds High-Level Requirements (HLR). They capture system-level operational needs, safety objectives, and performance criteria that HLRs will decompose.',
+    guidance: 'User needs should align with aircraft functions and safety objectives. Each need should be traceable to HLRs. Safety-critical needs (DAL A/B) require explicit safety focus. Document need criticality (safety vs. performance).'
+  },
+  {
+    name: 'IEC 62304',
+    clause: '§5.2 Software Development Planning & Safety Classification',
+    description: 'User needs inform software development planning and establish context for software safety classification. They capture the intended use, operational environment, and hazards that drive safety class assignment.',
+    guidance: 'Include needs related to intended use, operational modes, and known hazards. Safety-critical needs influence Software Safety Class (Class A/B/C). Document the relationship between needs and subsequent HARA (Hazard Analysis and Risk Assessment) inputs.'
+  },
+  {
+    name: 'ISO 26262',
+    clause: '§8 HARA Safety Goals',
+    description: 'User needs capture the operational context and safety objectives that flow from Hazard Analysis and Risk Assessment (HARA). Safety goals derived from HARA outputs become user needs that drive functional safety requirements.',
+    guidance: 'Document operational scenarios, hazards, and safety objectives as needs. Include ASIL (Automotive Safety Integrity Level) context. User needs should map bidirectionally with HARA outputs and subsequent functional safety requirements.'
+  },
+  {
+    name: 'ASPICE',
+    clause: 'SYS.1 Stakeholder Requirements Elicitation',
+    description: 'User needs are the primary output of SYS.1, capturing stakeholder expectations, constraints, and acceptance criteria. They form the foundation for system requirements definition and verification planning.',
+    guidance: 'Ensure comprehensive stakeholder engagement (customers, end-users, regulators, safety). Document requirement sources and trace through SYS.2 (system requirements) and SYS.3 (architectural design) gates.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'What is the difference between a user need and a requirement?',
+    answer: 'A user need is a high-level statement of what stakeholders expect or require from the system, written in plain language without prescribing how to achieve it. A requirement is a specific, measurable specification of how the system will meet that need. One user need may generate multiple requirements. For example, the user need "The system must be safe to operate" might generate requirements like "Fault detection time < 100ms" and "All hazardous functions require dual-channel confirmation."'
+  },
+  {
+    question: 'Can I have multiple requirements for one user need?',
+    answer: 'Yes, and this is normal. A single user need typically decomposes into multiple requirements that specify different aspects of meeting that need. The RTMify Requirements tab allows you to trace multiple requirements back to a single user need using the UN-ID reference. This creates a one-to-many relationship that supports traceability matrices.'
+  },
+  {
+    question: 'What sources should I capture for user needs?',
+    answer: 'There are four primary sources: (1) Customer—explicit customer statements and use cases; (2) Regulation—regulatory standards, certification rules, and compliance requirements; (3) Internal—company standards, safety policies, and architectural constraints; (4) Safety—hazard analyses, risk assessments, and safety goals (FMEA, HARA, etc.). Always identify the source to ensure regulatory compliance and traceability.'
+  },
+  {
+    question: 'How specific should a user need statement be?',
+    answer: 'User need statements should be clear and unambiguous but not overly prescriptive. Avoid specifying implementation details or solutions; instead, describe the problem or expectation. A good statement is 1–2 sentences and can be understood by non-technical stakeholders. For example: "The device shall provide audible and visual alarms when critical parameters exceed safe limits" is good; "Use a 85dB piezo buzzer and red LED" is too prescriptive (that is a requirement).'
+  },
+  {
+    question: 'What if a user need comes from a regulation, not a customer?',
+    answer: 'Document it as a user need with the source set to "Regulation." Regulatory requirements are stakeholder requirements (your regulator is a stakeholder), and capturing them as user needs ensures they are formally traced through design, verification, and validation. This is especially important for medical devices (FDA labeling, 21 CFR), aerospace (14 CFR), and automotive (ISO 26262, ISO functional safety) contexts.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((item, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": item.name,
+        "item": `https://rtmify.io${item.url}`
+      }))
+    },
+    {
+      "@type": "TechArticle",
+      "headline": "User Needs Tab Documentation",
+      "description": description,
+      "url": canonical,
+      "datePublished": "2024-01-15",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "RTMify",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://rtmify.io/logo.svg"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="user-needs"
+>
+  <!-- Header -->
+  <h1 class="text-5xl font-bold text-[#1A1A2E] mb-3">User Needs Tab</h1>
+  <p class="text-lg text-[#555555] mb-10">Complete field reference and compliance mapping for the User Needs tab in the RTMify requirements traceability template.</p>
+
+  <!-- Answer Block -->
+  <div class="bg-gradient-to-br from-[#1A1A2E] to-[#2d3561] text-white p-7 rounded-lg mb-10 border-l-4 border-[#1565C0]">
+    <p class="text-base leading-relaxed m-0"><strong>The User Needs tab captures stakeholder expectations and regulatory requirements at the highest level before design or detailed requirements are defined.</strong> Each need is a plain-language statement of what customers, regulators, safety analyses, or internal standards expect the system to accomplish—not how it will accomplish it. User needs form the foundation for all downstream requirements, design, and verification activities across AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE processes.</p>
+  </div>
+
+  <!-- Field Reference Section -->
+  <section class="mb-15">
+    <h2 class="text-4xl font-bold text-[#1A1A2E] border-b-4 border-[#1A1A2E] pb-3 mb-5">Field-by-Field Reference</h2>
+    <p class="text-base text-[#555555] mb-10">The User Needs tab contains five columns that systematically capture, prioritize, and track stakeholder needs throughout the product lifecycle.</p>
+
+    <div class="overflow-x-auto mb-10">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="p-3.5 text-left font-semibold w-[10%]">Column</th>
+            <th class="p-3.5 text-left font-semibold w-[20%]">Field Name</th>
+            <th class="p-3.5 text-left font-semibold w-[35%]">Description</th>
+            <th class="p-3.5 text-left font-semibold w-[35%]">Valid Values & Tips</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="hover:bg-[#F5F5F5]">
+            <td class="p-3.5 border-b border-[#DDDDDD] font-mono font-semibold text-[#1565C0]">A</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><strong>ID</strong></td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">Unique identifier for each user need. Enables traceability to requirements, design, and verification.</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">UN-001, UN-002, UN-003, …</span> Auto-populated. Sequential format ensures unique identification and supports traceability matrix lookups.</td>
+          </tr>
+          <tr class="hover:bg-[#F5F5F5]">
+            <td class="p-3.5 border-b border-[#DDDDDD] font-mono font-semibold text-[#1565C0]">B</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><strong>Statement</strong></td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">Plain-language description of what stakeholders expect or require. Should focus on the problem or need, not the solution. Understood by both technical and non-technical readers.</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">1–2 sentences. Avoid implementation details, solutions, or technical jargon. Example: "The system must detect and report faults within 100ms of occurrence." (Good) vs. "Use interrupt-driven architecture" (Too prescriptive).</td>
+          </tr>
+          <tr class="hover:bg-[#F5F5F5]">
+            <td class="p-3.5 border-b border-[#DDDDDD] font-mono font-semibold text-[#1565C0]">C</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><strong>Source of Need Statement</strong></td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">Identifies where the need originated. Required for traceability and regulatory compliance. Ensures needs are justified and traceable to authoritative sources.</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Customer</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Regulation</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Internal</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Safety</span> <br><br>— Customer: explicit customer request or use case<br>— Regulation: regulatory standards, certification rules<br>— Internal: company standards, design constraints<br>— Safety: hazard analysis, FMEA, HARA, risk assessment outputs</td>
+          </tr>
+          <tr class="hover:bg-[#F5F5F5]">
+            <td class="p-3.5 border-b border-[#DDDDDD] font-mono font-semibold text-[#1565C0]">D</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><strong>Priority</strong></td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">Indicates the relative importance and criticality of the need. Guides requirement decomposition and verification planning.</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">High</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Medium</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Low</span> <br><br>— High: safety-critical, regulatory, or essential function<br>— Medium: important but not critical<br>— Low: nice-to-have, enhancement, or optional<br><br>Safety-related needs (DO-178C DAL A/B, IEC 62304 Class A/B) should typically be High.</td>
+          </tr>
+          <tr class="hover:bg-[#F5F5F5]">
+            <td class="p-3.5 border-b border-[#DDDDDD] font-mono font-semibold text-[#1565C0]">E</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><strong>RTMify Status</strong></td>
+            <td class="p-3.5 border-b border-[#DDDDDD]">Automatically calculated field indicating whether this user need has been fully traced through the product lifecycle (requirements, design, verification).</td>
+            <td class="p-3.5 border-b border-[#DDDDDD]"><span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Complete</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">In Progress</span> | <span class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs">Not Started</span> <br><br>Auto-populated based on linked requirements and verification activities. Use this to identify incomplete traceability chains and audit readiness.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Per-Standard Mapping -->
+  <section class="mb-15">
+    <h2 class="text-4xl font-bold text-[#1A1A2E] border-b-4 border-[#1A1A2E] pb-3 mb-5">Per-Standard Compliance Mapping</h2>
+    <p class="text-base text-[#555555] mb-10">User needs map to specific clauses and processes in each regulated standard. Below is a standard-by-standard breakdown showing how the User Needs tab satisfies each compliance framework.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      {standards.map(std => {
+        let borderColor = '#1565C0';
+        if (std.name === 'ISO 13485:2016') borderColor = '#2E7D32';
+        else if (std.name === 'DO-178C') borderColor = '#6A1B9A';
+        else if (std.name === 'IEC 62304') borderColor = '#BF360C';
+        else if (std.name === 'ISO 26262') borderColor = '#E65100';
+        else if (std.name === 'ASPICE') borderColor = '#004D40';
+
+        return (
+          <div
+            style={{ borderLeftColor: borderColor }}
+            class="border-l-4 p-5 bg-[#F5F5F5] rounded"
+          >
+            <h3 class="text-lg font-semibold text-[#1A1A2E] mb-2">{std.name}</h3>
+            <div class="font-mono text-xs text-[#555555] font-semibold mb-3">{std.clause}</div>
+            <p class="text-sm text-[#555555] mb-3 leading-relaxed">{std.description}</p>
+            <div class="bg-white border border-[#DDDDDD] p-3 rounded text-xs text-[#555555] leading-relaxed">
+              <strong>Guidance:</strong> {std.guidance}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Common Mistakes -->
+  <section style={{ backgroundColor: '#fff3e0', borderLeftColor: '#e65100' }} class="border-l-4 p-5 rounded mb-10">
+    <h3 class="text-xl font-semibold text-[#e65100] mt-0 mb-4">Common Mistakes to Avoid</h3>
+    <ul class="list-none m-0 p-0">
+      <li class="mb-3 pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Writing requirements instead of needs:</strong> User needs describe problems or expectations ("The system must be safe"), not solutions ("Use dual-channel redundancy"). If your statement specifies how to do something, it is a requirement, not a user need.</li>
+      <li class="mb-3 pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Missing source attribution:</strong> Every need must have a source (Customer, Regulation, Internal, or Safety). Undocumented sources create audit failures and traceability breaks.</li>
+      <li class="mb-3 pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Duplicate or overlapping needs:</strong> Review the needs list for statements that say the same thing in different words. Consolidate duplicates and link all downstream requirements to the primary need ID.</li>
+      <li class="mb-3 pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Vague or unmeasurable statements:</strong> Avoid statements like "The system should be reliable" or "Performance should be good." Instead, quantify: "The system shall have a mean time between failures (MTBF) ≥ 10,000 hours."</li>
+      <li class="mb-3 pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Ignoring safety needs:</strong> Safety-critical needs from hazard analyses (FMEA, HARA, TQFP) must be captured as user needs with source "Safety" and priority "High." This is non-negotiable for regulated products.</li>
+      <li class="pl-6 relative"><span style={{ position: 'absolute', left: 0, color: '#e65100', fontWeight: 'bold' }}>✕</span><strong>Failing to trace through the lifecycle:</strong> User needs are not standalone—they drive requirements (Requirements tab), design (Design tab), verification (Verification tab), and validation. Incomplete traceability results in audit gaps and compliance failures.</li>
+    </ul>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="mb-15">
+    <h2 class="text-4xl font-bold text-[#1A1A2E] border-b-4 border-[#1A1A2E] pb-3 mb-5">Frequently Asked Questions</h2>
+
+    {faqs.map((faq, idx) => (
+      <div class={`mb-8 pb-8 ${idx < faqs.length - 1 ? 'border-b border-[#DDDDDD]' : ''}`}>
+        <div class="text-base font-semibold text-[#1A1A2E] mb-3">{faq.question}</div>
+        <div class="text-sm text-[#555555] leading-relaxed">{faq.answer}</div>
+      </div>
+    ))}
+  </section>
+
+  <!-- Cross-links -->
+  <section style={{ backgroundColor: '#e3f2fd', borderLeftColor: '#1565c0' }} class="border-l-4 p-5 rounded mt-10 mb-10">
+    <h3 class="text-xl font-semibold text-[#1565C0] mt-0 mb-4">Related Documentation</h3>
+    <ul class="list-none m-0 p-0">
+      <li class="mb-2"><a href="/docs/requirements/" class="text-[#1565C0] no-underline font-medium hover:underline">Requirements Tab</a> — How to decompose user needs into specific system requirements</li>
+      <li class="mb-2"><a href="/docs/traceability/" class="text-[#1565C0] no-underline font-medium hover:underline">Traceability</a> — Building and validating traceability matrices across all tabs</li>
+      <li class="mb-2"><a href="/docs/status-codes/" class="text-[#1565C0] no-underline font-medium hover:underline">Status Codes</a> — Understanding RTMify status indicators and completion criteria</li>
+      <li class="mb-2"><a href="/standards/as9100/" class="text-[#1565C0] no-underline font-medium hover:underline">AS9100 Guidance</a> — Design input requirements under AS9100 Rev D</li>
+      <li class="mb-2"><a href="/standards/iso-13485/" class="text-[#1565C0] no-underline font-medium hover:underline">ISO 13485 Guidance</a> — Design input and regulatory requirements mapping</li>
+      <li class="mb-2"><a href="/standards/do-178c/" class="text-[#1565C0] no-underline font-medium hover:underline">DO-178C Guidance</a> — System requirements and HLR decomposition</li>
+      <li class="mb-2"><a href="/standards/iec-62304/" class="text-[#1565C0] no-underline font-medium hover:underline">IEC 62304 Guidance</a> — Software development planning and safety classification</li>
+      <li class="mb-2"><a href="/standards/iso-26262/" class="text-[#1565C0] no-underline font-medium hover:underline">ISO 26262 Guidance</a> — HARA and functional safety requirements</li>
+      <li><a href="/standards/aspice/" class="text-[#1565C0] no-underline font-medium hover:underline">ASPICE Guidance</a> — SYS.1 stakeholder requirements elicitation</li>
+    </ul>
+  </section>
+
+  <!-- Footer meta -->
+  <div style={{ marginTop: '80px', paddingTop: '40px', borderTopColor: '#DDDDDD' }} class="border-t text-xs text-[#999999]">
+    <p><strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <p><strong>Standards Covered:</strong> AS9100 Rev D, ISO 13485:2016, DO-178C, IEC 62304, ISO 26262:2018, ASPICE 3.1</p>
+    <p style={{ marginTop: '12px', fontStyle: 'italic' }}>RTMify is a compliance-aware requirements traceability manager designed for regulated engineering environments. This documentation reflects best practices across aerospace, medical device, automotive, and industrial safety standards.</p>
+  </div>
+</DocsLayout>

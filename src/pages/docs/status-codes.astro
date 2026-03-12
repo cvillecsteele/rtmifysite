@@ -1,0 +1,616 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Status Codes Reference';
+const description = 'Complete guide to RTMify Status column codes: OK, NO_TEST_LINKED, MISSING_USER_NEED, UNRESOLVED, and MISSING_ID. Understand what each status means, why it matters for compliance, and how to fix audit findings.';
+const canonical = 'https://rtmify.io/docs/status-codes/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Status Codes', url: '/docs/status-codes/' }
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'TechArticle',
+      name: title,
+      description: description,
+      url: canonical,
+      datePublished: '2024-01-01',
+      dateModified: '2026-03-12'
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'RTMify',
+          item: 'https://rtmify.io'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Docs',
+          item: 'https://rtmify.io/docs/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Status Codes',
+          item: canonical
+        }
+      ]
+    },
+    {
+      '@type': 'DefinedTermSet',
+      hasDefinedTerm: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'OK',
+          description: 'Fully linked and consistent. Node is in the graph, all referenced IDs resolve, all edges exist.',
+          url: `${canonical}#ok`
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'NO_TEST_LINKED',
+          description: 'Requirement has no Test Group in column E. Unverified requirement — gap that surfaces in every RTM audit.',
+          url: `${canonical}#no-test-linked`
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'MISSING_USER_NEED',
+          description: 'Requirement references no parent User Need in column C. Traceability break.',
+          url: `${canonical}#missing-user-need`
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'UNRESOLVED',
+          description: 'References an ID that doesn\'t exist in another tab.',
+          url: `${canonical}#unresolved`
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'MISSING_ID',
+          description: 'Row has data but column A is blank.',
+          url: `${canonical}#missing-id`
+        }
+      ]
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Can I ignore warnings and just fix errors?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — warnings are audit findings waiting to happen. NO_TEST_LINKED and MISSING_USER_NEED trigger non-conformance findings in AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE audits. Every warning must be addressed before sign-off.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What if RTMify shows OK but I know there\'s an issue?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'RTMify checks structural integrity only: IDs resolve, edges exist, no blanks. It does NOT validate semantic correctness. Use OK as a baseline — then do manual review. A green spreadsheet is necessary but not sufficient for audit readiness.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I fix UNRESOLVED when I haven\'t created the referenced item yet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Two paths: (1) Create the missing row on the referenced tab with the referenced ID, or (2) Update the current row to reference a different ID that already exists. Until one of these happens, RTMify will keep flagging UNRESOLVED.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Do status codes work the same in RTMify Live?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. RTMify Live recalculates statuses in real-time as you edit. If you add a Test Group to a requirement with NO_TEST_LINKED, the status flips to OK immediately.'
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<DocsLayout {title} {description} {canonical} {jsonLd} {breadcrumbs} activeSlug="status-codes">
+  <article class="prose max-w-4xl mx-auto">
+    <header class="mb-12 border-b border-[#DDDDDD] pb-8">
+      <h1 class="text-4xl font-bold text-[#1A1A2E] mb-4">{title}</h1>
+      <p class="text-lg text-[#555555] leading-relaxed">
+        The RTMify Status column (last column on every tab) tells you whether each row is fully linked and audit-ready, or has gaps that need fixing. Five possible values: <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">OK</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">NO_TEST_LINKED</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_USER_NEED</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UNRESOLVED</code>, and <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_ID</code>. Any non-OK status is an audit finding waiting to happen.
+      </p>
+    </header>
+
+    <!-- Status Overview Section -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Status Overview</h2>
+      <p class="text-[#555555] mb-8">
+        RTMify auto-populates the Status column when it processes your file. When used standalone, treat it as a manual checklist. All five status codes map to specific compliance clauses across AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE.
+      </p>
+
+      <div class="overflow-x-auto border border-[#DDDDDD] rounded-lg shadow-sm">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="bg-[#1A1A2E] text-white">
+              <th class="px-6 py-4 text-left font-semibold border border-[#DDDDDD]">Status</th>
+              <th class="px-6 py-4 text-left font-semibold border border-[#DDDDDD]">Appears On</th>
+              <th class="px-6 py-4 text-left font-semibold border border-[#DDDDDD]">Meaning</th>
+              <th class="px-6 py-4 text-left font-semibold border border-[#DDDDDD]">Severity</th>
+              <th class="px-6 py-4 text-left font-semibold border border-[#DDDDDD]">How to Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- OK -->
+            <tr class="bg-[#DCFCE7] border border-[#DDDDDD]">
+              <td class="px-6 py-4 border border-[#DDDDDD]"><code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">OK</code></td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">All tabs</td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Fully linked and consistent. Node is in the graph, all referenced IDs resolve, all edges exist.</td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><span class="inline-block bg-[#DCFCE7] text-[#166534] px-3 py-1 rounded text-xs font-semibold">Clean</span></td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><a href="#ok" class="text-blue-500 hover:underline">See detailed guide</a></td>
+            </tr>
+            <!-- NO_TEST_LINKED -->
+            <tr class="bg-[#FEF9C3] border border-[#DDDDDD]">
+              <td class="px-6 py-4 border border-[#DDDDDD]"><code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">NO_TEST_LINKED</code></td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Requirements, User Needs</td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Requirement has no Test Group in column E. Unverified requirement — gap that surfaces in every RTM audit.</td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><span class="inline-block bg-[#FEF9C3] text-[#854D0E] px-3 py-1 rounded text-xs font-semibold">Warning</span></td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><a href="#no-test-linked" class="text-blue-500 hover:underline">See detailed guide</a></td>
+            </tr>
+            <!-- MISSING_USER_NEED -->
+            <tr class="bg-[#FEF9C3] border border-[#DDDDDD]">
+              <td class="px-6 py-4 border border-[#DDDDDD]"><code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_USER_NEED</code></td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Requirements tab</td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Requirement references no parent User Need in column C. Traceability break — violates §8.3.3 / §7.3.3 / ASPICE SWE.1.</td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><span class="inline-block bg-[#FEF9C3] text-[#854D0E] px-3 py-1 rounded text-xs font-semibold">Warning</span></td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><a href="#missing-user-need" class="text-blue-500 hover:underline">See detailed guide</a></td>
+            </tr>
+            <!-- UNRESOLVED -->
+            <tr class="bg-[#FEE2E2] border border-[#DDDDDD]">
+              <td class="px-6 py-4 border border-[#DDDDDD]"><code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UNRESOLVED</code></td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Any tab with references</td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">References an ID that doesn't exist in another tab. Fix the referenced ID or add the missing row before generating an RTM.</td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><span class="inline-block bg-[#FEE2E2] text-[#991B1B] px-3 py-1 rounded text-xs font-semibold">Error</span></td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><a href="#unresolved" class="text-blue-500 hover:underline">See detailed guide</a></td>
+            </tr>
+            <!-- MISSING_ID -->
+            <tr class="bg-[#FEE2E2] border border-[#DDDDDD]">
+              <td class="px-6 py-4 border border-[#DDDDDD]"><code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_ID</code></td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">All tabs</td>
+              <td class="px-6 py-4 border border-[#DDDDDD] text-[#555555]">Row has data but column A is blank. Row was skipped entirely — nothing was ingested into the graph.</td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><span class="inline-block bg-[#FEE2E2] text-[#991B1B] px-3 py-1 rounded text-xs font-semibold">Error</span></td>
+              <td class="px-6 py-4 border border-[#DDDDDD]"><a href="#missing-id" class="text-blue-500 hover:underline">See detailed guide</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Per-Status Detailed Sections -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8">Status Code Details</h2>
+
+      <!-- OK Status -->
+      <div id="ok" class="mb-10 p-6 rounded-lg bg-[#DCFCE7] border-l-4 border-[#22C55E]">
+        <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4"><code class="font-mono bg-[#F5F5F5] px-2 py-1 rounded">OK</code> — Clean</h3>
+        <div class="mb-6 p-4 bg-white rounded border border-[#DDDDDD]">
+          <span class="inline-block font-semibold text-[#166534]">✓ Clean</span>
+        </div>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">What Triggers This Status</h4>
+        <p class="text-[#555555] mb-4">All of the following conditions are met:</p>
+        <ul class="list-disc list-inside text-[#555555] space-y-2 mb-6">
+          <li>Row has a unique ID in column A</li>
+          <li>All referenced IDs (user needs, tests, risks) exist on their respective tabs</li>
+          <li>All cross-tab links resolve without errors</li>
+          <li>No mandatory fields are blank</li>
+          <li>The row is fully integrated into the traceability graph</li>
+        </ul>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Why It Matters for Compliance</h4>
+        <p class="text-[#555555] mb-6">
+          OK is your baseline for audit readiness. Every major standard (AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, ASPICE) requires that traceability networks be complete and internally consistent. An OK row proves structural integrity. However, OK does not validate semantic correctness — your requirement text could still be vague, your test could still be flawed. Use OK as a necessary but not sufficient condition for sign-off.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Example Scenario</h4>
+        <p class="text-[#555555] mb-6">
+          You have a requirement <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-001</code> that links to user need <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UN-001</code> and test group <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">TG-001</code>. All three IDs exist on their tabs, the links are bidirectional, and there are no blank fields. RTMify shows <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">OK</code>. This row can be included in your RTM and presented to an auditor without structural objections.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">How to Maintain It</h4>
+        <ul class="list-disc list-inside text-[#555555] space-y-2">
+          <li>Never leave column A (ID) blank</li>
+          <li>Before referencing another ID, verify it exists on its tab</li>
+          <li>Keep bidirectional links in sync: if REQ-001 → UN-001, then UN-001 must reference REQ-001 in the Requirements column</li>
+          <li>Run RTMify regularly to catch drift</li>
+        </ul>
+      </div>
+
+      <!-- NO_TEST_LINKED Status -->
+      <div id="no-test-linked" class="mb-10 p-6 rounded-lg bg-[#FEF9C3] border-l-4 border-[#EAB308]">
+        <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4"><code class="font-mono bg-[#F5F5F5] px-2 py-1 rounded">NO_TEST_LINKED</code> — Warning</h3>
+        <div class="mb-6 p-4 bg-white rounded border border-[#DDDDDD]">
+          <span class="inline-block font-semibold text-[#854D0E]">⚠ Warning</span>
+        </div>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">What Triggers This Status</h4>
+        <p class="text-[#555555] mb-6">
+          A requirement exists and has a valid ID, but column E (Test Group reference) is blank or references a non-existent test group.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Which Tabs It Appears On</h4>
+        <p class="text-[#555555] mb-6">
+          Primarily on the <strong>Requirements</strong> tab. Can also appear on the <strong>User Needs</strong> tab if a User Need has no test coverage linked through any requirement.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Why It Matters for Compliance</h4>
+        <p class="text-[#555555] mb-4">Every major standard requires verification traceability:</p>
+        <ul class="list-disc list-inside text-[#555555] space-y-2 mb-6">
+          <li><strong>AS9100 §8.3.5</strong>: "Verification of requirements shall be established and maintained"</li>
+          <li><strong>ISO 13485 §7.3.5–7.3.6</strong>: Design outputs must be verified</li>
+          <li><strong>DO-178C §6.3</strong>: "Traceability shall exist from system requirements to test cases"</li>
+          <li><strong>IEC 62304 §5.5</strong>: "Traceability of requirements to implementation and verification shall be established"</li>
+          <li><strong>ISO 26262 Part 6, §9–11</strong>: ASIL requirements must trace to verification</li>
+          <li><strong>ASPICE SWE.4–SWE.6</strong>: Verification links are mandatory</li>
+        </ul>
+        <p class="text-[#555555] mb-6">
+          An auditor will ask: "How do you know this requirement works?" If you have no test, you have no answer. This is a finding.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Example Scenario</h4>
+        <p class="text-[#555555] mb-6">
+          You have <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-042: The system shall process uploads within 5 seconds</code>. The requirement is properly linked to user need <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UN-018</code>, but column E is blank. RTMify shows <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">NO_TEST_LINKED</code>. In your audit, the examiner asks which test verifies the 5-second requirement. You have no answer. Finding issued.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">How to Fix It (Step by Step)</h4>
+        <ol class="list-decimal list-inside text-[#555555] space-y-4">
+          <li>
+            <strong>Create a test group</strong> (if it doesn't exist):
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go to the Tests tab</li>
+              <li>Add a new row with a unique test group ID, e.g., <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">TG-042</code></li>
+              <li>Add test case(s) that verify the requirement</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Link the test group to the requirement</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go back to Requirements tab, row with NO_TEST_LINKED</li>
+              <li>In column E, enter the test group ID (e.g., <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">TG-042</code>)</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Create reverse link</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go to the Tests tab, row TG-042</li>
+              <li>In the Requirements column, reference <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-042</code></li>
+            </ul>
+          </li>
+          <li><strong>Re-run RTMify</strong>: Status should flip to OK</li>
+        </ol>
+      </div>
+
+      <!-- MISSING_USER_NEED Status -->
+      <div id="missing-user-need" class="mb-10 p-6 rounded-lg bg-[#FEF9C3] border-l-4 border-[#EAB308]">
+        <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4"><code class="font-mono bg-[#F5F5F5] px-2 py-1 rounded">MISSING_USER_NEED</code> — Warning</h3>
+        <div class="mb-6 p-4 bg-white rounded border border-[#DDDDDD]">
+          <span class="inline-block font-semibold text-[#854D0E]">⚠ Warning</span>
+        </div>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">What Triggers This Status</h4>
+        <p class="text-[#555555] mb-6">
+          A requirement exists and has a valid ID, but column C (User Need reference) is blank or references a non-existent user need.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Which Tabs It Appears On</h4>
+        <p class="text-[#555555] mb-6">
+          <strong>Requirements</strong> tab only. This status indicates a broken upstream link.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Why It Matters for Compliance</h4>
+        <p class="text-[#555555] mb-4">Bidirectional traceability is non-negotiable across all six standards:</p>
+        <ul class="list-disc list-inside text-[#555555] space-y-2 mb-6">
+          <li><strong>AS9100 §8.3.3</strong>: "Requirements traceability shall be established and maintained"</li>
+          <li><strong>ISO 13485 §7.3.3</strong>: "Design inputs shall be reviewed and approved"</li>
+          <li><strong>DO-178C</strong>: "Bidirectional traceability shall be established"</li>
+          <li><strong>IEC 62304 §5.2</strong>: "Traceability from user needs to requirements shall be established"</li>
+          <li><strong>ISO 26262 §8</strong>: "Traceability shall be established between safety goals and requirements"</li>
+          <li><strong>ASPICE SYS.1, SWE.1</strong>: Bidirectional traceability is mandatory</li>
+        </ul>
+        <p class="text-[#555555] mb-6">
+          A requirement with no user need is an orphan — you cannot prove it was requested. Auditors will flag this as a traceability break and a non-conformance.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Example Scenario</h4>
+        <p class="text-[#555555] mb-6">
+          You have <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-105: The system shall encrypt all PII at rest</code> in column A–B, but column C is blank. When asked "Where does this encryption requirement come from?", you have no user need to point to. The auditor asks: "Is this a scope creep requirement?" Finding issued.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">How to Fix It (Step by Step)</h4>
+        <ol class="list-decimal list-inside text-[#555555] space-y-4">
+          <li>
+            <strong>Identify the user need</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go to User Needs tab</li>
+              <li>Find the user need that led to this requirement (or create one if missing)</li>
+              <li>Note its ID, e.g., <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UN-050</code></li>
+            </ul>
+          </li>
+          <li>
+            <strong>Add the reference</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go back to Requirements tab, row REQ-105</li>
+              <li>In column C, enter the user need ID: <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UN-050</code></li>
+            </ul>
+          </li>
+          <li>
+            <strong>Create reverse link</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Go to User Needs tab, row UN-050</li>
+              <li>In the Requirements column, add <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-105</code></li>
+            </ul>
+          </li>
+          <li><strong>Re-run RTMify</strong>: Status should flip to OK (unless NO_TEST_LINKED also applies)</li>
+        </ol>
+      </div>
+
+      <!-- UNRESOLVED Status -->
+      <div id="unresolved" class="mb-10 p-6 rounded-lg bg-[#FEE2E2] border-l-4 border-[#DC2626]">
+        <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4"><code class="font-mono bg-[#F5F5F5] px-2 py-1 rounded">UNRESOLVED: X</code> — Error</h3>
+        <div class="mb-6 p-4 bg-white rounded border border-[#DDDDDD]">
+          <span class="inline-block font-semibold text-[#991B1B]">✗ Error</span>
+        </div>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">What Triggers This Status</h4>
+        <p class="text-[#555555] mb-6">
+          A row contains a reference to an ID (in any column: User Needs, Tests, Risks, or Requirements) that does not exist on its target tab. RTMify appends the unresolved ID to the status, e.g., <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UNRESOLVED: UN-999</code>.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Which Tabs It Appears On</h4>
+        <p class="text-[#555555] mb-6">
+          Any tab with cross-tab references: Requirements, Tests, Risks. User Needs tab if a user need references a non-existent requirement.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Why It Matters for Compliance</h4>
+        <p class="text-[#555555] mb-4">This is a data integrity error. The traceability graph is incomplete — a link points to nothing. All standards require complete, verifiable traceability:</p>
+        <ul class="list-disc list-inside text-[#555555] space-y-2 mb-6">
+          <li><strong>ASPICE SYS.1</strong>: "Bidirectional traceability of requirements shall be established and maintained with a traceability matrix"</li>
+          <li><strong>ISO 26262 §6</strong>: "Traceability shall be established between ... safety requirements ... and ... verification activities"</li>
+          <li><strong>All standards</strong>: Graph integrity is fundamental to audit credibility</li>
+        </ul>
+        <p class="text-[#555555] mb-6">
+          You cannot sign off on an RTM with UNRESOLVED statuses. The graph is broken.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Example Scenario</h4>
+        <p class="text-[#555555] mb-6">
+          You have <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">REQ-200</code> that references user need <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UN-999</code> in column C. But UN-999 does not exist on the User Needs tab — perhaps it was deleted by mistake, or the ID was misspelled. RTMify shows <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UNRESOLVED: UN-999</code>. Your RTM is now incomplete and cannot be released.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">How to Fix It (Step by Step)</h4>
+        <p class="text-[#555555] mb-4">Two options, choose one:</p>
+
+        <p class="font-semibold text-[#1A1A2E] mb-3">Option 1: Create the missing row</p>
+        <ol class="list-decimal list-inside text-[#555555] space-y-2 mb-6">
+          <li>Go to the tab where the missing ID should exist (e.g., User Needs for UN-999)</li>
+          <li>Add a new row with the missing ID in column A</li>
+          <li>Fill in the row with appropriate content</li>
+          <li>Create the reverse link back to the original requirement</li>
+          <li>Re-run RTMify: UNRESOLVED should become OK</li>
+        </ol>
+
+        <p class="font-semibold text-[#1A1A2E] mb-3">Option 2: Fix the reference</p>
+        <ol class="list-decimal list-inside text-[#555555] space-y-2">
+          <li>Go back to the row showing UNRESOLVED (e.g., REQ-200)</li>
+          <li>Check which ID is unresolved (RTMify tells you: UN-999)</li>
+          <li>Verify the correct ID exists on the target tab</li>
+          <li>Update the reference to the correct ID</li>
+          <li>Delete the row with the wrong ID if it has no other links</li>
+          <li>Re-run RTMify: UNRESOLVED should become OK</li>
+        </ol>
+      </div>
+
+      <!-- MISSING_ID Status -->
+      <div id="missing-id" class="mb-10 p-6 rounded-lg bg-[#FEE2E2] border-l-4 border-[#DC2626]">
+        <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4"><code class="font-mono bg-[#F5F5F5] px-2 py-1 rounded">MISSING_ID</code> — Error</h3>
+        <div class="mb-6 p-4 bg-white rounded border border-[#DDDDDD]">
+          <span class="inline-block font-semibold text-[#991B1B]">✗ Error</span>
+        </div>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">What Triggers This Status</h4>
+        <p class="text-[#555555] mb-6">
+          A row has content (text in columns B, C, D, etc.) but column A (ID) is blank or missing. RTMify cannot ingest this row into the traceability graph — there is no unique identifier to anchor it.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Which Tabs It Appears On</h4>
+        <p class="text-[#555555] mb-6">
+          All tabs (User Needs, Requirements, Tests, Risks).
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Why It Matters for Compliance</h4>
+        <p class="text-[#555555] mb-4">Requirements and needs must be uniquely identifiable and traceable. All standards require this:</p>
+        <ul class="list-disc list-inside text-[#555555] space-y-2 mb-6">
+          <li><strong>ASPICE SYS.1</strong>: "Requirements shall be uniquely identified"</li>
+          <li><strong>ISO 26262 §8.1</strong>: "Functional requirements shall be clearly specified and documented"</li>
+          <li><strong>All standards</strong>: Unidentified items cannot be audited or traced</li>
+        </ul>
+        <p class="text-[#555555] mb-6">
+          RTMify skips this row entirely. It does not appear in the RTM, the traceability matrix, or any audit report. It exists in your spreadsheet but not in your formal documentation.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">Example Scenario</h4>
+        <p class="text-[#555555] mb-6">
+          You have a User Needs row where column A is blank, but column B contains "The user shall be able to export data". RTMify cannot identify this need — there is no ID. The row is silently skipped. Later, when a requirement references this need, RTMify shows UNRESOLVED because the need was never ingested into the graph.
+        </p>
+
+        <h4 class="text-lg font-semibold text-[#1A1A2E] mt-6 mb-3">How to Fix It (Step by Step)</h4>
+        <ol class="list-decimal list-inside text-[#555555] space-y-4">
+          <li><strong>Identify the blank ID row</strong>: Scan column A for empty cells (use Ctrl+F in Excel/Sheets to find empty cells)</li>
+          <li>
+            <strong>Assign a unique ID</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>Follow your ID naming convention (e.g., UN-001, UN-002, etc.)</li>
+              <li>Ensure the ID doesn't conflict with existing IDs on that tab</li>
+              <li>Enter it in column A</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Update cross-references</strong>:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li>If other rows reference this row by description or partial match, update them to use the new ID</li>
+              <li>Create bidirectional links if applicable</li>
+            </ul>
+          </li>
+          <li><strong>Re-run RTMify</strong>: Status should become OK (assuming other fields are valid)</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Standards Compliance Mapping -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Which Standards Care About Which Statuses</h2>
+      <p class="text-[#555555] mb-8">
+        Every status code maps to specific compliance clauses. Use this guide to understand which audit findings will be raised for each status.
+      </p>
+
+      <div class="grid gap-6">
+        <!-- NO_TEST_LINKED Mapping -->
+        <div class="p-6 bg-[#F5F5F5] rounded-lg border-l-4 border-[#1A1A2E]">
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-4"><code class="font-mono bg-white px-2 py-1 rounded">NO_TEST_LINKED</code></h4>
+          <ul class="list-disc list-inside text-[#555555] space-y-2">
+            <li><strong>AS9100</strong> §8.3.5</li>
+            <li><strong>ISO 13485</strong> §7.3.5, §7.3.6</li>
+            <li><strong>DO-178C</strong> §6.3</li>
+            <li><strong>IEC 62304</strong> §5.5</li>
+            <li><strong>ISO 26262</strong> Part 6, §9-11</li>
+            <li><strong>ASPICE</strong> SWE.4, SWE.5, SWE.6</li>
+          </ul>
+        </div>
+
+        <!-- MISSING_USER_NEED Mapping -->
+        <div class="p-6 bg-[#F5F5F5] rounded-lg border-l-4 border-[#1A1A2E]">
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-4"><code class="font-mono bg-white px-2 py-1 rounded">MISSING_USER_NEED</code></h4>
+          <ul class="list-disc list-inside text-[#555555] space-y-2">
+            <li><strong>AS9100</strong> §8.3.3</li>
+            <li><strong>ISO 13485</strong> §7.3.3</li>
+            <li><strong>DO-178C</strong> Bidirectional traceability</li>
+            <li><strong>IEC 62304</strong> §5.2</li>
+            <li><strong>ISO 26262</strong> §8</li>
+            <li><strong>ASPICE</strong> SYS.1, SWE.1</li>
+          </ul>
+        </div>
+
+        <!-- UNRESOLVED Mapping -->
+        <div class="p-6 bg-[#F5F5F5] rounded-lg border-l-4 border-[#1A1A2E]">
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-4"><code class="font-mono bg-white px-2 py-1 rounded">UNRESOLVED</code></h4>
+          <ul class="list-disc list-inside text-[#555555] space-y-2">
+            <li><strong>All standards</strong> Data integrity & completeness</li>
+            <li><strong>ASPICE</strong> SYS.1 (traceability links)</li>
+            <li><strong>ISO 26262</strong> §6 (traceability)</li>
+          </ul>
+        </div>
+
+        <!-- MISSING_ID Mapping -->
+        <div class="p-6 bg-[#F5F5F5] rounded-lg border-l-4 border-[#1A1A2E]">
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-4"><code class="font-mono bg-white px-2 py-1 rounded">MISSING_ID</code></h4>
+          <ul class="list-disc list-inside text-[#555555] space-y-2">
+            <li><strong>All standards</strong> Data integrity & completeness</li>
+            <li><strong>ASPICE</strong> SYS.1 (requirement identification)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8">Frequently Asked Questions</h2>
+
+      <div class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <details class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+          <summary class="px-6 py-4 bg-[#F5F5F5] text-[#1A1A2E] font-semibold cursor-pointer hover:bg-[#EEEEEE] flex justify-between items-center">
+            Can I ignore warnings and just fix errors?
+            <span class="text-lg">+</span>
+          </summary>
+          <div class="px-6 py-4 bg-white border-t border-[#DDDDDD]">
+            <p class="text-[#555555] leading-relaxed">
+              No — warnings are audit findings waiting to happen. NO_TEST_LINKED and MISSING_USER_NEED trigger non-conformance findings in AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE audits. Every warning must be addressed before sign-off. Your audit team will ask "where's the test for this requirement?" and "which user need does this come from?" — have answers ready.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 2 -->
+        <details class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+          <summary class="px-6 py-4 bg-[#F5F5F5] text-[#1A1A2E] font-semibold cursor-pointer hover:bg-[#EEEEEE] flex justify-between items-center">
+            What if RTMify shows OK but I know there's an issue?
+            <span class="text-lg">+</span>
+          </summary>
+          <div class="px-6 py-4 bg-white border-t border-[#DDDDDD]">
+            <p class="text-[#555555] leading-relaxed">
+              RTMify checks structural integrity only: IDs resolve, edges exist, no blanks. It does NOT validate semantic correctness. If your requirement text is unclear, your test is wrong, or your traceability link is misleading, RTMify will show OK. Use OK as a baseline — then do manual review. A green spreadsheet is necessary but not sufficient for audit readiness.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 3 -->
+        <details class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+          <summary class="px-6 py-4 bg-[#F5F5F5] text-[#1A1A2E] font-semibold cursor-pointer hover:bg-[#EEEEEE] flex justify-between items-center">
+            How do I fix UNRESOLVED when I haven't created the referenced item yet?
+            <span class="text-lg">+</span>
+          </summary>
+          <div class="px-6 py-4 bg-white border-t border-[#DDDDDD]">
+            <p class="text-[#555555] leading-relaxed">
+              Two paths: (1) Create the missing row on the referenced tab with the referenced ID, or (2) Update the current row to reference a different ID that already exists. Until one of these happens, RTMify will keep flagging UNRESOLVED. You cannot sign off on an RTM with UNRESOLVED statuses — the graph is incomplete.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 4 -->
+        <details class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+          <summary class="px-6 py-4 bg-[#F5F5F5] text-[#1A1A2E] font-semibold cursor-pointer hover:bg-[#EEEEEE] flex justify-between items-center">
+            Do status codes work the same in RTMify Live?
+            <span class="text-lg">+</span>
+          </summary>
+          <div class="px-6 py-4 bg-white border-t border-[#DDDDDD]">
+            <p class="text-[#555555] leading-relaxed">
+              Yes. RTMify Live recalculates statuses in real-time as you edit. If you add a Test Group to a requirement with NO_TEST_LINKED, the status flips to OK immediately. Same logic applies to all five codes. Use Live mode for edit-as-you-audit workflows; batch processing in RTMify™ for final sign-off.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Cross-Links Section -->
+    <section class="p-8 bg-[#F5F5F5] rounded-lg">
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8 mt-0">Related Documentation</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="/docs/user-needs/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          User Needs Tab Guide
+        </a>
+        <a href="/docs/requirements/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          Requirements Tab Guide
+        </a>
+        <a href="/docs/tests/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          Tests Tab Guide
+        </a>
+        <a href="/docs/risks/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          Risks Tab Guide
+        </a>
+        <a href="/docs/traceability/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          Traceability Matrix Guide
+        </a>
+        <a href="/docs/" class="block p-4 bg-white border border-[#DDDDDD] rounded-lg text-blue-500 font-semibold hover:bg-[#1A1A2E] hover:text-white transition-colors">
+          Documentation Hub
+        </a>
+      </div>
+    </section>
+  </article>
+</DocsLayout>

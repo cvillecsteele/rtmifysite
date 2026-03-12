@@ -1,0 +1,459 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify AS9100 Quick Start Guide';
+const description = 'Complete walkthrough of filling in the RTMify template for AS9100 Rev D aerospace quality management system.';
+const canonical = 'https://rtmify.io/docs/for/as9100/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'AS9100', url: '/docs/for/as9100/' }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "url": canonical,
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "datePublished": "2024-01-15",
+      "dateModified": "2026-03-12"
+    },
+    {
+      "@type": "HowTo",
+      "name": title,
+      "description": description,
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Define User Needs",
+          "text": "Capture design inputs per §8.3.3. Sources include customer specifications, regulatory requirements (FAA/EASA/military), lessons learned from previous programs, and internal operational needs. Use ID format UN-nnn."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Write Requirements",
+          "text": "Create design outputs per §8.3.4. Each requirement must trace to a User Need and be verifiable. Use REQ-nnn format with priority, test group linkage, and approval status."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Define Tests",
+          "text": "Document verification (§8.3.5) and validation activities. Link each test to a requirement via test group IDs. Methods include Test, Analysis, Demonstration, and Inspection."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Document Risks",
+          "text": "Per §6.1, identify risks, assess severity and occurrence, document mitigations, and track residual risk. Link risks to requirements to show traceability of risk mitigation."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Check Status and Generate RTM",
+          "text": "Run RTMify Trace to validate the matrix. Every row should show OK status. Fix NO_TEST_LINKED and MISSING_USER_NEED issues before audit."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need separate rows for customer vs. regulatory requirements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, but we recommend tracking the source in your User Needs table. Many requirements will satisfy multiple sources — for example, a design output traced to a regulatory requirement may also satisfy a customer need. The User Needs table (§8.3.3) is where you capture sources; the Requirements table focuses on the design outputs themselves."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does this relate to my APQP/PPAP process?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "RTMify covers design traceability per §8.3.3–8.3.5 (Design and Development). APQP/PPAP governance (advanced product quality planning / production part approval process) is a downstream activity. Use RTMify to document your design phase; PPAP artifacts (such as First Article Inspection reports per AS9102) demonstrate production readiness. Both are required for certification."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What about ITAR/export control requirements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If your product is subject to ITAR (International Traffic in Arms Regulations) or EAR (Export Administration Regulations), capture export control as a User Need source and link it to requirements. Document your ITAR compliance procedures in your QMS separately; RTMify can help you trace that ITAR requirements are reflected in your design outputs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to include manufacturing requirements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This template covers design traceability per §8.3 (Design and Development). Production process controls, supplier management, and manufacturing requirements are governed by other clauses (§7.5, §8.4) and should be documented in your process control procedures. However, if manufacturing constraints drive design requirements (e.g., \"unit must fit standard 19-inch rack\"), capture that as a User Need and trace it through the template."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((bc, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": bc.name,
+        "item": bc.url
+      }))
+    }
+  ]
+};
+
+const userNeedsExample = [
+  { id: 'UN-001', description: 'Aircraft shall maintain cabin pressure at cruise altitude', source: 'Regulatory', priority: 'High' },
+  { id: 'UN-002', description: 'Maintenance crew shall be able to replace the unit in under 30 minutes', source: 'Customer', priority: 'Medium' },
+  { id: 'UN-003', description: 'System shall operate in temperatures from -55°C to +85°C', source: 'Regulation (DO-160G)', priority: 'High' }
+];
+
+const requirementsExample = [
+  { id: 'REQ-001', description: 'The pressurization controller SHALL maintain cabin altitude below 8,000 ft during cruise', traces: 'UN-001', priority: 'High', testGroup: 'TG-001', status: 'Approved' },
+  { id: 'REQ-002', description: 'The unit SHALL be removable using standard aerospace tooling with no more than 6 fasteners', traces: 'UN-002', priority: 'Medium', testGroup: 'TG-002', status: 'Approved' },
+  { id: 'REQ-003', description: 'The system SHALL operate within specification across the temperature range -55°C to +85°C per DO-160G Section 4', traces: 'UN-003', priority: 'High', testGroup: 'TG-003', status: 'Approved' }
+];
+
+const testsExample = [
+  { testGroup: 'TG-001', testId: 'T-001', type: 'Verification', method: 'Test', description: 'Altitude chamber test per ATP-001' },
+  { testGroup: 'TG-001', testId: 'T-002', type: 'Verification', method: 'Analysis', description: 'Thermal analysis of pressurization valve response' },
+  { testGroup: 'TG-002', testId: 'T-003', type: 'Verification', method: 'Demonstration', description: 'Maintenance crew timed replacement trial' },
+  { testGroup: 'TG-003', testId: 'T-004', type: 'Verification', method: 'Test', description: 'DO-160G Section 4 temperature cycling' }
+];
+
+const risksExample = [
+  { id: 'RSK-101', description: 'Pressurization valve fails closed at altitude', severity: '5', occurrence: '2', mitigation: 'Redundant valve with independent actuation', linkedReq: 'REQ-001', residualSeverity: '5', residualOccurrence: '1' },
+  { id: 'RSK-102', description: 'Fastener corrosion in salt-fog environment', severity: '3', occurrence: '3', mitigation: 'Specify cadmium-plated hardware per NAS1149', linkedReq: 'REQ-002', residualSeverity: '3', residualOccurrence: '1' }
+];
+
+const faqItems = [
+  {
+    question: 'Do I need separate rows for customer vs. regulatory requirements?',
+    answer: 'No, but we recommend tracking the source in your User Needs table. Many requirements will satisfy multiple sources — for example, a design output traced to a regulatory requirement may also satisfy a customer need. The User Needs table (§8.3.3) is where you capture sources; the Requirements table focuses on the design outputs themselves.'
+  },
+  {
+    question: 'How does this relate to my APQP/PPAP process?',
+    answer: 'RTMify covers design traceability per §8.3.3–8.3.5 (Design and Development). APQP/PPAP governance (advanced product quality planning / production part approval process) is a downstream activity. Use RTMify to document your design phase; PPAP artifacts (such as First Article Inspection reports per AS9102) demonstrate production readiness. Both are required for certification.'
+  },
+  {
+    question: 'What about ITAR/export control requirements?',
+    answer: 'If your product is subject to ITAR (International Traffic in Arms Regulations) or EAR (Export Administration Regulations), capture export control as a User Need source and link it to requirements. Document your ITAR compliance procedures in your QMS separately; RTMify can help you trace that ITAR requirements are reflected in your design outputs.'
+  },
+  {
+    question: 'Do I need to include manufacturing requirements?',
+    answer: 'This template covers design traceability per §8.3 (Design and Development). Production process controls, supplier management, and manufacturing requirements are governed by other clauses (§7.5, §8.4) and should be documented in your process control procedures. However, if manufacturing constraints drive design requirements (e.g., "unit must fit standard 19-inch rack"), capture that as a User Need and trace it through the template.'
+  }
+];
+---
+
+<DocsLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbs={breadcrumbs} activeSlug="as9100">
+  <!-- About This Guide Section -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">About This Guide</h2>
+    <div class="prose prose-sm max-w-none text-[#555555]">
+      <p class="mb-4">
+        This guide walks you through filling in the RTMify template for <strong>AS9100 Rev D</strong>, the aerospace quality management system standard. AS9100 is an extension of ISO 9001 with additional requirements for design controls, configuration management, and product safety specific to the aerospace, defense, and space industries.
+      </p>
+      <p class="mb-4">
+        Clause 8.3 (Design and Development) governs how you capture, verify, and manage design requirements. This template covers the traceability artifacts that clause requires: design inputs, design outputs, verification and validation, and configuration management.
+      </p>
+      <p>
+        By the end of this guide, you'll have a complete requirements traceability matrix (RTM) that demonstrates compliance with §8.3.3–8.3.6 and links design decisions to risk mitigation per §6.1.
+      </p>
+    </div>
+  </section>
+
+  <!-- What AS9100 Requires Section -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">What AS9100 Requires for Traceability</h2>
+
+    <h3 class="text-xl font-bold text-[#1A1A2E] mt-6 mb-4">Design Inputs (§8.3.3)</h3>
+    <p class="text-[#555555] mb-4">
+      AS9100 §8.3.3 requires you to establish and document design input requirements. These include:
+    </p>
+    <ul class="list-disc list-inside text-[#555555] mb-6 space-y-2">
+      <li><strong>Customer requirements</strong> — contractual specifications, delivery schedules, support needs</li>
+      <li><strong>Regulatory requirements</strong> — FAA certification (14 CFR Part 25, Part 23), EASA (EASA CS-23, CS-25), military standards (MIL-HDBK-516 for systems; AS5501 for cybersecurity)</li>
+      <li><strong>Lessons learned</strong> — field failures, customer feedback, previous design audits, anomaly reports (AR/MRs)</li>
+      <li><strong>Risk considerations</strong> — safety-critical functions, failure modes, environmental extremes (DO-160G for avionics)</li>
+    </ul>
+    <p class="text-[#555555] mb-6">
+      Your User Needs table captures these inputs. RTMify tags each with a source (Customer, Regulatory, Lessons Learned, Risk) so you can demonstrate traceability during audit.
+    </p>
+
+    <h3 class="text-xl font-bold text-[#1A1A2E] mt-6 mb-4">Design Outputs &amp; Verification (§8.3.4 &amp; §8.3.5)</h3>
+    <p class="text-[#555555] mb-4">
+      §8.3.4 requires design outputs to be documented, reviewed for adequacy, and traceable to inputs. §8.3.5 mandates verification (did we build it right?) and validation (did we build the right thing?). RTMify links each Requirement (design output) to:
+    </p>
+    <ul class="list-disc list-inside text-[#555555] mb-6 space-y-2">
+      <li>One or more User Needs (design inputs) via the <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-[#1565C0] text-sm">traces</code> field</li>
+      <li>Verification activities (tests, analyses, demonstrations, inspections) via the <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-[#1565C0] text-sm">testGroup</code> field</li>
+      <li>Risk mitigations (§6.1) via the <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-[#1565C0] text-sm">linkedReq</code> field in the Risk table</li>
+    </ul>
+    <p class="text-[#555555] mb-6">
+      This chain of traceability proves that every design decision is grounded in customer/regulatory need and verified before release.
+    </p>
+
+    <h3 class="text-xl font-bold text-[#1A1A2E] mt-6 mb-4">Configuration Management (§8.3.6)</h3>
+    <p class="text-[#555555] mb-6">
+      AS9100 §8.3.6 adds configuration management: design changes must assess impact on existing artifacts. When you update a Requirement, RTMify's impact analysis shows which Tests, Risks, and dependent Requirements are affected. Document the change rationale and approvals in your change control board (CCB) process — RTMify supports this by providing the traceability backbone.
+    </p>
+
+    <p class="text-[#555555]">
+      For deeper standard coverage, see our <a href="/standards/as9100" class="text-[#1565C0] hover:underline">AS9100 Standard Overview</a>.
+    </p>
+  </section>
+
+  <!-- Step-by-Step Walkthrough Section -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Step-by-Step Walkthrough</h2>
+
+    <!-- Step 1: Define User Needs -->
+    <div class="mb-8 p-6 border-l-4 border-[#1565C0] bg-[#F5F5F5] rounded">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#1565C0] text-white flex items-center justify-center font-bold mr-4">1</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E]">Define User Needs</h3>
+      </div>
+      <p class="text-[#555555] mb-4">
+        Capture design inputs per <strong>§8.3.3</strong>. Sources include customer specifications, regulatory requirements (FAA/EASA/military), lessons learned from previous programs, and internal operational needs. Use ID format <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">UN-nnn</code>.
+      </p>
+      <div class="mb-4 overflow-x-auto">
+        <table class="w-full border-collapse text-[#555555] text-sm">
+          <caption class="text-left font-semibold text-[#1A1A2E] mb-2">User Needs Example</caption>
+          <thead>
+            <tr class="bg-[#DDDDDD]">
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">ID</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Description</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Source</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userNeedsExample.map((row) => (
+              <tr class="border-b border-[#DDDDDD] hover:bg-white">
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.id}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.description}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.source}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.priority}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[#555555] text-sm border-t border-[#DDDDDD] pt-4 mt-4">
+        <strong>Tips:</strong> Be specific — include standards references (e.g., "per DO-160G Section 4"). Distinguish between MUST requirements and SHOULD requirements. Link each User Need to at least one Requirement; unlinked needs indicate incomplete design coverage.
+      </p>
+    </div>
+
+    <!-- Step 2: Write Requirements -->
+    <div class="mb-8 p-6 border-l-4 border-[#1565C0] bg-[#F5F5F5] rounded">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#1565C0] text-white flex items-center justify-center font-bold mr-4">2</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E]">Write Requirements</h3>
+      </div>
+      <p class="text-[#555555] mb-4">
+        Create design outputs per <strong>§8.3.4</strong>. Each requirement traces to a User Need and is verifiable against it. Use <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">REQ-nnn</code> format with priority, test group linkage, and approval status.
+      </p>
+      <div class="mb-4 overflow-x-auto">
+        <table class="w-full border-collapse text-[#555555] text-sm">
+          <caption class="text-left font-semibold text-[#1A1A2E] mb-2">Requirements Example</caption>
+          <thead>
+            <tr class="bg-[#DDDDDD]">
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">ID</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Description</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Traces</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Priority</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Test Group</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {requirementsExample.map((row) => (
+              <tr class="border-b border-[#DDDDDD] hover:bg-white">
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.id}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.description}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.traces}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.priority}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.testGroup}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[#555555] text-sm border-t border-[#DDDDDD] pt-4 mt-4">
+        <strong>Tips:</strong> Use SHALL (mandatory) or SHOULD (desired). Include measurable success criteria (e.g., "below 8,000 ft", "under 30 minutes"). Every requirement must trace to at least one User Need. Empty <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">testGroup</code> fields will trigger NO_TEST_LINKED during RTMify Trace validation.
+      </p>
+    </div>
+
+    <!-- Step 3: Define Tests -->
+    <div class="mb-8 p-6 border-l-4 border-[#1565C0] bg-[#F5F5F5] rounded">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#1565C0] text-white flex items-center justify-center font-bold mr-4">3</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E]">Define Tests</h3>
+      </div>
+      <p class="text-[#555555] mb-4">
+        Document verification (§8.3.5) and validation activities. Link each test to a requirement via test group IDs. Methods include <strong>Test</strong> (hardware/software testing), <strong>Analysis</strong> (engineering calculations, thermal/stress analysis), <strong>Demonstration</strong> (bench trials, crew trials), and <strong>Inspection</strong> (visual, dimensional, FAI).
+      </p>
+      <div class="mb-4 overflow-x-auto">
+        <table class="w-full border-collapse text-[#555555] text-sm">
+          <caption class="text-left font-semibold text-[#1A1A2E] mb-2">Tests &amp; Verification Example</caption>
+          <thead>
+            <tr class="bg-[#DDDDDD]">
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Test Group</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Test ID</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Type</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Method</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testsExample.map((row) => (
+              <tr class="border-b border-[#DDDDDD] hover:bg-white">
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.testGroup}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.testId}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.type}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.method}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[#555555] text-sm border-t border-[#DDDDDD] pt-4 mt-4">
+        <strong>Tips:</strong> Link each <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">testGroup</code> to a <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">REQ</code>. Include test procedure references (e.g., ATP-001, ATP = Acceptance Test Procedure). One requirement may require multiple verification methods; that's expected for safety-critical items. See <a href="/docs/tests" class="text-[#1565C0] hover:underline">Tests &amp; Verification</a> for detailed guidance.
+      </p>
+    </div>
+
+    <!-- Step 4: Document Risks -->
+    <div class="mb-8 p-6 border-l-4 border-[#1565C0] bg-[#F5F5F5] rounded">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#1565C0] text-white flex items-center justify-center font-bold mr-4">4</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E]">Document Risks</h3>
+      </div>
+      <p class="text-[#555555] mb-4">
+        Per <strong>§6.1</strong> (Actions to Address Risks and Opportunities), identify risks, assess severity (1–5) and occurrence (1–5), document mitigations, and track residual risk. Link risks to requirements to show how mitigation is built into design.
+      </p>
+      <div class="mb-4 overflow-x-auto">
+        <table class="w-full border-collapse text-[#555555] text-sm">
+          <caption class="text-left font-semibold text-[#1A1A2E] mb-2">Risks &amp; Mitigations Example</caption>
+          <thead>
+            <tr class="bg-[#DDDDDD]">
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Risk ID</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Description</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Severity</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Occurrence</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Mitigation</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Linked Req</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Residual Severity</th>
+              <th class="border border-[#DDDDDD] px-3 py-2 text-left font-semibold">Residual Occurrence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {risksExample.map((row) => (
+              <tr class="border-b border-[#DDDDDD] hover:bg-white">
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.id}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.description}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.severity}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.occurrence}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.mitigation}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2 font-mono text-[#1565C0]">{row.linkedReq}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.residualSeverity}</td>
+                <td class="border border-[#DDDDDD] px-3 py-2">{row.residualOccurrence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[#555555] text-sm border-t border-[#DDDDDD] pt-4 mt-4">
+        <strong>Tips:</strong> Use a risk matrix (Severity × Occurrence) to prioritize. High-risk items (Severity 4–5 + Occurrence 3–5) should have corresponding Requirement entries. Document the mitigation approach in the requirement itself. Track residual risk post-mitigation; audit expects residual risk to be acceptable (e.g., ≤4). See <a href="/docs/risks" class="text-[#1565C0] hover:underline">Risk Management</a> for FMEA/FTA guidance.
+      </p>
+    </div>
+
+    <!-- Step 5: Check Status and Generate RTM -->
+    <div class="mb-8 p-6 border-l-4 border-[#1565C0] bg-[#F5F5F5] rounded">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#1565C0] text-white flex items-center justify-center font-bold mr-4">5</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E]">Check Status and Generate RTM</h3>
+      </div>
+      <p class="text-[#555555] mb-4">
+        Run <strong>RTMify Trace</strong> to validate the matrix. Every row should show <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">OK</code> status. The trace checks for:
+      </p>
+      <ul class="list-disc list-inside text-[#555555] mb-4 space-y-2">
+        <li><code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">MISSING_USER_NEED</code> — Requirement with no User Need link (§8.3.3–8.3.4 traceability broken)</li>
+        <li><code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">NO_TEST_LINKED</code> — Requirement with no Test Group (§8.3.5 verification missing)</li>
+        <li><code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">ORPHAN_TEST</code> — Test Group with no Requirement (scope creep or old test; clean up)</li>
+        <li><code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">INCOMPLETE_RISK</code> — Risk with no mitigation or residual risk still unacceptable</li>
+      </ul>
+      <p class="text-[#555555] mb-4">
+        Fix all issues before your external audit. A clean RTM demonstrates design discipline and reduces audit findings.
+      </p>
+      <p class="text-[#555555] text-sm border-t border-[#DDDDDD] pt-4 mt-4">
+        <strong>Pro tip:</strong> Review the <a href="/docs/status-codes" class="text-[#1565C0] hover:underline">Status Codes</a> reference for full error definitions and remediation steps.
+      </p>
+    </div>
+  </section>
+
+  <!-- Coverage Section -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">What This Template Covers vs. Doesn't Cover</h2>
+
+    <h3 class="text-xl font-bold text-[#1A1A2E] mt-6 mb-4">Covered</h3>
+    <ul class="list-disc list-inside text-[#555555] mb-6 space-y-2">
+      <li><strong>Design Inputs (§8.3.3)</strong> — customer specs, regulatory requirements, lessons learned, risk considerations</li>
+      <li><strong>Design Outputs (§8.3.4)</strong> — traceable to inputs, verifiable, with measurable criteria</li>
+      <li><strong>Verification &amp; Validation (§8.3.5)</strong> — test/analysis/demonstration/inspection planning and execution</li>
+      <li><strong>Risk Management (§6.1)</strong> — identification, assessment, mitigation, residual risk tracking</li>
+      <li><strong>Configuration Management (§8.3.6)</strong> — impact analysis when requirements change</li>
+    </ul>
+
+    <h3 class="text-xl font-bold text-[#1A1A2E] mt-6 mb-4">NOT Covered (separate QMS documentation)</h3>
+    <ul class="list-disc list-inside text-[#555555] space-y-2">
+      <li><strong>Configuration Management Procedures (§8.3.6)</strong> — Use your change control board (CCB) process, Design Authority approval matrix, and baseline management procedures. RTMify provides the traceability backbone; your QMS procedures govern the workflow.</li>
+      <li><strong>Formal Design Reviews</strong> — AS9100 requires Preliminary Design Review (PDR), Critical Design Review (CDR), and design release approval. Document review minutes, action items, and sign-offs in your design review SOP; link to RTMify design outputs as evidence.</li>
+      <li><strong>First Article Inspection (FAI)</strong> — Per AS9102, FAI demonstrates production readiness. RTMify shows design intent; FAI report shows first-production compliance. Coordinate FAI results with your design baseline.</li>
+      <li><strong>Supplier Quality Requirements</strong> — Captured in your supplier management (§8.4) and PPAP procedures. If a design output depends on supplier performance, create a User Need and trace it; supplier qualification is a separate control.</li>
+      <li><strong>Production Process Controls (§8.5)</strong> — Manufacturing, assembly, test, and shipping procedures are QMS work instructions. If a production constraint drives a design requirement, capture it as a User Need.</li>
+    </ul>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqItems.map((item) => (
+        <details class="p-4 border border-[#DDDDDD] rounded hover:bg-[#F5F5F5] cursor-pointer">
+          <summary class="font-semibold text-[#1A1A2E] select-none">
+            {item.question}
+          </summary>
+          <p class="text-[#555555] mt-4 text-sm leading-relaxed">
+            {item.answer}
+          </p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <style>
+    details summary {
+      outline: none;
+    }
+    details summary::-webkit-details-marker {
+      color: #1565C0;
+    }
+    details[open] summary {
+      color: #1565C0;
+      font-weight: 600;
+    }
+  </style>
+</DocsLayout>

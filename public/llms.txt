@@ -1,0 +1,64 @@
+# RTMify — Requirements Traceability for Regulated Industries
+
+> Free requirements traceability matrix template and tooling for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
+
+RTMify is a compliance-aware lifecycle manager built around the spreadsheet. The core artifact is a single .xlsx template with four tabs: User Needs, Requirements, Tests, and Risks. These four tabs form a directed traceability graph that satisfies the traceability requirements of six major regulated-industry standards.
+
+## Products
+
+- **RTMify Template**: Free .xlsx download. Four tabs, one schema, six standards. No account required.
+- **RTMify Trace**: Drop the .xlsx file, get a full RTM as PDF/DOCX/MD. Runs locally — nothing uploaded.
+- **RTMify Live**: Connects to Google Sheets. Re-evaluates traceability every 30 seconds. Reads git repos for code-to-requirement mapping. Runs an MCP server for conversational querying.
+
+## Documentation
+
+- [Template Documentation Hub](https://rtmify.io/docs/): Overview, quick start, standard picker
+- [User Needs Tab Guide](https://rtmify.io/docs/user-needs/): Field-by-field reference for the User Needs tab
+- [Requirements Tab Guide](https://rtmify.io/docs/requirements/): SHALL statements, ID conventions, lifecycle status
+- [Tests Tab Guide](https://rtmify.io/docs/tests/): Verification vs. Validation, TAID methods
+- [Risks Tab Guide](https://rtmify.io/docs/risks/): Severity × likelihood scoring, ISO 14971, HARA
+- [Status Codes Reference](https://rtmify.io/docs/status-codes/): OK, NO_TEST_LINKED, MISSING_USER_NEED, UNRESOLVED, MISSING_ID
+- [The Traceability Chain](https://rtmify.io/docs/traceability/): How the four tabs connect, bidirectional traceability
+
+## Standard-Specific Quick Start Guides
+
+- [AS9100 Quick Start](https://rtmify.io/docs/for/as9100/): Aerospace quality. §8.3 design controls.
+- [ISO 13485 Quick Start](https://rtmify.io/docs/for/iso-13485/): Medical devices. §7.3 design controls, ISO 14971.
+- [DO-178C Quick Start](https://rtmify.io/docs/for/do-178c/): Airborne software. SYS/HLR/LLR, DAL A–E.
+- [IEC 62304 Quick Start](https://rtmify.io/docs/for/iec-62304/): Medical device software. Safety class A/B/C.
+- [ISO 26262 Quick Start](https://rtmify.io/docs/for/iso-26262/): Automotive functional safety. HARA, ASIL A–D.
+- [ASPICE Quick Start](https://rtmify.io/docs/for/aspice/): Automotive SPICE. SYS.2/SWE.1–6, CL2+ traceability.
+
+## Standards Pages
+
+- [AS9100 Overview](https://rtmify.io/standards/as9100)
+- [ISO 13485 Overview](https://rtmify.io/standards/iso-13485)
+- [DO-178C Overview](https://rtmify.io/standards/do-178c)
+- [IEC 62304 Overview](https://rtmify.io/standards/iec-62304)
+- [ISO 26262 Overview](https://rtmify.io/standards/iso-26262)
+- [ASPICE Overview](https://rtmify.io/standards/aspice)
+
+## Key Concepts
+
+- **User Need**: Top of the traceability chain. Stakeholder need, voice of customer, regulatory input. Not a solution — a problem statement.
+- **Requirement**: SHALL statement. One per row, uniquely identified, independently verifiable. Traces up to a User Need and down to a Test Group.
+- **Test Group**: Contains one or more individual tests. Linked from the Requirements tab via Test Group ID.
+- **Test**: Individual test case. Typed as Verification (built it right) or Validation (built the right thing). Method: Test, Analysis, Inspection, or Demonstration.
+- **Risk**: Hazard or failure mode with severity × likelihood scoring, pre- and post-mitigation. Links to the requirement that controls it.
+- **RTMify Status**: Auto-populated column on every tab. OK = fully linked. Warnings and errors flag traceability gaps before the auditor does.
+
+## Template Schema
+
+The .xlsx file uses this cross-referencing structure:
+- Requirements tab Column C → User Needs tab (upstream traceability)
+- Requirements tab Column E → Tests tab (downstream traceability)
+- Risks tab Column F → Requirements tab (risk-to-mitigation linkage)
+
+## Contact
+
+hello@rtmify.io
+
+## Company
+
+Iron Brothers Ventures, LLC
+https://rtmify.io

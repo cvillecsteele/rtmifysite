@@ -1,0 +1,299 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'The Traceability Chain — How the Four RTMify Tabs Connect';
+const description = 'How User Needs, Requirements, Tests, and Risks link together in the RTMify template. Bidirectional traceability, suspect flagging, and impact analysis for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE.';
+const canonical = 'https://rtmify.io/docs/traceability/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Traceability', url: '/docs/traceability/' }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://rtmify.io/docs/traceability/#article",
+      "headline": "The Traceability Chain — How the Four RTMify Tabs Connect",
+      "description": "How User Needs, Requirements, Tests, and Risks link together in the RTMify template. Bidirectional traceability, suspect flagging, and impact analysis.",
+      "author": { "@type": "Organization", "name": "RTMify", "url": "https://rtmify.io" },
+      "publisher": { "@type": "Organization", "name": "Iron Brothers Ventures, LLC", "url": "https://rtmify.io" },
+      "datePublished": "2026-03-12",
+      "dateModified": "2026-03-12",
+      "proficiencyLevel": "Beginner",
+      "about": { "@type": "Thing", "name": "Requirements Traceability" },
+      "isPartOf": { "@type": "WebSite", "name": "RTMify", "url": "https://rtmify.io" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+        { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+        { "@type": "ListItem", "position": 3, "name": "Traceability", "item": "https://rtmify.io/docs/traceability/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What happens if the traceability chain is broken?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A broken chain means an auditor can't follow the thread from a user need to the test that verifies it — or from a test back to the need that justifies it. RTMify flags breaks with MISSING_USER_NEED, NO_TEST_LINKED, or UNRESOLVED status codes. Every regulated standard treats incomplete traceability as a finding." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need traceability for every single requirement?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every requirement should trace up to at least one User Need and down to at least one Test Group. Requirements with no upstream traceability are 'orphans' — they have no justification. Requirements with no downstream traceability are unverified. Both are audit findings under AS9100 §8.3.3, ISO 13485 §7.3.3, and all six standards the template covers." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the minimum traceability needed for a first audit?",
+          "acceptedAnswer": { "@type": "Answer", "text": "At minimum: every requirement traces to a user need (Column C filled), every requirement has a test group (Column E filled), and every risk has a linked requirement (Column F filled). All referenced IDs must resolve — no UNRESOLVED status codes. This gives you forward and backward traceability across the full chain." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is traceability different from test coverage?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Traceability answers 'can I follow the thread from need to test?' Coverage answers 'how much of the requirement does the test actually exercise?' You can have 100% traceability (every requirement links to a test) with poor coverage (the tests don't adequately exercise the requirement). The RTMify template tracks traceability. Coverage analysis requires reviewing what each test actually verifies." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I add intermediate levels like subsystem requirements?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Use ID prefixes to encode levels — for example SYS-001 for system requirements, SUB-001 for subsystem, SWE-001 for software. Link them through the User Need ID column: a software requirement's 'parent' is the subsystem requirement above it. DO-178C programs routinely use SYS/HLR/LLR prefixes this way." }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<DocsLayout {title} {description} {canonical} {breadcrumbs} {jsonLd} activeSlug="traceability">
+  <section class="bg-[#1A1A2E] text-white py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl font-black mb-4" style="font-family: var(--font-family-display);">The Traceability Chain</h1>
+      <p class="text-lg text-gray-300 max-w-2xl">
+        The four tabs in the RTMify template form a directed graph. User Needs flow down to Requirements, which link to Test Groups containing individual Tests. Risks link sideways to the Requirements that mitigate them. Every regulated standard requires this chain to be complete and bidirectional.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-3xl mx-auto px-4 py-12">
+
+    <!-- The Graph -->
+    <section>
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">The graph</h2>
+      <p class="text-[#555555] mb-6">Four tabs, four node types, three link types. Every arrow is created by a cell reference in the template.</p>
+
+      <div class="bg-[#18181B] rounded-lg p-6 overflow-x-auto mb-6">
+        <pre class="font-mono text-sm leading-relaxed text-[#E4E4E7] m-0 whitespace-pre" style="font-family: var(--font-family-mono);"><span class="text-green-400">User Need</span> (UN-001)
+    │
+    │  Requirements tab, Column C ("User Need ID")
+    ▼
+<span class="text-blue-300">Requirement</span> (REQ-001)
+    │                           ◄──── <span class="text-red-300">Risk</span> (RSK-101)
+    │  Requirements tab,               Risks tab,
+    │  Column E ("Test Group ID")      Column F ("Linked REQ")
+    ▼
+<span class="text-purple-300">Test Group</span> (TG-001)
+    │
+    │  Tests tab, Column A ("Test Group ID")
+    ▼
+<span class="text-purple-300">Tests</span> (T-001, T-002…)</pre>
+      </div>
+    </section>
+
+    <!-- How linking works -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">How the links work</h2>
+      <p class="text-[#555555] mb-6">There are no hidden formulas. Every link is a plain-text ID in a cell. RTMify reads these IDs and builds the graph.</p>
+
+      <table class="w-full border-collapse text-sm mb-6">
+        <thead>
+          <tr class="border-b-2 border-[#1A1A2E]">
+            <th class="text-left p-3 text-[#1A1A2E] font-bold">Link</th>
+            <th class="text-left p-3 text-[#1A1A2E] font-bold">Where it lives</th>
+            <th class="text-left p-3 text-[#1A1A2E] font-bold">Direction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#DDDDDD]">
+            <td class="p-3 text-[#555555]">Requirement → User Need</td>
+            <td class="p-3"><code class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">Requirements</code> tab, Column C</td>
+            <td class="p-3 text-[#555555]">Up — to parent need</td>
+          </tr>
+          <tr class="border-b border-[#DDDDDD]">
+            <td class="p-3 text-[#555555]">Requirement → Test Group</td>
+            <td class="p-3"><code class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">Requirements</code> tab, Column E</td>
+            <td class="p-3 text-[#555555]">Down — to verification</td>
+          </tr>
+          <tr class="border-b border-[#DDDDDD]">
+            <td class="p-3 text-[#555555]">Test → Test Group</td>
+            <td class="p-3"><code class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">Tests</code> tab, Column A</td>
+            <td class="p-3 text-[#555555]">Down — group membership</td>
+          </tr>
+          <tr>
+            <td class="p-3 text-[#555555]">Risk → Requirement</td>
+            <td class="p-3"><code class="font-mono bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">Risks</code> tab, Column F</td>
+            <td class="p-3 text-[#555555]">Sideways — to mitigation</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="text-[#555555]">If an ID in any of these cells doesn't match a row in the target tab, RTMify flags it as <code class="font-mono bg-red-100 px-1.5 py-0.5 rounded text-xs text-red-900" style="font-family: var(--font-family-mono);">UNRESOLVED</code>. If the cell is blank where a link is expected, RTMify flags the appropriate warning (<code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code> or <code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>). See <a href="/docs/status-codes/" class="text-[#1A1A2E] underline">Status Codes</a> for the full reference.</p>
+    </section>
+
+    <!-- Bidirectional traceability -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Bidirectional traceability</h2>
+      <p class="text-[#555555] mb-4">Auditors check the chain in both directions. Forward traceability proves every need is implemented and verified. Backward traceability proves every test traces to a real need — no gold-plating, no orphan tests.</p>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-5 border border-[#DDDDDD] rounded bg-green-50">
+          <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Forward traceability</h3>
+          <p class="text-[#555555] text-sm mb-2">User Need → Requirement → Test</p>
+          <p class="text-[#555555] text-xs"><strong>Proves:</strong> every stakeholder need is decomposed into a verifiable requirement and covered by at least one test. Nothing falls through the cracks.</p>
+        </div>
+        <div class="p-5 border border-[#DDDDDD] rounded bg-blue-50">
+          <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Backward traceability</h3>
+          <p class="text-[#555555] text-sm mb-2">Test → Requirement → User Need</p>
+          <p class="text-[#555555] text-xs"><strong>Proves:</strong> every test exists for a reason. Every requirement traces to a real stakeholder need. No unnecessary work, no scope creep embedded in the test suite.</p>
+        </div>
+      </div>
+
+      <p class="text-[#555555]">Most standards require both directions explicitly. DO-178C calls it out by name. ASPICE requires bidirectional traceability at Capability Level 2 and above. ISO 13485 auditors verify that every design output (§7.3.4) maps back to a design input (§7.3.3) and forward to verification activities (§7.3.5).</p>
+    </section>
+
+    <!-- Suspect flagging -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">What "suspect" means</h2>
+      <p class="text-[#555555] mb-4">When an upstream artifact changes, everything downstream becomes <dfn>suspect</dfn>. A suspect item isn't necessarily wrong — it needs re-evaluation. Someone has to look at it and confirm it's still valid, or update it.</p>
+
+      <div class="bg-yellow-50 border border-yellow-400 rounded p-5 mb-4">
+        <p class="text-[#555555] m-0 text-sm"><strong>Example:</strong> You change UN-003 from "Battery shall last 8 hours" to "Battery shall last 12 hours." Now REQ-003 (which implements UN-003), TG-003 (which tests REQ-003), and RSK-103 (which assesses battery-related risk) are all suspect. The requirement text might need updating. The test pass criteria definitely need updating. The risk assessment might change.</p>
+      </div>
+
+      <p class="text-[#555555] mb-4"><strong>RTMify Live</strong> handles suspect-propagation automatically — when you edit a cell in Google Sheets, Live re-evaluates the chain and flags everything downstream. In the <strong>static template</strong>, you need to trace the links manually. This is why the template includes cross-reference IDs in every tab: so you can follow the chain by searching for an ID.</p>
+
+      <p class="text-[#555555]">ISO 13485 §7.3.9 specifically requires that design changes assess the effect on existing artifacts. AS9100 §8.3.6 requires impact assessment before changes. RTMify's suspect-propagation satisfies these requirements automatically.</p>
+    </section>
+
+    <!-- Impact analysis -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Impact analysis</h2>
+      <p class="text-[#555555] mb-4">Before changing any artifact, trace the chain to see what's affected. This is impact analysis — and it's required by every standard before approving a design change.</p>
+
+      <div class="bg-[#18181B] rounded-lg p-5 mb-4">
+        <p class="font-mono text-xs text-green-400 m-0 mb-2" style="font-family: var(--font-family-mono);"><strong class="text-green-300">❯</strong> What breaks if I change UN-002?</p>
+        <p class="font-mono text-xs text-[#E4E4E7] m-0" style="font-family: var(--font-family-mono);">UN-002 is referenced by REQ-004, REQ-005, and REQ-012.<br/>REQ-004 links to TG-002 (3 tests) and RSK-101.<br/>REQ-005 links to TG-004 (2 tests).<br/>REQ-012 links to TG-007 (1 test) and RSK-205.<br/><span class="text-yellow-300">⚠ Total downstream impact: 3 requirements, 3 test groups, 6 tests, 2 risks.</span></p>
+      </div>
+
+      <p class="text-[#555555]">With <strong>RTMify Live</strong> and its MCP server, you can ask this question conversationally from Claude, Cursor, or any MCP-compatible client. With the <strong>static template</strong>, search for the ID across tabs manually — Column C in Requirements, Column F in Risks — and follow each chain downstream.</p>
+    </section>
+
+    <!-- Per-standard requirements -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">What each standard requires</h2>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse text-xs min-w-96">
+          <thead>
+            <tr class="border-b-2 border-[#1A1A2E]">
+              <th class="text-left p-3 text-[#1A1A2E] font-bold">Standard</th>
+              <th class="text-left p-3 text-[#1A1A2E] font-bold">Required chain</th>
+              <th class="text-left p-3 text-[#1A1A2E] font-bold">Bidirectional?</th>
+              <th class="text-left p-3 text-[#1A1A2E] font-bold">Key clauses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-[#DDDDDD]">
+              <td class="p-3"><span class="bg-blue-700 text-white px-2 py-0.5 rounded text-xs font-bold">AS9100</span></td>
+              <td class="p-3 text-[#555555]">Inputs → Outputs → V&V</td>
+              <td class="p-3 text-[#555555]">Yes (implied by §8.3.4)</td>
+              <td class="p-3 text-[#555555]">§8.3.3, §8.3.4, §8.3.5</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD]">
+              <td class="p-3"><span class="bg-green-700 text-white px-2 py-0.5 rounded text-xs font-bold">ISO 13485</span></td>
+              <td class="p-3 text-[#555555]">Inputs → Outputs → V&V + Risk (14971)</td>
+              <td class="p-3 text-[#555555]">Yes (§7.3.3/4 cross-ref)</td>
+              <td class="p-3 text-[#555555]">§7.3.3–§7.3.6, §7.3.9</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD]">
+              <td class="p-3"><span class="bg-purple-700 text-white px-2 py-0.5 rounded text-xs font-bold">DO-178C</span></td>
+              <td class="p-3 text-[#555555]">SYS → HLR → LLR → Source → Test → Results</td>
+              <td class="p-3 text-[#555555]">Yes (explicit requirement)</td>
+              <td class="p-3 text-[#555555]">§5.5, §6.3, §6.4, Table A</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD]">
+              <td class="p-3"><span class="bg-orange-800 text-white px-2 py-0.5 rounded text-xs font-bold">IEC 62304</span></td>
+              <td class="p-3 text-[#555555]">Needs → SW Req → Architecture → Test</td>
+              <td class="p-3 text-[#555555]">Yes (safety class B/C)</td>
+              <td class="p-3 text-[#555555]">§5.2, §5.3, §5.5, §5.7</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD]">
+              <td class="p-3"><span class="bg-red-700 text-white px-2 py-0.5 rounded text-xs font-bold">ISO 26262</span></td>
+              <td class="p-3 text-[#555555]">HARA → Safety Goals → Safety Req → Design → Test</td>
+              <td class="p-3 text-[#555555]">Yes (V-model)</td>
+              <td class="p-3 text-[#555555]">§8, §10, Part 6 §9–§11</td>
+            </tr>
+            <tr>
+              <td class="p-3"><span class="bg-teal-700 text-white px-2 py-0.5 rounded text-xs font-bold">ASPICE</span></td>
+              <td class="p-3 text-[#555555]">SYS.1 → SYS.2 → SWE.1 → SWE.2/3 → SWE.4–6</td>
+              <td class="p-3 text-[#555555]">Yes (CL2+ requirement)</td>
+              <td class="p-3 text-[#555555]">SYS.1–2, SWE.1–6, SYS.4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-[#555555]">The common thread: every standard requires that you can start from a stakeholder need and trace all the way to the test that verifies it — and back. The RTMify template's four-tab structure satisfies this for all six standards. The ID cross-references in each tab are the links that auditors follow.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Frequently asked questions</h2>
+
+      <div class="space-y-4">
+        <details class="border border-[#DDDDDD] rounded-lg p-4">
+          <summary class="font-semibold text-[#1A1A2E] cursor-pointer">What happens if the traceability chain is broken?</summary>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">A broken chain means an auditor can't follow the thread from a user need to the test that verifies it — or from a test back to the need that justifies it. RTMify flags breaks with <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code>, <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>, or <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">UNRESOLVED</code> status codes. Every regulated standard treats incomplete traceability as a finding. See <a href="/docs/status-codes/" class="text-[#1A1A2E]">Status Codes</a> for how to fix each one.</p>
+        </details>
+
+        <details class="border border-[#DDDDDD] rounded-lg p-4">
+          <summary class="font-semibold text-[#1A1A2E] cursor-pointer">Do I need traceability for every single requirement?</summary>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">Yes. Every requirement should trace up to at least one User Need (Column C) and down to at least one Test Group (Column E). Requirements with no upstream traceability are "orphans" — they have no justification. Requirements with no downstream traceability are unverified. Both are audit findings.</p>
+        </details>
+
+        <details class="border border-[#DDDDDD] rounded-lg p-4">
+          <summary class="font-semibold text-[#1A1A2E] cursor-pointer">What's the minimum traceability for a first audit?</summary>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">Every requirement traces to a user need (Column C filled). Every requirement has a test group (Column E filled). Every risk has a linked requirement (Column F filled). All referenced IDs resolve — zero <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">UNRESOLVED</code> status codes. This gives you forward and backward traceability across the full chain. It won't be perfect, but it'll pass.</p>
+        </details>
+
+        <details class="border border-[#DDDDDD] rounded-lg p-4">
+          <summary class="font-semibold text-[#1A1A2E] cursor-pointer">How is traceability different from coverage?</summary>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">Traceability answers "can I follow the thread from need to test?" Coverage answers "how much of the requirement does the test actually exercise?" You can have 100% traceability (every requirement links to a test) with poor coverage (the tests don't adequately exercise the requirements). The RTMify template tracks traceability. Coverage analysis requires reviewing what each test actually verifies — structural coverage tools (for code) or test adequacy reviews (for system tests).</p>
+        </details>
+
+        <details class="border border-[#DDDDDD] rounded-lg p-4">
+          <summary class="font-semibold text-[#1A1A2E] cursor-pointer">Can I add intermediate levels (e.g., subsystem requirements)?</summary>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">Yes. Use ID prefixes to encode levels — for example <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">SYS-001</code> for system requirements, <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">SUB-001</code> for subsystem, <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">SWE-001</code> for software. Chain them through the User Need ID column: a software requirement's "parent" is the subsystem requirement above it. DO-178C programs routinely use SYS/HLR/LLR prefixes this way. The template handles any depth of decomposition — it's just more rows in the Requirements tab with the right cross-references.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Cross-links -->
+    <section class="border-t border-[#DDDDDD] pt-10 mt-10">
+      <h2 class="text-xl font-bold text-[#1A1A2E] mb-4">Related documentation</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <a href="/docs/user-needs/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">User Needs →</a>
+        <a href="/docs/requirements/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Requirements →</a>
+        <a href="/docs/tests/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Tests →</a>
+        <a href="/docs/risks/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Risks →</a>
+        <a href="/docs/status-codes/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Status Codes →</a>
+        <a href="/docs/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Back to Docs Hub →</a>
+      </div>
+    </section>
+
+  </div>
+</DocsLayout>

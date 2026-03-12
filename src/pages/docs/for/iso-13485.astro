@@ -1,0 +1,712 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'ISO 13485:2016 Quick Start Guide';
+const description = 'Complete walkthrough of using RTMify for medical device quality management system design controls under ISO 13485:2016';
+const canonical = 'https://rtmify.io/docs/for/iso-13485/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'ISO 13485', url: '/docs/for/iso-13485/' }
+];
+
+const faqItems = [
+  {
+    question: 'How does this relate to my Design History File?',
+    answer: 'The RTMify template directly generates your Design History File (DHF) documentation. Each User Need, Requirement, Test, and Risk entry creates traceable records that auditors require. Your RTM becomes §7.3 evidence: design inputs (User Needs), design outputs (Requirements), verification (Tests), validation (Tests with validation type), and design change controls. Export your RTM as PDF for your DHF submission.'
+  },
+  {
+    question: 'Do I need separate verification and validation for every requirement?',
+    answer: 'Not every requirement needs both. Verification (did we build it right?) applies to all technical requirements. Validation (did we build the right thing?) applies to requirements driven by customer needs and regulatory inputs—especially those affecting safety and performance. For example: a display contrast requirement needs both verification (luminance test) and validation (usability study). A firmware version requirement might only need verification (documentation check). ISO 13485 §7.3.5 and §7.3.6 distinguish these; auditors specifically check this distinction.'
+  },
+  {
+    question: 'How do I handle requirements from harmonized standards (IEC 60601)?',
+    answer: 'Trace them back to User Needs. When IEC 60601-1 (general safety) mandates a particular electrical safety level, create a User Need with Regulation/Standard source, then derive Requirements that implement it. Example: UN-002 | "Device shall comply with IEC 60601-1 electrical safety" → REQ-002 | "Patient-contacting materials shall not exceed 5 µA leakage current" → Test to verify. This shows regulators that your design intentionally addresses each standard requirement.'
+  },
+  {
+    question: 'What about FDA 21 CFR 820 design controls?',
+    answer: 'ISO 13485 §7.3 is recognized as equivalent to FDA 21 CFR 820.30 design controls by the FDA (Design Control Guidance for Medical Device Manufacturers, 2023). The mapping: Design Inputs (§7.3.3) = customer needs, regulatory; Design Outputs (§7.3.4) = verifiable specifications; Verification (§7.3.5) = testing to inputs; Validation (§7.3.6) = clinical/user testing; Design Changes (§7.3.9) = change control and impact analysis. Use the same RTMify template for both standards.'
+  }
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'TechArticle',
+      headline: title,
+      description: description,
+      url: canonical,
+      image: {
+        '@type': 'ImageObject',
+        url: 'https://rtmify.io/og-iso-13485.png',
+        width: 1200,
+        height: 630
+      },
+      author: {
+        '@type': 'Organization',
+        name: 'RTMify',
+        url: 'https://rtmify.io'
+      },
+      datePublished: '2026-03-12',
+      dateModified: '2026-03-12',
+      inLanguage: 'en',
+      keywords: 'ISO 13485, medical device, quality management, design controls, requirements traceability, verification, validation, design history file'
+    },
+    {
+      '@type': 'HowTo',
+      name: 'ISO 13485 Design Controls Implementation',
+      description: 'Complete walkthrough of implementing design controls per ISO 13485:2016 using RTMify',
+      step: [
+        {
+          '@type': 'HowToStep',
+          name: 'User Needs (Design Inputs)',
+          text: 'Capture customer needs, regulatory requirements, safety requirements, performance requirements, and applicable standards per ISO 13485:2016 §7.3.3'
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Requirements (Design Outputs)',
+          text: 'Define verifiable requirements traced to design inputs per ISO 13485:2016 §7.3.4'
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Tests (Verification & Validation)',
+          text: 'Plan verification activities (testing against requirements) and validation activities (testing against user needs) per ISO 13485:2016 §7.3.5 and §7.3.6'
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Risks (ISO 14971 Integration)',
+          text: 'Integrate risk management per ISO 14971, linking risks to mitigating requirements and controls'
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'RTM Generation & DHF',
+          text: 'Generate traceability matrix and documentation for Design History File'
+        }
+      ]
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map(item => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer
+        }
+      }))
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.name,
+        item: `https://rtmify.io${crumb.url}`
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="iso-13485"
+>
+  <article class="iso-guide">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold text-[#1A1A2E] mb-4">{title}</h1>
+      <p class="text-lg text-[#555555] mb-6 leading-relaxed">
+        Medical device design controls under ISO 13485:2016 require rigorous traceability from customer needs
+        through design outputs, verification, and validation. This guide shows how RTMify maps directly to §7.3
+        design control requirements and accelerates Design History File (DHF) documentation.
+      </p>
+      <div class="flex flex-wrap gap-3 text-sm">
+        <span class="px-3 py-1 bg-[#F5F5F5] border border-[#DDDDDD] rounded text-[#2E7D32] font-semibold">ISO 13485:2016</span>
+        <span class="text-[#555555]">§7.3 Design and Development</span>
+        <span class="text-[#555555]">Last updated: March 12, 2026</span>
+      </div>
+    </header>
+
+    <section class="mb-12">
+      <h2 id="rtmify-mapping" class="text-2xl font-bold text-[#1A1A2E] mb-4 border-b-2 border-[#2E7D32] pb-3">
+        RTMify Template Mapping to ISO 13485:2016
+      </h2>
+      <p class="text-[#555555] mb-6">
+        The RTMify template aligns directly with ISO 13485:2016 Clause 7.3 (Design and Development).
+        Understanding this mapping ensures your design control documentation meets both standard and audit expectations.
+      </p>
+
+      <div class="overflow-x-auto mb-8 border border-[#DDDDDD] rounded">
+        <table class="w-full text-sm text-[#555555]">
+          <thead class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">RTMify Field</th>
+              <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">ISO 13485:2016 Section</th>
+              <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>User Needs</strong></td>
+              <td class="px-4 py-3">§7.3.3 Design Inputs</td>
+              <td class="px-4 py-3">Capture customer requirements, regulatory mandates, performance needs, safety requirements, and applicable standards</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>Requirements</strong></td>
+              <td class="px-4 py-3">§7.3.4 Design Outputs</td>
+              <td class="px-4 py-3">Define verifiable specifications derived from and traceable to design inputs</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>Tests (Verification)</strong></td>
+              <td class="px-4 py-3">§7.3.5 Design Verification</td>
+              <td class="px-4 py-3">Demonstrate that design outputs conform to design inputs (did we build it right?)</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>Tests (Validation)</strong></td>
+              <td class="px-4 py-3">§7.3.6 Design Validation</td>
+              <td class="px-4 py-3">Demonstrate that device meets user needs and intended use (did we build the right thing?)</td>
+            </tr>
+            <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>Risks</strong></td>
+              <td class="px-4 py-3">§7.3 + ISO 14971</td>
+              <td class="px-4 py-3">Integrate risk management; trace risks to mitigating requirements and control implementation</td>
+            </tr>
+            <tr class="hover:bg-[#F5F5F5]">
+              <td class="px-4 py-3"><strong>Traceability Matrix</strong></td>
+              <td class="px-4 py-3">§7.3.8 Design Transfer</td>
+              <td class="px-4 py-3">Evidence of complete traceability from inputs through outputs and testing to product realization</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 id="what-iso-requires" class="text-2xl font-bold text-[#1A1A2E] mb-4 border-b-2 border-[#2E7D32] pb-3">
+        What ISO 13485:2016 Requires
+      </h2>
+
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Inputs (§7.3.3)</h3>
+          <p class="text-[#555555] mb-4">
+            ISO 13485:2016 §7.3.3 mandates that design input requirements shall:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Include customer and user needs:</strong> Clinician usability, patient safety, environmental conditions</li>
+            <li><strong>Address regulatory and standards requirements:</strong> IEC 60601 series, ISO 14971 risk management, FDA 510(k) guidance, EU MDR annexes</li>
+            <li><strong>Define performance and safety requirements:</strong> Accuracy, reliability, shelf-life, biocompatibility, electromagnetic compatibility</li>
+            <li><strong>Be documented and reviewed:</strong> Design input review must identify ambiguities, conflicts, and incompleteness</li>
+            <li><strong>Be approved before design output development:</strong> Prevents rework; ensures shared understanding</li>
+          </ul>
+          <div class="bg-[#F5F5F5] border-l-4 border-[#2E7D32] p-4 text-[#555555]">
+            <strong>Auditor focus:</strong> Are design inputs comprehensive? Do they trace to your product scope? Is there evidence of customer/regulatory input, not just internal assumptions?
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Outputs (§7.3.4)</h3>
+          <p class="text-[#555555] mb-4">
+            Design outputs are the specifications that implement design inputs. ISO 13485:2016 §7.3.4 requires:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Verifiable specifications:</strong> Each requirement must be testable—include measurement criteria, pass/fail thresholds, and success metrics</li>
+            <li><strong>Traceability to design inputs:</strong> Every design output must link back to at least one design input; inputs map to outputs</li>
+            <li><strong>Performance and safety specifications:</strong> Electrical safety limits, biocompatibility grades, accuracy tolerances, latency budgets</li>
+            <li><strong>Risk control specifications:</strong> How design addresses identified hazards (ISO 14971 link)</li>
+            <li><strong>Documentation standards:</strong> Hardware specs, firmware design, software requirements specifications, mechanical drawings, material specifications</li>
+            <li><strong>Design output review and approval:</strong> Ensures specifications are complete, unambiguous, and achievable</li>
+          </ul>
+          <div class="bg-[#F5F5F5] border-l-4 border-[#2E7D32] p-4 text-[#555555]">
+            <strong>Auditor focus:</strong> Can every design output be tested? Is the traceability complete and bidirectional? Are safety and regulatory requirements explicitly addressed?
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Verification (§7.3.5)</h3>
+          <p class="text-[#555555] mb-4">
+            Verification confirms that design outputs correctly implement design inputs. The standard states:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Verification shall be performed:</strong> Testing, analysis, inspection, or demonstration against approved design outputs</li>
+            <li><strong>Includes first articles and samples:</strong> Tests on actual production units, not just prototypes</li>
+            <li><strong>Addresses all design outputs:</strong> Every requirement needs a verification activity; multiple tests per requirement are often necessary</li>
+            <li><strong>Covers design outputs derived from harmonized standards:</strong> When IEC 60601 mandates a 5:1 contrast ratio, your verification test must confirm it</li>
+            <li><strong>Documented and approved:</strong> Test plans, test results, and acceptance criteria clearly recorded</li>
+          </ul>
+          <p class="text-[#555555] mb-4">
+            <strong>Example:</strong> REQ-001 states "Display SHALL maintain contrast ratio ≥ 5:1 at 500 lux." Verification includes luminance meter testing per IEC 62366 in a simulated bright-light clinical environment, recorded in a test report approved by Design and Quality.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Validation (§7.3.6)</h3>
+          <p class="text-[#555555] mb-4">
+            Validation confirms the device meets user needs and intended use. This is distinct from verification:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Clinical, user, or field validation:</strong> Real clinicians, patients, or environments—not just lab conditions</li>
+            <li><strong>Addresses high-risk or customer-critical requirements:</strong> Usability, efficacy, comfort, reliability under actual conditions</li>
+            <li><strong>Risk-based approach:</strong> High-risk requirements require robust validation; low-risk requirements may use demonstrated use or clinical data</li>
+            <li><strong>Includes intended use scenarios:</strong> If your device is for 72-hour continuous wear, validation includes 72-hour continuous wear studies</li>
+            <li><strong>Biocompatibility validation:</strong> If patient-contacting, ISO 10993 biocompatibility per intended contact duration and type</li>
+            <li><strong>Software validation:</strong> If device includes software, IEC 62304 software validation (covered in separate guide)</li>
+            <li><strong>Documented and approved:</strong> Validation protocols, results, and conclusions approved before product release</li>
+          </ul>
+          <div class="bg-[#F5F5F5] border-l-4 border-[#2E7D32] p-4 text-[#555555]">
+            <strong>Key distinction (auditor focus):</strong> A luminance meter test is verification (did we build the output right?). A usability study where clinicians read the display in a simulated ward is validation (did we build the right thing for real use?).
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Transfer (§7.3.8)</h3>
+          <p class="text-[#555555] mb-4">
+            Once design is verified and validated, design transfer ensures manufacturing can consistently produce the design. This requires:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Process capability studies:</strong> Manufacturing parameters meet design specifications</li>
+            <li><strong>First article inspection:</strong> Initial production units tested against design outputs</li>
+            <li><strong>Manufacturing documentation:</strong> Work instructions, process controls, material specifications tied to design outputs</li>
+            <li><strong>Traceability matrix:</strong> Your RTM proves design outputs are realized in product specifications and manufacturing procedures</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">Design Changes (§7.3.9)</h3>
+          <p class="text-[#555555] mb-4">
+            Post-approval design changes must undergo impact analysis and, if necessary, additional verification and validation:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Change assessment:</strong> Does the change affect regulatory approval, safety, performance, or user needs?</li>
+            <li><strong>Re-verification required:</strong> If requirement specifications change, test again</li>
+            <li><strong>Re-validation required:</strong> If the change affects high-risk features or clinical use, clinical validation may be needed</li>
+            <li><strong>Post-market surveillance:</strong> Ongoing monitoring for unintended consequences</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">ISO 14971 Risk Management Integration</h3>
+          <p class="text-[#555555] mb-4">
+            ISO 13485:2016 requires integration of ISO 14971 (Risk Management). The standard mandates:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Risk identification:</strong> Hazards, hazardous situations, and harms</li>
+            <li><strong>Risk analysis:</strong> Severity and probability (or likelihood) estimation</li>
+            <li><strong>Risk evaluation:</strong> Compare estimated risk against risk acceptance criteria</li>
+            <li><strong>Risk control:</strong> Design mitigations (safest), protective measures, information for users</li>
+            <li><strong>Residual risk evaluation:</strong> After mitigation, is risk acceptable?</li>
+            <li><strong>Risk control verification:</strong> Test that mitigations work</li>
+          </ul>
+          <p class="text-[#555555] mt-4">
+            Your RTMify Risks table links each identified risk to its mitigating requirement. Example: Risk RSK-101 (display unreadable in bright light) is controlled by REQ-001 (5:1 contrast), verified by test TG-001.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 id="step-by-step" class="text-2xl font-bold text-[#1A1A2E] mb-4 border-b-2 border-[#2E7D32] pb-3">
+        Step-by-Step Walkthrough: Medical Device Example
+      </h2>
+      <p class="text-[#555555] mb-8">
+        This example follows a wearable pulse oximetry sensor (SpO2 monitor) through all five steps.
+        The device attaches to a patient's finger and wirelessly transmits real-time oxygen saturation to a clinician's tablet.
+      </p>
+
+      <div class="space-y-12">
+        <article id="step-1" class="border-l-4 border-[#2E7D32] pl-6 py-6">
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Step 1: User Needs (Design Inputs)</h3>
+          <p class="text-[#555555] mb-6">
+            Gather requirements from customers (clinicians, hospital procurement), regulations (IEC 60601-1, FDA),
+            and standards. Document each need with its source and priority. These become your §7.3.3 design inputs.
+          </p>
+
+          <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-6 font-mono text-sm text-[#1A1A2E] overflow-x-auto mb-6">
+            <div class="whitespace-pre-wrap leading-relaxed">
+{`User Needs Template (ISO 13485 §7.3.3 Design Inputs)
+─────────────────────────────────────────────────────
+
+UN-001 | Display & Usability
+"Clinician shall be able to read patient SpO2 in ambient light conditions up to 500 lux"
+Source: Customer | Priority: High | Regulatory Ref: IEC 60601-1-6 (usability)
+
+UN-002 | Patient Safety
+"Device shall not cause skin irritation or sensitization during 72-hour continuous use"
+Source: Regulation (IEC 60601-1-2 skin contact; ISO 10993) | Priority: High | Regulatory Ref: ISO 10993-5 Cytotoxicity, IEC 60601-1-2 §7.3.3
+
+UN-003 | Battery Life
+"Battery shall last at least 8 hours of continuous monitoring at nominal SpO2 measurement rate"
+Source: Customer | Priority: Medium | Regulatory Ref: None
+
+UN-004 | Measurement Accuracy
+"SpO2 measurement accuracy shall be ±3% in range 70–100% SpO2 per clinical studies"
+Source: Regulation (FDA 510(k) guidance on SpO2 devices) | Priority: High | Regulatory Ref: FDA-2001-D-0001 SpO2 Accuracy
+
+UN-005 | Wireless Connectivity
+"Wireless transmission shall comply with FCC Part 15 and shall not cause interference with clinical equipment"
+Source: Regulation | Priority: High | Regulatory Ref: FCC Part 15.109, IEC 60601-1-2 EMC
+
+UN-006 | Biocompatibility
+"Patient-contacting adhesive shall not leach chemicals harmful to skin tissue"
+Source: Regulation | Priority: High | Regulatory Ref: ISO 10993-1, -5, -9`}
+            </div>
+          </div>
+
+          <p class="text-[#555555] mb-4">
+            <strong>ISO 13485 Requirement:</strong> §7.3.3 mandates design inputs include customer needs, regulatory requirements,
+            performance, safety, and applicable standards. Your User Needs table is the evidence for this requirement.
+          </p>
+          <p class="text-[#555555] mb-4"><strong>Auditor Questions:</strong></p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2">
+            <li>Are all customer needs represented? (Ask customers during design review)</li>
+            <li>Have you identified all applicable standards? (FDA, EU MDR, ISO/IEC standards specific to device type)</li>
+            <li>Are performance and safety requirements explicitly stated with acceptance criteria?</li>
+            <li>Is there a record of design input review and approval before proceeding to Step 2?</li>
+          </ul>
+        </article>
+
+        <article id="step-2" class="border-l-4 border-[#2E7D32] pl-6 py-6">
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Step 2: Requirements (Design Outputs)</h3>
+          <p class="text-[#555555] mb-6">
+            Convert each User Need into one or more verifiable Requirements. Each Requirement is traceable to a User Need
+            and includes acceptance criteria (the test will check against these). These are your §7.3.4 design outputs.
+          </p>
+
+          <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-6 font-mono text-sm text-[#1A1A2E] overflow-x-auto mb-6">
+            <div class="whitespace-pre-wrap leading-relaxed">
+{`Requirements Template (ISO 13485 §7.3.4 Design Outputs)
+──────────────────────────────────────────────────────
+
+REQ-001 | High-Contrast OLED Display for Readability
+"The display SHALL maintain a contrast ratio of at least 5:1 (per WCAG 2.0 AA)
+when measured at 500 lux ambient illumination per IEC 62366 photometer standards"
+Traced to: UN-001 (Usability in ambient light)
+Priority: High | Test Gate: TG-001 | Status: Approved
+
+REQ-002 | Hypoallergenic Patient Contact Materials
+"Patient-contacting adhesive materials SHALL be medical-grade silicone
+with proven biocompatibility per ISO 10993-5 (cytotoxicity) and ISO 10993-9 (sensitization)"
+Traced to: UN-002 (No skin irritation), UN-006 (Biocompatibility)
+Priority: High | Test Gate: TG-002 | Status: Approved
+
+REQ-003 | Battery Operating Life
+"The rechargeable lithium polymer battery SHALL provide continuous operation for at least 8 hours
+at 25°C ambient temperature and nominal SpO2 measurement polling rate (once per second)"
+Traced to: UN-003 (Battery life)
+Priority: Medium | Test Gate: TG-003 | Status: Approved
+
+REQ-004 | SpO2 Measurement Accuracy (Specification)
+"The device firmware algorithm SHALL produce SpO2 readings within ±3% absolute error
+when compared to laboratory CO-oximetry reference standard across SpO2 range 70–100%"
+Traced to: UN-004 (Measurement accuracy)
+Priority: High | Test Gate: TG-004 | Status: Approved
+
+REQ-005 | Wireless Transmission Compliance
+"The 2.4 GHz wireless transceiver SHALL emit RF power within FCC Part 15.209 limits (max −17 dBm/MHz)
+and demonstrate radiated immunity per IEC 61326-1 to prevent clinical equipment interference"
+Traced to: UN-005 (Wireless compliance)
+Priority: High | Test Gate: TG-005 | Status: Approved
+
+REQ-006 | Adhesive Leaching Control
+"Patient-contact adhesive formulation SHALL not release >5 µg/mL of leachable compounds
+when tested per ISO 10993-5 (3T cytotoxicity extraction, 24 hr, 37°C)"
+Traced to: UN-002, UN-006 (Biocompatibility, no skin irritation)
+Priority: High | Test Gate: TG-002 | Status: Approved`}
+            </div>
+          </div>
+
+          <p class="text-[#555555] mb-4"><strong>Key Features of Design Outputs:</strong></p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Verifiable:</strong> Each requirement includes success criteria (e.g., "≥5:1 contrast ratio," "±3% error")</li>
+            <li><strong>Traceable:</strong> Every requirement maps back to at least one User Need</li>
+            <li><strong>Standards-based:</strong> Specifications reference applicable standards (IEC, ISO, FDA guidance)</li>
+            <li><strong>Implementation-ready:</strong> Hardware and software engineers use these specs to design</li>
+          </ul>
+
+          <p class="text-[#555555] mb-4">
+            <strong>ISO 13485 Requirement:</strong> §7.3.4 requires design outputs be documented, traceable to inputs,
+            and reviewed/approved before implementation. Your Requirements table with traceability is the evidence.
+          </p>
+          <p class="text-[#555555] mb-4"><strong>Auditor Questions:</strong></p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2">
+            <li>Is every design output traceable to a design input? (Bidirectional: each input should map to outputs)</li>
+            <li>Are acceptance criteria clear and measurable?</li>
+            <li>Do specifications address all regulatory requirements from harmonized standards?</li>
+            <li>Is there documented evidence of design output review by design, quality, and regulatory teams?</li>
+          </ul>
+        </article>
+
+        <article id="step-3" class="border-l-4 border-[#2E7D32] pl-6 py-6">
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Step 3: Tests (Verification & Validation)</h3>
+          <p class="text-[#555555] mb-6">
+            This is where the critical ISO 13485 distinction emerges: <strong>Verification</strong> (§7.3.5) vs. <strong>Validation</strong> (§7.3.6).
+          </p>
+          <p class="text-[#555555] mb-6">
+            <strong>Verification:</strong> Testing the product in controlled lab conditions against the design output specification.
+            "Did we build the requirements right?"
+          </p>
+          <p class="text-[#555555] mb-6">
+            <strong>Validation:</strong> Testing the product in realistic or clinical conditions against user needs.
+            "Did we build the right thing for the intended use?"
+          </p>
+
+          <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-6 font-mono text-sm text-[#1A1A2E] overflow-x-auto mb-6">
+            <div class="whitespace-pre-wrap leading-relaxed text-xs">
+{`Tests Template (ISO 13485 §7.3.5 Verification & §7.3.6 Validation)
+────────────────────────────────────────────────────────────────
+
+TEST GATE TG-001: REQ-001 (Display Contrast)
+─────────────────────────────────────────────
+
+T-001 | Verification | Test | Luminance Meter Laboratory Measurement
+"Using calibrated luminance meter and standard illumination source (500 lux, CIE D65),
+measure pixel luminance of white display text and black background at 10 points across active display area.
+Calculate local contrast ratios. Accept if all points ≥ 5:1 per IEC 62366."
+Evidence: Test Report TRD-001, attachments include meter calibration cert, raw data, analysis
+
+T-002 | Validation | Demonstration | Usability Study – Clinical Environment
+"Recruit 10 clinicians (mixed experience levels) from partner hospital.
+Have each read 10 simulated SpO2 values displayed on device in hospital ward lighting (measured at 500 lux).
+Record time-to-read and accuracy. Accept if 100% of readings correct within 5 seconds per task."
+Evidence: Usability Study Report USR-001, informed consent forms, raw performance data, video recordings
+
+
+TEST GATE TG-002: REQ-002, REQ-006 (Biocompatibility)
+──────────────────────────────────────────────────────
+
+T-003 | Verification | Test | ISO 10993-5 Cytotoxicity (Accredited Lab)
+"Submit adhesive material samples to ISO 13485-certified biocompatibility lab (e.g., Nelson Labs).
+Test per ISO 10993-5 Annex E (3T direct contact, L-929 mouse fibroblast cells, 24 hr, 37°C).
+Accept if cytotoxicity grade ≤ Grade 1 (non-cytotoxic)."
+Evidence: Test Report TRD-002 (ISO 17025 accredited), material batch documentation, controls
+
+
+TEST GATE TG-003: REQ-003 (Battery Life)
+──────────────────────────────────────────
+
+T-004 | Verification | Test | Battery Rundown Test (Controlled Environment)
+"Place assembled device in environmental chamber at 25°C, 45–65% humidity.
+Activate continuous SpO2 measurement (1 Hz polling, display on, wireless off) and log battery voltage.
+Record time to battery depletion (<2V). Accept if battery provides ≥8 hours continuous operation."
+Evidence: Test Report TRD-003, environmental chamber calibration, voltage log data (CSV), analysis
+
+T-005 | Validation | Demonstration | Field Trial – 72-Hour Continuous Wear
+"Enroll 5 healthy volunteers and 5 patient subjects in 72-hour continuous wear trial.
+Each subject wears device 24/7 with daily logging of battery status, display readability, comfort, and skin condition.
+Accept if devices operate ≥8 hours per charge cycle and no subject reports adverse skin reactions."
+Evidence: Field Trial Report FTR-001, informed consent, daily logs, end-of-study skin assessments`}
+            </div>
+          </div>
+
+          <p class="text-[#555555] mb-4"><strong>The V&V Distinction (Auditor Focus):</strong></p>
+          <div class="overflow-x-auto mb-6 border border-[#DDDDDD] rounded">
+            <table class="w-full text-sm text-[#555555]">
+              <thead class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                <tr>
+                  <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">Aspect</th>
+                  <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">Verification (§7.3.5)</th>
+                  <th class="text-left px-4 py-3 font-semibold text-[#1A1A2E]">Validation (§7.3.6)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3"><strong>Question</strong></td>
+                  <td class="px-4 py-3">Did we build the requirements right?</td>
+                  <td class="px-4 py-3">Did we build the right thing for real use?</td>
+                </tr>
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3"><strong>Conditions</strong></td>
+                  <td class="px-4 py-3">Lab, controlled, repeatable</td>
+                  <td class="px-4 py-3">Clinical, field, realistic, variable</td>
+                </tr>
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3"><strong>Who</strong></td>
+                  <td class="px-4 py-3">Engineers, QA testers</td>
+                  <td class="px-4 py-3">Clinicians, patients, users, end customers</td>
+                </tr>
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3"><strong>Standard</strong></td>
+                  <td class="px-4 py-3">Design spec (your REQ)</td>
+                  <td class="px-4 py-3">Customer need (your UN) + regulatory expectation</td>
+                </tr>
+                <tr class="hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3"><strong>Examples</strong></td>
+                  <td class="px-4 py-3">Luminance meter test, battery rundown, emissions testing, cytotoxicity lab test</td>
+                  <td class="px-4 py-3">Usability study, clinical validation, field trial, patient outcome study</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="text-[#555555] mb-4">
+            <strong>ISO 13485 Requirement:</strong> §7.3.5 and §7.3.6 both state verification and validation activities
+            shall be planned and documented. Your RTMify Tests table with dual V&V entries provides this evidence.
+            Every design output needs verification; high-risk or customer-critical requirements need validation.
+          </p>
+          <p class="text-[#555555] mb-4"><strong>Auditor Questions:</strong></p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2">
+            <li>Is verification performed against design outputs (requirements), and validation against design inputs (user needs)?</li>
+            <li>Are test protocols (plans) documented before tests are run?</li>
+            <li>Are test results traceable back to requirements?</li>
+            <li>For failed or inconclusive tests, how is the failure addressed? (Re-design, deviation, risk assessment?)</li>
+            <li>Is there a documented conclusion that all verification and validation requirements have been satisfied before product release?</li>
+          </ul>
+        </article>
+
+        <article id="step-4" class="border-l-4 border-[#2E7D32] pl-6 py-6">
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Step 4: Risks (ISO 14971 Integration)</h3>
+          <p class="text-[#555555] mb-6">
+            ISO 13485 §7.3 requires integration of risk management per ISO 14971. Each identified hazard must be mitigated
+            by design controls (requirements) and the mitigation effectiveness verified through testing.
+          </p>
+
+          <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-6 font-mono text-sm text-[#1A1A2E] overflow-x-auto mb-6">
+            <div class="whitespace-pre-wrap leading-relaxed text-xs">
+{`Risks & Mitigations (ISO 13485 §7.3 + ISO 14971 Risk Management)
+───────────────────────────────────────────────────────────────
+
+RISK RSK-101: Display Unreadable in Bright Light → Misreading → Delayed Intervention
+─────────────────────────────────────────────────────────────────────────────────────
+
+Hazard: Display contrast insufficient in ambient light
+Hazardous Situation: Clinician cannot read SpO2 value in brightly lit OR
+Harm: Delayed recognition of hypoxia; delayed clinical intervention; patient deterioration
+
+Probability: Likely (frequent exposure to bright OR conditions in hospitals)
+Severity: Critical (patient harm potential: hypoxic injury, organ damage)
+Risk Level (P × S): HIGH → Requires control
+
+Risk Mitigations:
+  Control 1: Design Control (REQ-001 – High-contrast display ≥5:1)
+    Verification: T-001 luminance meter test
+    Validation: T-002 clinician usability study
+    Residual Risk: LOW (high contrast proven in clinical lighting)
+
+
+RISK RSK-102: Skin Irritation from Adhesive Contact
+───────────────────────────────────────────────────
+
+Hazard: Adhesive leachates trigger dermatitis
+Hazardous Situation: Patient wears device 72 hours; skin pH and microbiota altered
+Harm: Itching, erythema, blistering; patient discontinues use; loss of monitoring
+
+Probability: Unlikely (with biocompatible silicone)
+Severity: Moderate (discomfort, treatment with topical steroid cream)
+Risk Level: MEDIUM
+
+Risk Mitigations:
+  Control 1: Material Selection (REQ-002 – Medical-grade hypoallergenic silicone)
+  Control 2: Leaching Specification (REQ-006 – ≤5 µg/mL leachables per ISO 10993-5)
+    Verification: T-003 ISO 10993-5 cytotoxicity lab test
+    Validation: T-005 72-hour field trial with skin assessment
+    Residual Risk: LOW`}
+            </div>
+          </div>
+
+          <p class="text-[#555555] mb-4">
+            ISO 13485 §7.3 and ISO 14971 require clear linkage between identified risks and design controls (requirements)
+            that mitigate them. Your RTMify Risks table is the evidence of this integration.
+          </p>
+          <p class="text-[#555555] mb-4"><strong>Auditor Questions:</strong></p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2">
+            <li>Have all potential hazards been identified? (Use FMEA, hazard analysis worksheets)</li>
+            <li>Are risks prioritized by severity and probability?</li>
+            <li>For each high/medium risk, is there a specific design requirement that controls it?</li>
+            <li>Is risk control verification documented (the test proves the mitigation works)?</li>
+            <li>After mitigation, is residual risk acceptable per your risk acceptance criteria?</li>
+          </ul>
+        </article>
+
+        <article id="step-5" class="border-l-4 border-[#2E7D32] pl-6 py-6">
+          <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Step 5: RTM Generation & Design History File</h3>
+          <p class="text-[#555555] mb-4">
+            Once you have documented User Needs, Requirements, Tests, and Risks, RTMify generates your traceability matrix
+            (RTM) and compiles evidence for your Design History File (DHF). This is your §7.3.8 design transfer documentation.
+          </p>
+
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-3 mt-6">Traceability Matrix (RTM) Structure</h4>
+          <p class="text-[#555555] mb-4">
+            Your RTM proves that every User Need (design input) traces through Requirements (design outputs) to Tests
+            (verification/validation) and Risks (ISO 14971 controls). Auditors expect:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-6">
+            <li><strong>Forward traceability:</strong> User Needs → Requirements → Tests (every need is implemented and tested)</li>
+            <li><strong>Backward traceability:</strong> Tests → Requirements → User Needs (every test traces back to a need; no orphan requirements)</li>
+            <li><strong>Risk-control traceability:</strong> Risks → Control Requirements → Verification Tests (every risk is controlled and verified)</li>
+            <li><strong>Completeness:</strong> All design inputs, outputs, verification, and validation are documented and approved before product release</li>
+          </ul>
+
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-3 mt-6">Design History File (DHF) Contents</h4>
+          <p class="text-[#555555] mb-4">
+            Your DHF includes (and RTMify helps organize):
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li><strong>Design Input Documentation</strong> (§7.3.3): User Needs with sources and regulatory references</li>
+            <li><strong>Design Output Documentation</strong> (§7.3.4): Requirements with traceability and acceptance criteria</li>
+            <li><strong>Design Review Records</strong> (§7.3.7): Evidence of design team, quality, and regulatory review and approval</li>
+            <li><strong>Design Verification Reports</strong> (§7.3.5): Test plans, protocols, results for all requirements</li>
+            <li><strong>Design Validation Reports</strong> (§7.3.6): Clinical/user study plans, results, conclusions</li>
+            <li><strong>Risk Management Report</strong> (ISO 14971): Hazard analysis, risk evaluation, mitigations, residual risk assessment</li>
+            <li><strong>Traceability Matrix</strong> (§7.3.8): Complete RTM demonstrating coverage and bidirectional traceability</li>
+            <li><strong>Design Transfer Documentation</strong> (§7.3.8): Manufacturing process capability, first article inspection</li>
+            <li><strong>Design Change History</strong> (§7.3.9): All post-approval changes with impact analysis and re-verification/validation</li>
+          </ul>
+
+          <h4 class="text-lg font-semibold text-[#1A1A2E] mb-3 mt-6">Exporting to DHF</h4>
+          <p class="text-[#555555] mb-4">
+            RTMify exports your complete project as a PDF bundle, suitable for regulatory submission:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-[#555555] ml-2 mb-4">
+            <li>User Needs table (with source and regulatory mapping)</li>
+            <li>Requirements table (with traceability links to User Needs)</li>
+            <li>Tests table (V&V activities, link to Requirements, status)</li>
+            <li>Risks table (link to Risk Mitigation Requirements)</li>
+            <li>Traceability Matrix (complete coverage matrix)</li>
+            <li>Design Input Review and Approval Records</li>
+            <li>Design Output Review and Approval Records</li>
+          </ul>
+
+          <p class="text-[#555555] mb-4">
+            Regulators and auditors expect this documentation in your DHF. RTMify's export function provides auditable
+            evidence that you have met all requirements of ISO 13485:2016 §7.3.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4 border-b-2 border-[#2E7D32] pb-3">
+        Frequently Asked Questions
+      </h2>
+      <div class="space-y-3">
+        {faqItems.map((item) => (
+          <details class="border border-[#DDDDDD] rounded p-4 cursor-pointer hover:bg-[#F5F5F5] group">
+            <summary class="font-semibold text-[#1A1A2E] group-open:text-[#2E7D32]">
+              {item.question}
+            </summary>
+            <p class="text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD]">
+              {item.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-8 text-center">
+      <h2 class="text-2xl font-bold text-[#1A1A2E] mb-3">Ready to Start Your Design Controls?</h2>
+      <p class="text-[#555555] mb-6">
+        RTMify makes it easy to build compliant design controls that auditors expect. Start documenting your design inputs,
+        requirements, and verification/validation activities today.
+      </p>
+      <a href="/" class="inline-block px-6 py-3 bg-[#2E7D32] text-white font-semibold rounded hover:opacity-90 transition">
+        Begin with RTMify
+      </a>
+    </section>
+  </article>
+</DocsLayout>

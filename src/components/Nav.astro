@@ -30,19 +30,15 @@ const currentPath = Astro.url.pathname;
             {link.label}
           </a>
         ))}
-        <a href="/download" class="ml-2 px-3 py-1.5 bg-white text-[#1A1A2E] rounded font-semibold hover:bg-gray-100 transition-colors">
+        <a href="/download" class={`ml-2 px-3 py-1.5 rounded font-semibold transition-colors ${currentPath === '/download' ? 'text-white border-b-2 border-white pb-[4px]' : 'bg-white text-[#1A1A2E] hover:bg-gray-100'}`}>
           Download
         </a>
-        <a href="/pricing" class="px-3 py-1.5 hover:bg-white/10 rounded transition-colors">Pricing</a>
-        <a href="/about" class="px-3 py-1.5 hover:bg-white/10 rounded transition-colors">About</a>
       </div>
       <!-- Mobile: just show Download -->
       <div class="md:hidden flex items-center gap-2">
-        <a href="/download" class="px-3 py-1.5 bg-white text-[#1A1A2E] rounded font-semibold text-sm hover:bg-gray-100 transition-colors">
+        <a href="/download" class={`px-3 py-1.5 rounded font-semibold text-sm transition-colors ${currentPath === '/download' ? 'text-white border-b-2 border-white pb-[4px]' : 'bg-white text-[#1A1A2E] hover:bg-gray-100'}`}>
           Download
         </a>
-        <a href="/pricing" class="text-sm px-3 py-1.5 hover:bg-white/10 rounded transition-colors">Pricing</a>
-        <a href="/about" class="text-sm px-3 py-1.5 hover:bg-white/10 rounded transition-colors">About</a>
       </div>
     </div>
   </div>

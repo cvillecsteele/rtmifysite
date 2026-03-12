@@ -1,0 +1,801 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'Requirements Tab Documentation | RTMify';
+const description = 'Complete guide to the Requirements tab in the RTMify requirements traceability template. Learn to write testable SHALL statements, trace requirements to user needs and tests, and ensure compliance with AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE standards.';
+const canonical = 'https://rtmify.io/docs/requirements/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Requirements', url: '/docs/requirements/' }
+];
+
+const faqs = [
+  {
+    question: 'What is the difference between a system requirement and a software requirement?',
+    answer: 'A system requirement (SYS-xxx or REQ-xxx) describes what the overall system must do, regardless of implementation. It may be met by hardware, software, mechanical components, or human procedures. A software requirement (SWE-xxx or SW-xxx) describes what the software component must do. One system requirement often generates multiple software (and hardware) requirements. For example, the system requirement "Detect a fault within 50ms" might decompose into a software requirement "Monitor sensor input every 10ms" and a hardware requirement "Sensor must settle within 40ms." ASPICE and IEC 62304 explicitly separate these; DO-178C uses SYS/HLR/LLR to show the decomposition hierarchy.'
+  },
+  {
+    question: 'How do I handle derived requirements (requirements with no parent user need)?',
+    answer: 'Derived requirements are legitimate and common. They emerge from design decisions, standards compliance, or architectural constraints and do not correspond directly to a user need. Examples: "The software shall implement watchdog timer resets every 1s" (derived from safety architecture) or "All memory buffers shall be bounds-checked" (derived from secure coding standards). Document the derivation source in the Notes column: note the regulation, standard clause, or design document that mandates the requirement. Ensure derived requirements are still traced forward to test cases—they need verification just like user-driven requirements. For audit purposes, mark these clearly: you might use a Notes annotation like "Derived: IEC 62304 §5.3.6 – Software Design Review."'
+  },
+  {
+    question: 'Can one requirement link to multiple test groups?',
+    answer: 'Yes. A complex requirement may be verified by multiple test groups (TG-xxx) or multiple test cases within a group. For example, "The system SHALL operate correctly in temperature ranges 0–50°C (normal) and −40–70°C (extended)" might be verified by both TG-005 (Environmental Testing) and TG-012 (Functional Testing at Temperature Extremes). Conversely, one test group may verify multiple related requirements. The Requirements tab Test Group ID field can hold multiple references (comma-separated or structured as needed by your template variant). During traceability review, ensure every requirement has at least one linked test; unmarked requirements indicate incomplete verification planning.'
+  },
+  {
+    question: 'When should I mark a requirement Obsolete vs. deleting it?',
+    answer: 'Never delete a requirement row from an approved baseline. Deletion breaks traceability history and audit trails. Instead, mark the Lifecycle Status as "Obsolete" and document the reason in Notes (e.g., "Obsolete: Superseded by REQ-125 (v2.3)" or "Obsolete: Feature removed per change request CR-2024-045"). This preserves the traceability chain, allows you to trace old test results, and shows auditors that you managed the requirement lifecycle intentionally. Obsolete requirements remain in the historical record but are excluded from active compliance assessments. Some organizations archive obsolete requirements to a separate "Retired" worksheet for cleaner working documents.'
+  },
+  {
+    question: 'What goes in the Notes column?',
+    answer: 'Use Notes for compliance annotations and traceability metadata that do not fit in other columns. Examples: (1) Safety/Criticality Annotations: "DAL B" (DO-178C), "ASIL C" (ISO 26262), "Safety Class A" (IEC 62304). (2) Standards References: "AS9100 §8.3.4 – Design Output Review" or "ISO 13485 §7.3.3 – Design Input Requirements." (3) Derived Requirement Source: "Derived from IEC 62304 §5.3.6 – Requirements Traceability." (4) Change History: "Modified v1.2 – Tightened timing to 200ms per CR-2024-010." (5) Verification Notes: "Requires independent V&V (DAL A)" or "Functional test + formal proof required." (6) Cross-References: "Related to REQ-045, REQ-067" or "Implements UN-012." Avoid free-form design commentary or implementation hints—keep Notes focused on traceability and compliance context.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((item, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": item.name,
+        "item": item.url
+      }))
+    },
+    {
+      "@type": "TechArticle",
+      "headline": "Requirements Tab Documentation",
+      "description": description,
+      "url": canonical,
+      "datePublished": "2024-02-01",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "RTMify",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://rtmify.io/logo.svg"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+const standards = [
+  {
+    name: 'AS9100 Rev D',
+    clause: '§8.3.3/4 Design Inputs & Outputs',
+    description: 'Requirements define design outputs that meet design inputs (user needs). Must be documented, reviewed, and approved. Configuration management is mandatory.',
+    guidance: 'Use standard REQ-nnn IDs. Ensure bidirectional traceability: each design output (requirement) must link to at least one design input (user need). Implement change control and maintain configuration baseline for all approved requirements. Each requirement must be independently verifiable.'
+  },
+  {
+    name: 'ISO 13485:2016',
+    clause: '§7.3.3/4 Design Inputs & Outputs',
+    description: 'Design outputs must be verifiable against design inputs and include design transfer criteria (§7.3.8). Requirements specify how design outputs meet inputs.',
+    guidance: 'Separate system requirements from software/hardware design output requirements. Each design input (user need) requires one or more design outputs (requirements). Document verifiability criteria. Note: Design transfer (§7.3.8) occurs after verification; trace requirements through V&V gates to ensure design outputs are validated before transfer to production.'
+  },
+  {
+    name: 'DO-178C',
+    clause: 'HLR/LLR Hierarchy & DAL Annotation',
+    description: 'High-Level Requirements (HLR) decompose System Requirements. Low-Level Requirements (LLR) decompose HLRs. Each level must map to test objectives (Table A objectives). DAL A/B require independence.',
+    guidance: 'Use prefixes: SYS-xxx (system), HLR-xxx (high-level), LLR-xxx (low-level). Annotate each requirement with DAL (Design Assurance Level: A/B/C/D/E) in Notes column. DAL A/B requirements demand independent verification: tests must be developed by someone other than the requirement author. Reference Table A objectives (Table A.1–A.7) by objective number for traceability to test cases.'
+  },
+  {
+    name: 'IEC 62304',
+    clause: '§5.2 Software Development Requirements',
+    description: 'Software safety classification (Class A/B/C) determines which lifecycle activities are mandatory. Safety Class drives requirement rigor and verification thoroughness.',
+    guidance: 'Annotate each requirement with Software Safety Class (A/B/C) in Notes column. Class A (highest hazard) requires formal methods, extensive documentation, and rigorous V&V. Class C (lowest hazard) allows simplified processes. Safety classes may be assigned per requirement or uniformly for the whole software. Ensure traceability from intended use (user needs) through HARA (hazard analysis) outputs to software requirements.'
+  },
+  {
+    name: 'ISO 26262',
+    clause: '§8/§10 Safety Requirements & ASIL Decomposition',
+    description: 'Functional safety requirements flow from Hazard Analysis and Risk Assessment (HARA). Each safety requirement is tagged with ASIL (Automotive Safety Integrity Level: A/B/C/D). Untagged requirements are treated as Quality Management (QM).',
+    guidance: 'Tag each safety requirement with ASIL (A=lowest, D=highest) in Notes column. Only ASIL-tagged requirements receive functional safety verification. Untagged requirements follow QM processes. Ensure bidirectional traceability: safety requirements must map to HARA safety goals and to verification test cases. ASIL D requires the most rigorous verification (e.g., formal methods, back-to-back testing).'
+  },
+  {
+    name: 'ASPICE',
+    clause: 'SWE.1 (Software Requirements) & SYS.2 (System Requirements)',
+    description: 'ASPICE separates system requirements (SYS.2) from software requirements (SWE.1). Capability Level 2+ demands bidirectional traceability. Requirements must be traceable to user needs and to verification activities.',
+    guidance: 'Use separate ID prefixes for clarity: SYS-xxx for system requirements, SWE-xxx (or SW-xxx) for software requirements. Ensure all requirements have parent user needs and child test cases/objectives. For CL2+ maturity, perform traceability analysis: every requirement must be reachable from a user need and every user need must be reachable through requirements to a test. Document traceability matrix and review gaps.'
+  }
+];
+
+const examplesGood = [
+  {
+    title: 'Timing Requirement',
+    statement: 'The system SHALL respond to user input within 200ms under nominal load (≤80% CPU utilization).',
+    why: 'Specific (200ms), measurable (CPU load threshold), independently verifiable (test can measure response time and validate CPU condition).'
+  },
+  {
+    title: 'Signal Strength',
+    statement: 'The alarm SHALL produce an audible signal of at least 85 dB at a distance of 3 meters in an ambient noise environment of 75 dB.',
+    why: 'Quantified (85 dB, 3m), environmental condition specified (75 dB ambient), can be verified with sound-level meter.'
+  },
+  {
+    title: 'Functional Safety',
+    statement: 'The software SHALL detect a loss-of-signal condition on the primary sensor within 50ms and automatically activate the backup sensor without user intervention.',
+    why: 'Functional requirement (what happens, not how), time-bound (50ms), acceptance criteria clear (backup sensor activation is observable).'
+  },
+  {
+    title: 'Communication Protocol',
+    statement: 'The communication protocol SHALL support CRC-32 error detection for all data packets and SHALL reject any packet with CRC mismatch.',
+    why: 'Specific algorithm (CRC-32), unambiguous action (reject), independently verifiable via protocol analysis and test.'
+  }
+];
+
+const examplesBad = [
+  {
+    title: 'Vague: No Metrics',
+    statement: 'The system should be fast.',
+    why: 'No measurable criteria. What defines "fast"? 100ms? 1s? 10s? Uses "should" instead of "SHALL".'
+  },
+  {
+    title: 'Subjective: Unmeasurable',
+    statement: 'The alarm needs to be loud enough.',
+    why: '"Loud enough" is subjective. Loud enough for whom? In what environment? No decibel specification, no distance reference.'
+  },
+  {
+    title: 'Solution-Focused: Not Verifiable',
+    statement: 'The software shall use a multithreaded architecture.',
+    why: 'Prescribes implementation (multithreaded). A requirement specifies what, not how. This belongs in design, not requirements.'
+  },
+  {
+    title: 'Ambiguous: Multiple Interpretations',
+    statement: 'The system shall communicate reliably with external devices.',
+    why: '"Reliably" is undefined. What error rate? 1 in 1000? 1 in 1,000,000? Over what time frame? No verifiable acceptance criteria.'
+  },
+  {
+    title: 'Compound: Difficult to Trace',
+    statement: 'The system shall detect faults, log them to a file, and notify the operator.',
+    why: 'Contains three separate requirements bundled together. Creates traceability confusion. Should be split: (1) detect faults, (2) log faults, (3) notify operator.'
+  }
+];
+
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="requirements"
+>
+  <!-- Header -->
+  <h1 class="text-[#1A1A2E]">Requirements Tab</h1>
+  <p class="subtitle">Complete field reference and compliance mapping for the Requirements tab in the RTMify requirements traceability template.</p>
+
+  <!-- Answer Block -->
+  <div class="answer-block">
+    <p><strong>The Requirements tab contains SHALL statements—one per row, uniquely identified, independently verifiable, and traceable to both user needs and test groups.</strong> Each requirement decomposes a user need into a specific, measurable specification that can be verified during testing. Requirements form the bridge between stakeholder needs (User Needs tab) and verification activities (Tests tab). Across AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE, requirements are the primary mechanism for ensuring compliance: every regulated requirement must be traceable upward to a user need and downward to a test.</p>
+  </div>
+
+  <!-- Field Reference Section -->
+  <div class="section">
+    <h2>Field-by-Field Reference</h2>
+    <p>The Requirements tab contains eight columns that systematically define, annotate, and track requirements throughout the product lifecycle.</p>
+
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th style="width: 8%;">Column</th>
+          <th style="width: 18%;">Field Name</th>
+          <th style="width: 37%;">Description</th>
+          <th style="width: 37%;">Valid Values & Tips</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-col">A</td>
+          <td><strong>ID</strong></td>
+          <td>Unique identifier for each requirement. Enables traceability across the entire product lifecycle and regulatory documentation.</td>
+          <td><span class="valid-values">REQ-001, REQ-002, …</span> or standard-specific <span class="valid-values">SYS-001, HLR-001, LLR-001</span> (DO-178C) or <span class="valid-values">SWE-001</span> (ASPICE software). Auto-populated. Use hierarchical naming (SYS → HLR → LLR) to show decomposition levels in DO-178C. Sequential format supports traceability matrix lookups.</td>
+        </tr>
+        <tr>
+          <td class="field-col">B</td>
+          <td><strong>Statement</strong></td>
+          <td>The complete requirement text. Must use SHALL language (imperative, mandatory), be independently verifiable, contain measurable acceptance criteria, and avoid implementation details.</td>
+          <td>Write as: "The system SHALL [action] [condition] [acceptance criteria]." Use SHALL (mandatory), not should (suggestive). Example: "The system SHALL respond to user input within 200ms under nominal load." Avoid vague words: good (too subjective), fast (no metric), reliable (unmeasurable). Each row = one requirement. If your statement has "and" connecting different actions, split into multiple requirements.</td>
+        </tr>
+        <tr>
+          <td class="field-col">C</td>
+          <td><strong>User Need ID</strong></td>
+          <td>Parent traceability link. Identifies the user need that this requirement decomposes. Every requirement must trace upward to at least one user need (except derived requirements—see FAQ).</td>
+          <td><span class="valid-values">UN-001, UN-002, …</span> Reference the exact ID from the User Needs tab. One requirement may link to multiple user needs (comma-separated); one user need may have multiple requirements. Leave blank only for derived requirements (document source in Notes). Bidirectional traceability is mandatory for regulated environments (DO-178C, ISO 26262, IEC 62304, ASPICE CL2+).</td>
+        </tr>
+        <tr>
+          <td class="field-col">D</td>
+          <td><strong>Priority</strong></td>
+          <td>Indicates relative importance and criticality. Guides verification planning, test prioritization, and release decisions.</td>
+          <td><span class="valid-values">High</span> | <span class="valid-values">Medium</span> | <span class="valid-values">Low</span> — High: safety-critical, essential function, regulatory requirement. Medium: important but not critical to core function. Low: nice-to-have, enhancement. Safety-critical requirements (DAL A/B, ASIL D, Class A) should be marked High. Low-priority requirements may be deferred in time-constrained releases but must still be traced and verified.</td>
+        </tr>
+        <tr>
+          <td class="field-col">E</td>
+          <td><strong>Test Group ID</strong></td>
+          <td>Verification traceability link. Identifies the test group(s) that will verify this requirement. Enables downward traceability to testing activities.</td>
+          <td><span class="valid-values">TG-001, TG-002, …</span> Reference test group IDs from the Tests tab. One requirement may link to multiple test groups (for complex requirements verified by multiple test suites). A requirement with no test link indicates incomplete verification planning—flag for closure before release. Ensure every requirement has at least one linked test.</td>
+        </tr>
+        <tr>
+          <td class="field-col">F</td>
+          <td><strong>Lifecycle Status</strong></td>
+          <td>Tracks the requirement through the approval workflow. Indicates maturity level and readiness for use in design and verification.</td>
+          <td><span class="valid-values">Draft</span> → <span class="valid-values">Review</span> → <span class="valid-values">Approved</span> → <span class="valid-values">Obsolete</span> — Draft: newly created, not yet reviewed. Review: under formal review, awaiting approval. Approved: formal approval complete, ready for design/verification (baseline). Obsolete: no longer active, superseded or removed. Only Approved requirements should be baselined for design. Track status changes and approval dates for audit records.</td>
+        </tr>
+        <tr>
+          <td class="field-col">G</td>
+          <td><strong>Notes</strong></td>
+          <td>Free-text field for compliance annotations, safety/criticality tags, standards references, and traceability metadata. Essential for regulatory compliance and cross-reference clarity.</td>
+          <td>Examples: <span class="valid-values">DAL B</span> (DO-178C), <span class="valid-values">ASIL C</span> (ISO 26262), <span class="valid-values">Safety Class A</span> (IEC 62304), <span class="valid-values">AS9100 §8.3.4</span>, <span class="valid-values">Derived: IEC 62304 §5.3.6</span>, <span class="valid-values">Requires independent V&V</span>. Avoid design commentary; focus on compliance context. See FAQ for detailed guidance.</td>
+        </tr>
+        <tr>
+          <td class="field-col">H</td>
+          <td><strong>RTMify Status</strong></td>
+          <td>Automatically populated field indicating traceability completeness. Shows whether this requirement is fully traced through the product lifecycle (user need → requirement → test).</td>
+          <td><span class="valid-values">Complete</span> | <span class="valid-values">In Progress</span> | <span class="valid-values">Not Started</span> — Complete: requirement has parent user need and child test group(s). In Progress: missing either parent or child. Not Started: neither parent nor child linked. Use this field to identify traceability gaps before design review or release.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Writing Good SHALL Statements -->
+  <div class="section">
+    <h2>Writing Good SHALL Statements</h2>
+    <p>A well-written requirement is the foundation of compliance. It must be specific, measurable, and independently verifiable. Use SHALL language (mandatory), include acceptance criteria, and avoid implementation details.</p>
+
+    <h3 class="text-[#2e7d32] mt-8">Good Examples</h3>
+    <div class="examples-grid">
+      {examplesGood.map(example => (
+        <div class="example-card example-good">
+          <h4>{example.title}</h4>
+          <div class="example-statement">"{example.statement}"</div>
+          <div class="example-why"><strong>Why:</strong> {example.why}</div>
+        </div>
+      ))}
+    </div>
+
+    <h3 class="text-[#c62828] mt-8">Bad Examples</h3>
+    <div class="examples-grid">
+      {examplesBad.map(example => (
+        <div class="example-card example-bad">
+          <h4>{example.title}</h4>
+          <div class="example-statement">"{example.statement}"</div>
+          <div class="example-why"><strong>Why:</strong> {example.why}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mistakes mt-10">
+      <h3>Key Principles for Writing SHALL Statements</h3>
+      <ul>
+        <li><strong>Use SHALL, not should or must:</strong> SHALL is legal/regulatory language for mandatory requirements. "Must" can be ambiguous (physical impossibility vs. requirement). "Should" implies optionality (wrong for regulated products).</li>
+        <li><strong>Include measurable acceptance criteria:</strong> Every requirement must specify HOW you will know it is met. Use numbers: time (200ms), distance (3m), decibels (85dB), percentage (95% success rate), binary (pass/fail).</li>
+        <li><strong>Define environmental or boundary conditions:</strong> "Under nominal load," "in temperature range 0–50°C," "with ambient noise ≤75 dB." Conditions set realistic test scenarios.</li>
+        <li><strong>Specify WHAT, not HOW:</strong> "The system SHALL detect a fault within 50ms" (WHAT). Not "The software SHALL use interrupt-driven architecture" (HOW/design). Requirements describe behavior; design documents specify implementation.</li>
+        <li><strong>Avoid compound statements:</strong> "The system SHALL detect faults, log them, and notify the operator" contains three requirements. Split into three rows: one for detection, one for logging, one for notification. Compound requirements create traceability confusion and incomplete testing.</li>
+        <li><strong>Be independent and atomic:</strong> Each requirement should stand alone and be verifiable in isolation. A test should verify one requirement at a time (or a small, well-defined set).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Per-Standard Compliance Mapping -->
+  <div class="section">
+    <h2>Per-Standard Compliance Mapping</h2>
+    <p>Requirements map to specific clauses and processes in each regulated standard. Below is a standard-by-standard breakdown showing how the Requirements tab satisfies each compliance framework, including ID conventions, annotations, and traceability requirements.</p>
+
+    <div class="standard-grid">
+      {standards.map(std => (
+        <div class={`standard-card standard-${std.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}>
+          <h3>{std.name}</h3>
+          <div class="standard-clause">{std.clause}</div>
+          <p>{std.description}</p>
+          <div class="standard-guidance">
+            <strong>Guidance:</strong> {std.guidance}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="section mt-10">
+      <h3>Traceability and Independence Requirements by Standard</h3>
+      <p><strong>DO-178C (DAL A/B):</strong> Requirements at Design Assurance Level A or B require independent verification. This means the verification (test development, test execution) must be performed by someone other than the requirement author. Document this requirement in the Notes column (e.g., "DAL A – Requires Independent Verification"). Your test strategy and test case documentation must identify independent testers and justify independence claims.</p>
+      <p><strong>ISO 26262 (Functional Safety):</strong> Safety-critical requirements must be tagged with ASIL in the Notes column. Only ASIL-tagged requirements receive functional safety verification and design review rigor. Untagged requirements are treated as quality management (QM) and may follow standard development processes. ASIL D (highest risk) requires the most rigorous verification, including formal methods or back-to-back testing with independent testers.</p>
+      <p><strong>IEC 62304 (Software Safety Class):</strong> All software requirements must be annotated with the applicable software safety class (A, B, or C) in the Notes column. Class A (highest hazard) mandates formal specification review, independence of verification, and comprehensive documentation. Class C permits simplified processes. The safety class is determined during Software Safety Classification (§5.1) based on the intended use and hazard analysis. Ensure consistency: all requirements within a single software safety class should receive the same rigor of verification.</p>
+      <p><strong>ASPICE (Capability Level 2+):</strong> ASPICE maturity levels CL2 and above require bidirectional traceability. Every requirement must have a parent (user need) and every user need must have children (requirements). Conversely, every requirement must have at least one child (test). Perform a traceability analysis during design review or release: identify any orphaned requirements (no parent) or unsourced requirements (no child) and resolve gaps before baseline approval.</p>
+    </div>
+  </div>
+
+  <!-- Lifecycle Status Workflow -->
+  <div class="section">
+    <h2>Lifecycle Status Workflow</h2>
+    <p>Every requirement progresses through a defined lifecycle: from initial creation (Draft) through formal review and approval (Approved), and finally retirement when no longer needed (Obsolete). Tracking status ensures requirements are not used in design or testing until formally approved.</p>
+
+    <div class="lifecycle-flow">
+      <div class="lifecycle-stages">
+        <div class="lifecycle-stage">
+          <div class="lifecycle-stage-name">Draft</div>
+          <div class="lifecycle-stage-desc">Newly created requirement awaiting review. May be edited freely. Not yet part of any baseline. Incomplete or provisional.</div>
+        </div>
+        <div class="lifecycle-stage">
+          <div class="lifecycle-stage-name">Review</div>
+          <div class="lifecycle-stage-desc">Under formal review by requirements team, design, and verification. Comments and revision requests captured. Stakeholder approval in progress.</div>
+        </div>
+        <div class="lifecycle-stage">
+          <div class="lifecycle-stage-name">Approved</div>
+          <div class="lifecycle-stage-desc">Formal approval complete. Baseline established. Ready for design decomposition and test case development. Changes require change control (CR) process.</div>
+        </div>
+        <div class="lifecycle-stage">
+          <div class="lifecycle-stage-name">Obsolete</div>
+          <div class="lifecycle-stage-desc">No longer active. Superseded by other requirements or removed from scope. Document reason in Notes. Retain in historical record for audit traceability.</div>
+        </div>
+      </div>
+
+      <h4 class="mt-7">Transition Triggers and Dates</h4>
+      <p><strong>Draft → Review:</strong> Triggered when the requirement author declares it ready for stakeholder review. Record review start date. Assign reviewers from design, verification, and quality.</p>
+      <p><strong>Review → Approved:</strong> Triggered when all review comments are resolved and formal approval authority (program manager, chief engineer, regulatory officer) signs off. Record approval date and approver name. Freeze the requirement baseline.</p>
+      <p><strong>Approved → Obsolete:</strong> Triggered when the requirement is superseded (e.g., by a newer version or refined requirement), descoped from the project, or made redundant. Document the change request (CR) number and reason (e.g., "Obsolete: Superseded by REQ-125 (v2.3) per CR-2024-045"). Retain the obsolete requirement in the spreadsheet but exclude from active compliance assessments.</p>
+      <p><strong>Best Practice:</strong> Add a hidden Date column (Column I) to record status change timestamps. Timestamps provide audit evidence and support traceability queries (e.g., "Show all requirements approved before 2024-06-01").</p>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+
+    {faqs.map(faq => (
+      <div class="faq-item">
+        <div class="faq-question">{faq.question}</div>
+        <div class="faq-answer">{faq.answer}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Cross-links -->
+  <div class="cross-links">
+    <h3>Related Documentation</h3>
+    <ul>
+      <li><a href="/docs/user-needs/">User Needs Tab</a> — Capturing stakeholder expectations and regulatory inputs</li>
+      <li><a href="/docs/tests/">Tests Tab</a> — Defining test groups and verification activities</li>
+      <li><a href="/docs/traceability/">Traceability</a> — Building and validating traceability matrices across all tabs</li>
+      <li><a href="/docs/status-codes/">Status Codes</a> — Understanding RTMify status indicators and completion criteria</li>
+      <li><a href="/standards/as9100/">AS9100 Guidance</a> — Design input/output and configuration management requirements</li>
+      <li><a href="/standards/iso-13485/">ISO 13485 Guidance</a> — Design input, output, and design transfer requirements</li>
+      <li><a href="/standards/do-178c/">DO-178C Guidance</a> — HLR/LLR hierarchy, DAL annotation, and independence requirements</li>
+      <li><a href="/standards/iec-62304/">IEC 62304 Guidance</a> — Software safety classification and verification rigor mapping</li>
+      <li><a href="/standards/iso-26262/">ISO 26262 Guidance</a> — ASIL annotation and functional safety requirements</li>
+      <li><a href="/standards/aspice/">ASPICE Guidance</a> — SWE.1, SYS.2 requirements, and bidirectional traceability for CL2+</li>
+    </ul>
+  </div>
+
+  <!-- Footer meta -->
+  <div class="footer-meta">
+    <p><strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <p><strong>Standards Covered:</strong> AS9100 Rev D, ISO 13485:2016, DO-178C, IEC 62304, ISO 26262:2018, ASPICE 3.1</p>
+    <p class="footer-note">RTMify is a compliance-aware requirements traceability manager designed for regulated engineering environments. This documentation reflects best practices across aerospace, medical device, automotive, and industrial safety standards.</p>
+  </div>
+</DocsLayout>
+
+<style>
+  @reference "tailwindcss";
+
+  /* Breadcrumbs - handled by DocsLayout */
+
+  /* Headings */
+  :global(h1) {
+    @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-0 mb-3;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  :global(h2) {
+    @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-12 mb-5;
+    font-size: 32px;
+    font-weight: 700;
+    border-bottom: 3px solid #1a1a2e;
+    padding-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  :global(h3) {
+    @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-12 mb-5;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  :global(h4) {
+    @apply text-[#1A1A2E];
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #555555;
+    margin-bottom: 40px;
+    line-height: 1.5;
+  }
+
+  /* Answer block */
+  .answer-block {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 100%);
+    color: white;
+    padding: 28px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    border-left: 4px solid #1565c0;
+  }
+
+  .answer-block p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Content sections */
+  .section {
+    margin-bottom: 60px;
+  }
+
+  :global(p) {
+    margin-bottom: 16px;
+    line-height: 1.7;
+    font-size: 15px;
+    color: #555555;
+  }
+
+  /* Reference table */
+  .field-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .field-table thead {
+    background-color: #1a1a2e;
+    color: white;
+  }
+
+  .field-table th {
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    border: none;
+  }
+
+  .field-table td {
+    padding: 14px;
+    border-bottom: 1px solid #DDDDDD;
+  }
+
+  .field-table tbody tr:hover {
+    background-color: #F5F5F5;
+  }
+
+  .field-col {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: #1565c0;
+  }
+
+  .valid-values {
+    font-family: 'IBM Plex Mono', monospace;
+    background: #f9f9f9;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+
+  /* Standard callout cards */
+  .standard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .standard-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .standard-card {
+    border-left: 4px solid;
+    padding: 20px;
+    background-color: #F5F5F5;
+    border-radius: 6px;
+  }
+
+  .standard-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  .standard-clause {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #555555;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .standard-card p {
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .standard-guidance {
+    background: white;
+    border: 1px solid #DDDDDD;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #555555;
+    margin-top: 12px;
+  }
+
+  /* Standard-specific colors */
+  .standard-as9100revd { border-left-color: #1565c0; }
+  .standard-iso134852016 { border-left-color: #2e7d32; }
+  .standard-do178c { border-left-color: #6a1b9a; }
+  .standard-iec62304 { border-left-color: #bf360c; }
+  .standard-iso26262 { border-left-color: #e65100; }
+  .standard-aspice { border-left-color: #004d40; }
+
+  /* Example blocks */
+  .examples-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .examples-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .example-card {
+    padding: 20px;
+    border-radius: 6px;
+    border-left: 4px solid;
+  }
+
+  .example-good {
+    background-color: #e8f5e9;
+    border-left-color: #2e7d32;
+  }
+
+  .example-bad {
+    background-color: #ffebee;
+    border-left-color: #c62828;
+  }
+
+  .example-card h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .example-statement {
+    font-family: 'IBM Plex Mono', monospace;
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 8px;
+    border-left: 2px solid;
+  }
+
+  .example-good .example-statement {
+    border-left-color: #2e7d32;
+    color: #1b5e20;
+  }
+
+  .example-bad .example-statement {
+    border-left-color: #c62828;
+    color: #b71c1c;
+  }
+
+  .example-why {
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.5;
+  }
+
+  .example-good .example-why {
+    color: #2e7d32;
+  }
+
+  .example-bad .example-why {
+    color: #c62828;
+  }
+
+  /* Lifecycle workflow */
+  .lifecycle-flow {
+    background: #F5F5F5;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+
+  .lifecycle-stages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .lifecycle-stage {
+    padding: 16px;
+    background: white;
+    border-radius: 4px;
+    border-left: 4px solid #1a1a2e;
+    font-size: 14px;
+  }
+
+  .lifecycle-stage-name {
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+
+  .lifecycle-stage-desc {
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.5;
+  }
+
+  /* Common mistakes */
+  .mistakes {
+    background: #fff3e0;
+    border-left: 4px solid #e65100;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+  }
+
+  .mistakes h3 {
+    margin-top: 0;
+    color: #e65100;
+  }
+
+  .mistakes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mistakes li {
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes li:before {
+    content: "✕";
+    position: absolute;
+    left: 0;
+    color: #e65100;
+    font-weight: bold;
+  }
+
+  /* FAQ section */
+  .faq-item {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #DDDDDD;
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .faq-question {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+
+  .faq-answer {
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.7;
+  }
+
+  /* Cross-links */
+  .cross-links {
+    background: #e3f2fd;
+    border-left: 4px solid #1565c0;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .cross-links h3 {
+    margin-top: 0;
+    color: #1565c0;
+  }
+
+  .cross-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cross-links li {
+    margin-bottom: 8px;
+  }
+
+  .cross-links a {
+    color: #1565c0;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cross-links a:hover {
+    text-decoration: underline;
+  }
+
+  :global(code) {
+    font-family: 'IBM Plex Mono', monospace;
+    background: #F5F5F5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: #d84315;
+  }
+
+  :global(strong) {
+    font-weight: 600;
+  }
+
+  /* Footer meta */
+  .footer-meta {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #DDDDDD;
+    font-size: 13px;
+    color: #999999;
+  }
+
+  .footer-meta p {
+    margin-bottom: 8px;
+  }
+
+  .footer-note {
+    margin-top: 12px;
+    font-style: italic;
+  }
+</style>

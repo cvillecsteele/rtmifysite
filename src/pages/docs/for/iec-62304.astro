@@ -1,0 +1,547 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify IEC 62304 Quick Start Guide';
+const description = 'Complete walkthrough of filling in the RTMify template for IEC 62304, the medical device software lifecycle standard.';
+const canonical = 'https://rtmify.io/docs/for/iec-62304/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'IEC 62304', url: '/docs/for/iec-62304/' }
+];
+
+const userNeedsExample = [
+  { id: 'UN-001', description: 'Software shall calculate and display patient heart rate from ECG signal', source: 'System Requirement (ISO 13485 §7.3.3)', priority: 'High' },
+  { id: 'UN-002', description: 'Software shall detect and alert on arrhythmia events within 5 seconds', source: 'Risk Control (ISO 14971)', priority: 'High' },
+  { id: 'UN-003', description: 'Clinician shall be able to review 24 hours of stored ECG waveform data', source: 'Customer', priority: 'Medium' },
+  { id: 'UN-004', description: 'Software shall be updatable in the field without specialized tools', source: 'Regulation (IEC 62304 §6.1)', priority: 'Medium' }
+];
+
+const requirementsExample = [
+  { id: 'SWE-001', description: 'The ECG processing module SHALL compute heart rate from R-R intervals with accuracy ±2 BPM', traces: 'UN-001', priority: 'High', testGroup: 'TG-001', status: 'Approved', notes: 'Class C — safety-critical calculation' },
+  { id: 'SWE-002', description: 'The arrhythmia detection module SHALL identify ventricular fibrillation within 3 seconds of onset', traces: 'UN-002', priority: 'High', testGroup: 'TG-002', status: 'Approved', notes: 'Class C — risk control measure per 14971' },
+  { id: 'SWE-003', description: 'The data storage module SHALL retain 24 hours of continuous ECG at 500 Hz sample rate', traces: 'UN-003', priority: 'Medium', testGroup: 'TG-003', status: 'Approved', notes: 'Class B — data integrity' },
+  { id: 'SWE-004', description: 'The update mechanism SHALL verify firmware image integrity via SHA-256 before installation', traces: 'UN-004', priority: 'Medium', testGroup: 'TG-004', status: 'Approved', notes: 'Class B — maintenance safety' }
+];
+
+const testsExample = [
+  { testGroup: 'TG-001', testId: 'T-001', type: 'Verification', method: 'Test', description: 'Heart rate accuracy test — MIT-BIH arrhythmia database' },
+  { testGroup: 'TG-001', testId: 'T-002', type: 'Verification', method: 'Analysis', description: 'R-R interval algorithm analysis — noise immunity' },
+  { testGroup: 'TG-002', testId: 'T-003', type: 'Verification', method: 'Test', description: 'VF detection sensitivity/specificity — AHA database' },
+  { testGroup: 'TG-002', testId: 'T-004', type: 'Validation', method: 'Demonstration', description: 'Clinical validation — cardiologist review of 100 cases' },
+  { testGroup: 'TG-003', testId: 'T-005', type: 'Verification', method: 'Test', description: '24-hour continuous recording test at 500 Hz' },
+  { testGroup: 'TG-004', testId: 'T-006', type: 'Verification', method: 'Test', description: 'Firmware update integrity test — corrupted image rejection' }
+];
+
+const risksExample = [
+  { id: 'RSK-101', description: 'ECG algorithm miscalculates heart rate due to noise artifact', severity: '4', occurrence: '3', mitigation: 'Bandpass filter + adaptive threshold, alarm on signal quality < threshold', linkedReq: 'SWE-001', residualSeverity: '4', residualOccurrence: '1' },
+  { id: 'RSK-102', description: 'Arrhythmia detection fails to alert on VF', severity: '5', occurrence: '2', mitigation: 'Dual-algorithm detection (morphology + rate), redundant alert path', linkedReq: 'SWE-002', residualSeverity: '5', residualOccurrence: '1' },
+  { id: 'RSK-103', description: 'Corrupted firmware update renders device inoperable', severity: '4', occurrence: '2', mitigation: 'SHA-256 verification, rollback to known-good image on failure', linkedReq: 'SWE-004', residualSeverity: '4', residualOccurrence: '1' }
+];
+
+const faqItems = [
+  {
+    question: 'What is the difference between Class A, B, and C software?',
+    answer: 'IEC 62304 classifies medical device software based on severity of potential harm. Class A: No injury is possible (e.g., informational display not used for diagnosis). Class B: Non-serious injury possible (e.g., calculation with automatic verification). Class C: Death or serious injury possible (e.g., critical monitoring or dosage calculation). Classification determines which IEC 62304 activities are mandatory. Class A requires only §5.1–5.2 (planning and requirements). Class B adds §5.3–5.5 (architecture and integration testing). Class C requires full §5.5 and additional emphasis on traceability per §5.5.5 and rigorous testing per §5.7. Your software safety class is determined through FMEA/risk analysis per ISO 14971 and should be recorded in the Notes column of your Requirements.'
+  },
+  {
+    question: 'How do I handle Software of Unknown Provenance (SOUP) components?',
+    answer: 'SOUP items are pre-developed software (COTS, open-source, vendor libraries) used in your device without modification. Per §5.1.3, you must: (1) identify all SOUP items with part number and version, (2) assess their use and potential failure modes, (3) document risk mitigation (testing, redundancy, or acceptance). In RTMify, create a Risks table entry for each SOUP component documenting its known limitations and how your design mitigates them. For example, if you use an open-source ECG library, assess the risk of calculation errors and specify independent verification tests (TG-001) that prove correctness even if the library contains bugs. Include a SOUP version/source record in your Risk Notes for traceability during post-market surveillance.'
+  },
+  {
+    question: 'Do I need a separate RTMify template if I am already using one for ISO 13485?',
+    answer: 'No. Use a single RTMify template with one User Needs tab, one Requirements tab, one Tests tab, and one Risks tab. The template structure is universal. IEC 62304 is the software-specific portion of ISO 13485 quality management system. Your User Needs can include both ISO 13485 design inputs (§7.3.2) and IEC 62304 requirements (§5.1–5.7). Requirements can mix business logic (ISO 13485) with safety-critical software requirements (IEC 62304). Tests mix functional verification with validation per both standards. Your single RTM serves as evidence for both audits. In the Notes column, flag software safety class (Class A/B/C) and reference the applicable IEC 62304 section (e.g., "Class C, §5.5.5 traceability required").'
+  },
+  {
+    question: 'What if my software safety class changes mid-project?',
+    answer: 'This is a change control event. Per ISO 13485 §8.5.6 (design and development changes), document the rationale: new risk assessment, feature scope change, clinical use evolution, etc. Update the affected Requirements with the new software safety class in the Notes column. Verify that your tests and risk mitigations are sufficient for the new class. If upgrading from Class A→B or B→C, you may need additional verification activities (e.g., adding §5.5 integration tests). Create a Change Record linking the Requirements that changed, the risk assessment justifying the new class, and any new tests required. Submit this change record to your QMS change control board before finalizing the design. RTMify Trace will show the updated class assignments; ensure all new verification activities are linked.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "url": canonical,
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "datePublished": "2024-02-20",
+      "dateModified": "2026-03-12"
+    },
+    {
+      "@type": "HowTo",
+      "headline": title,
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Define User Needs",
+          "text": "Capture system-level requirements from ISO 13485 design inputs (§7.3.2) and risk control measures from ISO 14971. User Needs are the starting point for traceability to software requirements per IEC 62304 §5.2."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Write Software Requirements",
+          "text": "Document software requirements per §5.2, specifying software safety class (A, B, or C) in Notes. Each requirement traces to a User Need and is verifiable per §5.5."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Define Software Tests",
+          "text": "Create verification and validation activities per §5.5 (integration testing) and §5.7 (system testing and release). Link tests to requirements via test group IDs."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Document Risks and SOUP",
+          "text": "Identify failure modes, document SOUP items and their risk mitigation per §5.1.3. Track residual risk post-mitigation and link to requirements."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Check Traceability and Generate RTM",
+          "text": "Run RTMify Trace to validate bidirectional traceability per §5.5.5. Every requirement should be linked to a User Need, verification activity, and preferably a risk."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((bc, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": bc.name,
+        "item": bc.url
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="iec-62304"
+>
+  <!-- About This Guide -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">About This Guide</h2>
+    <div class="space-y-4 text-[#555555] leading-relaxed">
+      <p>
+        This guide walks you through filling in the RTMify template for <strong>IEC 62304:2006+A1:2015</strong>, the medical device software lifecycle standard. IEC 62304 defines the processes for developing, validating, and maintaining software in medical devices. It operates in concert with ISO 13485 (quality management system) and ISO 14971 (risk management).
+      </p>
+      <p>
+        IEC 62304 classifies software into three safety classes (A, B, C) based on potential harm severity. Your software's class determines which lifecycle activities are mandatory. This template covers the core software lifecycle phases: requirements (§5.2), architectural design (§5.3), integration testing (§5.5), and system testing/release (§5.7).
+      </p>
+      <p>
+        By the end of this guide, you'll have a complete traceability matrix linking User Needs through software requirements, tests, and risk controls. This RTM is a key artifact in your Design History File (DHF) and demonstrates regulatory compliance with IEC 62304 §5.5 bidirectional traceability.
+      </p>
+    </div>
+  </section>
+
+  <!-- What IEC 62304 Requires -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">What IEC 62304 Requires for Software Lifecycle</h2>
+
+    <div class="space-y-8">
+      <!-- Software Safety Classification -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">Software Safety Classification (§5.3, Table 1)</h3>
+        <p class="text-[#555555] mb-4">
+          Medical device software is classified into three categories based on failure mode severity:
+        </p>
+        <ul class="space-y-3 ml-6 text-[#555555] border-l-4 border-[#BF360C] pl-6">
+          <li><strong>Class A</strong> — No injury possible (e.g., informational display, log file analysis). Minimal rigor: §5.1–5.2 only (planning, requirements).</li>
+          <li><strong>Class B</strong> — Non-serious injury possible (e.g., dosage calculation with automatic verification, patient monitoring with alert). Moderate rigor: §5.1–5.5 (planning through integration testing).</li>
+          <li><strong>Class C</strong> — Death or serious injury possible (e.g., critical drug infusion, arrhythmia detection, pacemaker control). Full rigor: all of §5.1–5.7, including §5.5.5 rigorous traceability and §5.7 comprehensive system testing.</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          Your software safety class is determined through risk analysis per ISO 14971 and must be documented in the Notes column of each software requirement. A single device may contain mixed classes: for example, an ECG monitor might have Class C requirements (arrhythmia detection) and Class B requirements (data storage).
+        </p>
+      </div>
+
+      <!-- Software Requirements -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">Software Requirements (§5.2)</h3>
+        <p class="text-[#555555] mb-4">
+          §5.2 mandates derivation of software requirements from system requirements and risk control measures. Each requirement must be:
+        </p>
+        <ul class="space-y-2 ml-6 text-[#555555] border-l-4 border-[#BF360C] pl-6">
+          <li><strong>Traceable</strong> — to a User Need (system requirement) or risk control</li>
+          <li><strong>Verifiable</strong> — testable or reviewable by objective means</li>
+          <li><strong>Prioritized</strong> — safety-critical vs. optional</li>
+          <li><strong>Classified</strong> — safety class A, B, or C per risk assessment</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          RTMify captures this through the Requirements tab: each SWE-nnn requirement traces upward to a User Need (UN-nnn), is linked to a Test Group (TG-nnn) for verification, and includes software safety class in Notes.
+        </p>
+      </div>
+
+      <!-- Software Architectural Design -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">Software Architectural Design (§5.3)</h3>
+        <p class="text-[#555555]">
+          §5.3 requires software architecture that separates safety-critical functionality from non-critical code. While detailed architecture diagrams are outside RTMify scope, you should document in the Requirements Notes which software components are safety-critical. For example, note that SWE-002 (arrhythmia detection) is implemented in a hardened arrhythmia_module with independent verification, whereas UI display (non-critical) runs in a separate user_interface module.
+        </p>
+      </div>
+
+      <!-- Software Integration and Testing -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">Software Integration and Testing (§5.5)</h3>
+        <p class="text-[#555555] mb-4">
+          §5.5 mandates integration testing and bidirectional traceability (§5.5.5). Every software requirement must be linked to verification activities (tests or analysis). For Class C, §5.5.5 requires full forward and backward traceability: every requirement traces to a test, and every test traces back to a requirement.
+        </p>
+        <p class="text-[#555555]">
+          RTMify's Test Group mechanism enforces this: create test records linked to each requirement via Test Group ID. For Class C, ensure no orphaned requirements or tests.
+        </p>
+      </div>
+
+      <!-- Software System Testing and Release -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">Software System Testing and Release (§5.7)</h3>
+        <p class="text-[#555555]">
+          §5.7 requires system testing demonstrating that the integrated software meets all requirements. Validation activities (clinical trials, usability testing, real-world deployment) also fall here. RTMify's Tests tab should include both verification (functional testing against spec) and validation (real-world testing against clinical/operational needs).
+        </p>
+      </div>
+
+      <!-- SOUP -->
+      <div>
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4">SOUP (Software of Unknown Provenance, §5.1.3)</h3>
+        <p class="text-[#555555]">
+          SOUP items are pre-developed software (COTS libraries, open-source packages, vendor tools) used without modification. Per §5.1.3, you must identify SOUP, assess use context and failure modes, and document risk mitigation. Create Risks table entries for each SOUP component. For example, if you use an open-source ECG processing library, assess the risk of calculation errors and specify verification tests (T-001, T-002) that prove correctness independent of the library's internal implementation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Walkthrough -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8">Step-by-Step Walkthrough</h2>
+
+    <div class="space-y-12">
+      <!-- Step 1: Define User Needs -->
+      <div class="border-l-4 border-[#BF360C] pl-6">
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#BF360C] text-white font-bold">1</span>
+          Define User Needs (System Requirements)
+        </h3>
+        <p class="text-[#555555] mb-4">
+          Capture system-level design inputs from your ISO 13485 design input process (§7.3.2) and risk control measures from ISO 14971. These become the foundation for software requirements traceability per IEC 62304 §5.2. Sources include:
+        </p>
+        <ul class="space-y-2 ml-6 text-[#555555] mb-4">
+          <li>System-level design inputs (patient monitoring, medication delivery, diagnostic criteria)</li>
+          <li>Risk controls identified in ISO 14971 FMEA (e.g., "Software shall detect arrhythmia within 3 seconds" to mitigate risk of missed critical event)</li>
+          <li>Regulatory/operational requirements (IEC 62304 §6.1 on maintenance, field updates)</li>
+          <li>Customer/clinical needs (review stored data, interface design)</li>
+        </ul>
+        <p class="text-[#555555] mb-4">Use ID format <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">UN-nnn</code>. Be specific and measurable: "Software shall alert clinician within 5 seconds" is better than "shall alert promptly".</p>
+
+        <div class="overflow-x-auto my-6 border border-[#DDDDDD] rounded">
+          <table class="w-full border-collapse text-sm">
+            <caption class="caption-top text-left text-[#555555] font-semibold py-2">User Needs / System Requirements Example</caption>
+            <thead>
+              <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">ID</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Description</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Source</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userNeedsExample.map((row) => (
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3 text-[#1A1A2E] font-mono font-semibold">{row.id}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.description}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.source}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.priority}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-[#F5F5F5] border-l-4 border-[#BF360C] p-4 mt-4 text-[#555555] text-sm">
+          <strong>Tips:</strong> Every User Need should trace forward to at least one software requirement (SWE-nnn). Unlinked User Needs indicate incomplete design and will fail RTMify Trace. Use the Source column to record whether this is an ISO 13485 design input, ISO 14971 risk control, regulatory requirement, or customer need. This helps auditors understand traceability to your quality system.
+        </div>
+      </div>
+
+      <!-- Step 2: Write Software Requirements -->
+      <div class="border-l-4 border-[#BF360C] pl-6">
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#BF360C] text-white font-bold">2</span>
+          Write Software Requirements (§5.2 Requirements Analysis)
+        </h3>
+        <p class="text-[#555555] mb-4">
+          Document software requirements per <strong>§5.2</strong>, deriving each from a User Need or risk control. Record software safety class (A, B, or C) in the Notes column. Each requirement must be verifiable.
+        </p>
+        <ul class="space-y-2 ml-6 text-[#555555] mb-4">
+          <li><strong>Requirement ID (SWE-nnn)</strong> — Software requirement identifier</li>
+          <li><strong>Description</strong> — Functional specification, measurable and testable (use SHALL)</li>
+          <li><strong>Traces</strong> — Parent User Need (UN-nnn) or Risk ID</li>
+          <li><strong>Priority</strong> — Safety-critical (High) or optional (Medium/Low)</li>
+          <li><strong>Test Group</strong> — Link to verification activities (TG-nnn)</li>
+          <li><strong>Status</strong> — Approved, In Review, Draft</li>
+          <li><strong>Notes</strong> — Software safety class (Class A/B/C), risk mitigation reference</li>
+        </ul>
+
+        <div class="overflow-x-auto my-6 border border-[#DDDDDD] rounded">
+          <table class="w-full border-collapse text-sm">
+            <caption class="caption-top text-left text-[#555555] font-semibold py-2">Software Requirements Example (with Safety Classification)</caption>
+            <thead>
+              <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">ID</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Description</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Traces</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Priority</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Test Group</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Status</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {requirementsExample.map((row) => (
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3 text-[#1A1A2E] font-mono font-semibold">{row.id}</td>
+                  <td class="px-4 py-3 text-[#555555] text-xs">{row.description}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.traces}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.priority}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.testGroup}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.status}</td>
+                  <td class="px-4 py-3 text-[#555555] text-xs">{row.notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-[#F5F5F5] border-l-4 border-[#BF360C] p-4 mt-4 text-[#555555] text-sm">
+          <strong>Tips:</strong> Use SHALL (mandatory requirement) for software-critical functions. Assign software safety class based on ISO 14971 risk assessment: Class C for functions that could cause death/serious injury (e.g., drug dosage, arrhythmia detection), Class B for non-serious injury risk, Class A for no injury. Record class in Notes per §5.3. Every requirement must have a Test Group for verification per §5.5. For Class C, ensure §5.5.5 bidirectional traceability is complete. See <a href="/docs/requirements" class="text-[#BF360C] hover:underline">Requirements</a> for traceability depth guidance.
+        </div>
+      </div>
+
+      <!-- Step 3: Define Software Tests -->
+      <div class="border-l-4 border-[#BF360C] pl-6">
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#BF360C] text-white font-bold">3</span>
+          Define Software Tests (§5.5 Integration Testing & §5.7 System Testing)
+        </h3>
+        <p class="text-[#555555] mb-4">
+          Document verification and validation activities per <strong>§5.5</strong> (integration testing) and <strong>§5.7</strong> (system testing and release). Link each test to a requirement via Test Group. Methods include:
+        </p>
+        <ul class="space-y-2 ml-6 text-[#555555] mb-4">
+          <li><strong>Test</strong> — Functional testing, bench testing, database stress testing, integration testing</li>
+          <li><strong>Analysis</strong> — Engineering analysis (algorithm correctness, statistical analysis, signal processing)</li>
+          <li><strong>Inspection</strong> — Code review, design review, documentation review</li>
+          <li><strong>Demonstration</strong> — Clinical validation, usability study, field trial, operational scenario walk-through</li>
+        </ul>
+
+        <div class="overflow-x-auto my-6 border border-[#DDDDDD] rounded">
+          <table class="w-full border-collapse text-sm">
+            <caption class="caption-top text-left text-[#555555] font-semibold py-2">Tests &amp; Verification Example (§5.5–§5.7)</caption>
+            <thead>
+              <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Test Group</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Test ID</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Type</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Method</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {testsExample.map((row) => (
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3 text-[#555555]">{row.testGroup}</td>
+                  <td class="px-4 py-3 text-[#555555] font-mono">{row.testId}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.type}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.method}</td>
+                  <td class="px-4 py-3 text-[#555555] text-xs">{row.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-[#F5F5F5] border-l-4 border-[#BF360C] p-4 mt-4 text-[#555555] text-sm">
+          <strong>Tips:</strong> Link every Test Group to a software requirement. One requirement may have multiple tests: for example, SWE-001 (heart rate accuracy) is verified by T-001 (bench test with reference ECG) and T-002 (algorithm analysis for noise immunity). For Class C requirements, include both unit-level verification (algorithm analysis) and system-level validation (clinical review). Include clinical validation (Demonstration) for Class C safety-critical requirements; e.g., TG-002 includes T-004 clinical validation demonstrating arrhythmia detection works in real patient data. For SOUP items, create tests proving the SOUP component's correctness in your use case. See <a href="/docs/tests" class="text-[#BF360C] hover:underline">Tests &amp; Verification</a> for detailed guidance.
+        </div>
+      </div>
+
+      <!-- Step 4: Document Risks and SOUP -->
+      <div class="border-l-4 border-[#BF360C] pl-6">
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#BF360C] text-white font-bold">4</span>
+          Document Risks and SOUP (§5.1.3, ISO 14971 Integration)
+        </h3>
+        <p class="text-[#555555] mb-4">
+          Identify failure modes and SOUP items, assess severity and mitigation, track residual risk. Per <strong>§5.1.3</strong>, SOUP (Software of Unknown Provenance) must be identified, risk-assessed, and mitigated. Link risks to requirements that implement mitigation.
+        </p>
+
+        <div class="overflow-x-auto my-6 border border-[#DDDDDD] rounded">
+          <table class="w-full border-collapse text-sm">
+            <caption class="caption-top text-left text-[#555555] font-semibold py-2">Risks &amp; Mitigations Example</caption>
+            <thead>
+              <tr class="bg-[#F5F5F5] border-b border-[#DDDDDD]">
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Risk ID</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Description</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Severity</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Occurrence</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Mitigation</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Linked Req</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Residual Severity</th>
+                <th class="px-4 py-2 text-left text-[#1A1A2E] font-semibold">Residual Occurrence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {risksExample.map((row) => (
+                <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                  <td class="px-4 py-3 text-[#555555] font-mono">{row.id}</td>
+                  <td class="px-4 py-3 text-[#555555] text-xs">{row.description}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.severity}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.occurrence}</td>
+                  <td class="px-4 py-3 text-[#555555] text-xs">{row.mitigation}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.linkedReq}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.residualSeverity}</td>
+                  <td class="px-4 py-3 text-[#555555]">{row.residualOccurrence}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-[#F5F5F5] border-l-4 border-[#BF360C] p-4 mt-4 text-[#555555] text-sm">
+          <strong>Tips:</strong> Use ISO 14971 risk severity/occurrence scale (1–5) to justify software safety class assignments. High-severity failures (death/serious injury) drive Class C requirements and rigorous testing. Mitigation is built into design: for example, "Arrhythmia detection fails to alert" is mitigated by SWE-002 (dual-algorithm detection) and verified by T-003/T-004. For SOUP items, create a Risk entry documenting the library, version, known limitations, and verification tests proving correctness in your context. Track residual risk post-mitigation; auditors expect risk to be reduced to acceptable levels. See <a href="/docs/risks" class="text-[#BF360C] hover:underline">Risk Management</a> for FMEA and SOUP assessment guidance.
+        </div>
+      </div>
+
+      <!-- Step 5: Check Traceability -->
+      <div class="border-l-4 border-[#BF360C] pl-6">
+        <h3 class="text-2xl font-semibold text-[#1A1A2E] mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#BF360C] text-white font-bold">5</span>
+          Check Traceability and Generate RTM (§5.5.5 Bidirectional Traceability)
+        </h3>
+        <p class="text-[#555555] mb-4">
+          Run <strong>RTMify Trace</strong> to validate bidirectional traceability per <strong>§5.5.5</strong>. Every row should show <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">OK</code> status. The trace checks:
+        </p>
+        <ul class="space-y-2 ml-6 text-[#555555] mb-4">
+          <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">MISSING_USER_NEED</code> — Software requirement with no parent User Need link (traceability upward broken)</li>
+          <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">NO_TEST_LINKED</code> — Requirement with no Test Group (verification per §5.5 missing)</li>
+          <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">ORPHAN_TEST</code> — Test Group with no Requirement (scope creep or obsolete test)</li>
+          <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">INCOMPLETE_RISK</code> — Risk with no mitigation or residual risk still unacceptable</li>
+          <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">ORPHAN_USER_NEED</code> — User Need with no linked software requirement (design input not addressed)</li>
+        </ul>
+        <p class="text-[#555555] mb-4">
+          Fix all issues before design completion. A clean RTM demonstrates compliance with §5.5.5 bidirectional traceability and is mandatory evidence in your Design History File (DHF).
+        </p>
+        <div class="bg-[#F5F5F5] border-l-4 border-[#BF360C] p-4 text-[#555555] text-sm">
+          <strong>Pro tip:</strong> Export your RTM as a traceability report and include it in your DHF. For Class C software, auditors require evidence of §5.5.5 full forward/backward traceability. RTMify's status checks help ensure compliance. See <a href="/docs/status-codes" class="text-[#BF360C] hover:underline">Status Codes</a> for full error definitions and remediation steps.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What This Template Covers -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">What This Template Covers vs. Doesn't Cover</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Covered</h3>
+        <ul class="space-y-3 text-[#555555]">
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>Software Requirements (§5.2)</strong> — Derivation of software requirements from system requirements and risk control measures, with software safety classification (Class A, B, C)</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>Software Architectural Design (§5.3 context)</strong> — Safety-critical component identification and separation from non-critical code, documented in requirement Notes</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>Software Integration and Testing (§5.5)</strong> — Integration testing strategy and bidirectional traceability per §5.5.5; every requirement linked to verification activity</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>Software System Testing and Release (§5.7)</strong> — System testing, validation (clinical/operational), and release readiness; verification vs. validation distinction</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>SOUP Identification and Risk Assessment (§5.1.3)</strong> — Pre-developed software identification, risk assessment, and mitigation documentation</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#BF360C] font-bold mt-1">✓</span>
+            <span><strong>ISO 14971 Risk Control Traceability</strong> — Linkage between risk controls and requirements, residual risk tracking post-mitigation</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">NOT Covered (separate IEC 62304 documentation)</h3>
+        <ul class="space-y-3 text-[#555555]">
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Software Development Planning (§4.0)</strong> — RTMify supports design execution; your development plan (SOP for requirements review, change control, traceability management) is a separate document. Reference your plan in RTMify Source fields where applicable.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Detailed Architectural Design (§5.3 full documentation)</strong> — RTMify captures requirement-level safety classification. Detailed architecture diagrams, module interfaces, and design rationale are maintained in your design documentation (separate from RTMify).</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Detailed Unit Implementation (§5.5.3–5.5.5, code-level)</strong> — RTMify traces to test groups; source code implementation details, unit test records, and code traceability are managed in your code repository and development environment. Your Software Test Report links RTMify's test groups to detailed test procedures and code coverage metrics.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Code Review and Inspection Records (§5.5.2)</strong> — Code review results and inspection checklists are maintained separately in your development QMS. Link them to RTMify test entries (Inspection method) for visibility.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>SOUP Anomaly Tracking (§5.1.3)</strong> — SOUP defect logs and anomaly resolution are tracked in your defect system. Reference SOUP version and known issues in RTMify Risk Notes.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Software Maintenance (§6.0)</strong> — Post-release maintenance, problem reports, and corrective action are handled by your QMS configuration management and problem resolution process (separate from design-phase RTMify).</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-[#555555] font-bold mt-1">◦</span>
+            <span><strong>Design History File (DHF) Assembly</strong> — RTMify generates the traceability matrix portion of your DHF. You assemble the complete DHF with design inputs, outputs, verification records, validation records, and design change controls per ISO 13485 §8.5.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqItems.map((item) => (
+        <details class="group border border-[#DDDDDD] rounded-lg p-6 cursor-pointer hover:bg-[#F5F5F5] transition-colors">
+          <summary class="text-lg font-semibold text-[#1A1A2E] flex items-center justify-between">
+            {item.question}
+            <span class="text-[#BF360C] text-2xl group-open:rotate-180 transition-transform">+</span>
+          </summary>
+          <p class="text-[#555555] mt-4 leading-relaxed">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</DocsLayout>

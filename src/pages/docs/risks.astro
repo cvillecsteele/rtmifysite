@@ -1,0 +1,483 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'Risks Tab | RTMify Documentation';
+const description = 'Complete guide to RTMify Risks tab: hazard and failure mode assessment with risk scoring, severity-likelihood matrices, and traceability to requirements.';
+const canonical = 'https://rtmify.io/docs/risks/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Risks', url: '/docs/risks/' }
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'TechArticle',
+      headline: 'RTMify Risks Tab: Hazard and Failure Mode Assessment',
+      description: description,
+      url: canonical,
+      image: 'https://rtmify.io/images/risks-tab-hero.jpg',
+      datePublished: '2024-01-15',
+      dateModified: new Date().toISOString().split('T')[0],
+      author: {
+        '@type': 'Organization',
+        name: 'RTMify',
+        url: 'https://rtmify.io'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'RTMify',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://rtmify.io/logo.png'
+        }
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What severity and likelihood scale should I use?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Use a 1–5 ordinal scale consistent with your standard and risk policy. ISO 13485 projects often align with ISO 14971 guidance: Severity (negligible, minor, serious, critical) maps to patient harm; Likelihood (rare, unlikely, moderate, likely, very likely) to occurrence probability. ISO 26262 HARA uses a similar scale but adds Exposure (how often hazard is encountered) and Controllability (driver ability to avoid harm) to compute ASIL. DO-178C uses qualitative risk levels mapped to DAL (Design Assurance Level). Document your scale definitions in your Risk Management Plan.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What if one risk needs multiple mitigations (multiple requirements)?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'List each requirement in column F separated by semicolons (e.g., REQ-047; REQ-048). RTMify will flag each link as valid if the corresponding requirements exist. Optionally, create a summary requirement (e.g., REQ-047 = "Implement battery backup and alarm circuit") that rolls up multiple design controls. This simplifies traceability while maintaining audit trail to detailed requirements.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I handle risks that are already mitigated by standard practice?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'If a risk is controlled by inherent design, manufacturing process, or industry best practice (e.g., use of certified components, standard operating procedures), still enter it with a mitigation reference. Link to a process requirement (e.g., REQ-PROC-042 = "Use ISO 9001 supplier controls for all purchased components") or a derived requirement. This ensures traceability and demonstrates systematic risk management to regulators. ASPICE MAN.5 requires process-based risk items to be visible.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Should I include risks that are already mitigated by standard practice?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Including mitigated risks demonstrates completeness of hazard identification and justifies design choices. For ISO 13485 risk management file compliance, regulators expect to see that all identified hazards have been assessed and either accepted (with residual risk justification) or controlled. Omitting obvious risks creates audit gaps. Use residual risk acceptance criteria (e.g., residual score < 5) to document that acceptability was evaluated.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What\'s the difference between HARA and FMEA?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'HARA (Hazard Analysis and Risk Assessment, ISO 26262 §8) is top-down: identify system-level hazards, assess severity and exposure, determine controllability, compute ASIL, and allocate requirements. FMEA (Failure Mode and Effects Analysis, IEC 60812) is bottom-up: start with component failures, trace effects through subsystems to system impact, then estimate severity and occurrence. Both are complementary. Use HARA for safety architecture, then FMEA to validate that lower-level failures cannot propagate to create system hazards. RTMify Risks tab accommodates both: use Risks for HARA-driven hazards and link to architecture requirements; use a separate Risk sub-sheet or external FMEA database for component-level failure modes.'
+          }
+        }
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: item.url
+      }))
+    }
+  ]
+};
+
+const riskColumns = [
+  {
+    column: 'A',
+    field: 'Risk ID',
+    type: 'Text',
+    example: 'RSK-101 or RSK-B-101 (ISO 26262)',
+    description: 'Unique identifier for each risk. Prefix with ASIL letter (A/B/C/D) for ISO 26262 HARA. ISO 13485 may use risk numbering tied to design history file (DHF).'
+  },
+  {
+    column: 'B',
+    field: 'Description',
+    type: 'Text (400 chars)',
+    example: 'Loss of power leads to inability to alert operator',
+    description: 'Concise hazard or failure mode description. For ISO 21434 cybersecurity risks, prefix with "TARA:". Include failure mode chain if relevant (cause → event → consequence).'
+  },
+  {
+    column: 'C',
+    field: 'Initial Severity',
+    type: 'Integer 1–5',
+    example: '4',
+    description: '1=negligible, 2=minor, 3=moderate, 4=major, 5=critical/fatal. ISO 26262: maps to ASIL. ISO 13485: supports risk class determination. DO-178C: informs DAL allocation.'
+  },
+  {
+    column: 'D',
+    field: 'Initial Likelihood',
+    type: 'Integer 1–5',
+    example: '3',
+    description: '1=very unlikely, 2=unlikely, 3=moderate, 4=likely, 5=very likely. ISO 26262: Exposure × Controllability. ISO 13485: frequency or probability. Justification must exist in design history.'
+  },
+  {
+    column: 'E',
+    field: 'Mitigation',
+    type: 'Text (200 chars)',
+    example: 'Implement battery backup with 24-hour autonomy; add low-power alarm circuit',
+    description: 'Design control, process control, or requirement that reduces severity or likelihood. May be multiple controls separated by semicolon; link each to corresponding REQ in column F.'
+  },
+  {
+    column: 'F',
+    field: 'Linked REQ',
+    type: 'Requirement ID(s)',
+    example: 'REQ-047 or REQ-047; REQ-048',
+    description: 'Reference to requirement(s) that implement the mitigation. If blank, risk is uncontrolled. RTMify flags UNRESOLVED if linked REQ does not exist. Creates traceability: Risk → Requirement → Test.'
+  },
+  {
+    column: 'G',
+    field: 'Residual Severity',
+    type: 'Integer 1–5',
+    example: '2',
+    description: 'Severity after mitigation is in place. Must be ≤ Initial Severity. Residual Severity = 1 means mitigation eliminates or reduces to negligible level.'
+  },
+  {
+    column: 'H',
+    field: 'Residual Likelihood',
+    type: 'Integer 1–5',
+    example: '2',
+    description: 'Likelihood after mitigation is operational. Must be ≤ Initial Likelihood. Documents that design control achieves acceptable residual risk.'
+  },
+  {
+    column: 'I',
+    field: 'RTMify Status',
+    type: 'Auto-populated (read-only)',
+    example: 'RESOLVED or UNRESOLVED',
+    description: 'Status indicator. UNRESOLVED if Linked REQ is empty or does not exist. RESOLVED if Linked REQ points to a valid requirement. Helps identify gaps in traceability.'
+  }
+];
+
+const severityLikelihoodScores = [
+  { score: '1–4', level: 'Low', color: 'green', description: 'Acceptable risk. May proceed with standard engineering practice.' },
+  { score: '5–9', level: 'Medium', color: 'yellow', description: 'Moderate risk. Mitigation required; monitoring of residual risk needed.' },
+  { score: '10–15', level: 'High', color: 'orange', description: 'High risk. Significant mitigation required; design review and traceability essential.' },
+  { score: '16–25', level: 'Critical', color: 'red', description: 'Critical risk. Intensive risk control; executive-level review and acceptance required.' }
+];
+
+const standards = [
+  {
+    id: 'as9100',
+    name: 'AS9100 Rev D',
+    color: '#1565C0',
+    clauses: 'Clauses: §6.1',
+    title: 'Actions to Address Risks and Opportunities',
+    content: '<p>AS9100 Rev D §6.1 requires the organization to plan and implement actions to address risks and opportunities to the quality management system. This includes determining risks and opportunities arising from external and internal issues, determining how to address them, and implementing planned actions. The Risks tab serves as a risk register documenting hazards and their mitigation. Risk-based thinking is embedded throughout the QMS; the standard is not prescriptive about which risk tool or methodology to use, but traceability from risk to requirement is essential for aerospace compliance (FAA certification).</p>'
+  },
+  {
+    id: 'iso13485',
+    name: 'ISO 13485:2016 & IEC 62304',
+    color: '#2E7D32',
+    clauses: 'Clauses: ISO 13485 §8.1; IEC 62304 §4.2',
+    title: 'Risk Management Integration',
+    content: '<p><strong>ISO 13485:2016</strong> requires medical device manufacturers to establish and implement a quality management system that includes risk management (§8.1). Risk management must follow ISO 14971:2019 (Medical Devices — Application of risk management to medical devices) or equivalent. The Risks tab implements ISO 14971 hazard identification, risk estimation, risk evaluation, risk control, and residual risk evaluation.</p><p><strong>IEC 62304 §4.2</strong> (Software development processes) explicitly requires risk management per ISO 14971. Safety Class (A/B/C) determined by IEC 60601-1 (or IEC 61508 as fallback) drives the rigor of risk analysis. Class A = minimal risk; Class B = moderate; Class C = high. Residual risk must be documented in the Design History File (DHF) as evidence of compliance.</p>'
+  },
+  {
+    id: 'do178c',
+    name: 'DO-178C',
+    color: '#6A1B9A',
+    clauses: 'Clauses: §2.4',
+    title: 'Safety Assessment Process (SAP)',
+    content: '<p>DO-178C §2.4 defines the Safety Assessment Process (SAP), which includes system hazard analysis and allocation of Design Assurance Levels (DAL: A, B, C, D, E) to software components. Hazards are system-level; the RTMify Risks tab documents these hazards with severity and likelihood. The pre-mitigation risk score informs whether a requirement warrants DAL-A (most rigorous) through DAL-E (least rigorous) treatment. DO-178C is not strictly a risk register methodology—it emphasizes safety assessment at the system level—but hazards identified in the Risks tab feed directly into architectural requirements and DAL allocation, ensuring DO-178C compliance for aviation software.</p>'
+  },
+  {
+    id: 'iso26262',
+    name: 'ISO 26262',
+    color: '#E65100',
+    clauses: 'Clauses: §8',
+    title: 'HARA — Hazard Analysis and Risk Assessment',
+    content: '<p><strong>ISO 26262 §8</strong> mandates Hazard Analysis and Risk Assessment (HARA) to determine Automotive Safety Integrity Levels (ASIL: QM, A, B, C, D). HARA is a top-down, systematic process:</p><ol><li><strong>Hazard Identification:</strong> Identify potential system hazards (loss of function, unintended action, etc.).</li><li><strong>ASIL Determination:</strong> For each hazard, assess Severity (S: 1–3), Exposure (E: 1–3), and Controllability (C: 1–3). ASIL = f(S, E, C); use ASIL lookup table. ASIL D is highest; QM (quality managed) is baseline non-safety.</li><li><strong>Requirement Allocation:</strong> Allocate ASIL to architectural and implementation requirements. Use ASIL-prefixed Risk IDs (e.g., <code>RSK-D-101</code> for ASIL D hazard #101).</li><li><strong>ASIL Decomposition:</strong> ASIL D can be decomposed into lower ASILs if each sub-requirement independently achieves the safety goal.</li><li><strong>Residual Risk Evaluation:</strong> After implementation, confirm that architectural controls achieve the target ASIL.</li></ol><p>RTMify Risks tab supports ASIL-prefixed Risk IDs in column A. Link each risk to architectural requirements in column F. Residual ASIL is implicit in the residual risk score (columns G × H).</p>'
+  },
+  {
+    id: 'iso21434',
+    name: 'ISO 21434',
+    color: '#004D40',
+    clauses: 'Clauses: §6 et seq.',
+    title: 'TARA — Threat Analysis and Risk Assessment',
+    content: '<p><strong>ISO 21434</strong> (Cybersecurity and over-the-air updates for road vehicles) requires Threat Analysis and Risk Assessment (TARA) to identify and evaluate cybersecurity risks. TARA is similar in structure to HARA but focuses on threats and vulnerabilities rather than safety hazards. The RTMify Risks tab accommodates cybersecurity risks: prefix descriptions in column B with <code>TARA:</code> to distinguish them from functional safety risks. Severity maps to impact; Likelihood to threat probability. Link to cybersecurity requirements (e.g., <code>REQ-SEC-047</code>) in column F. Residual risk scores document post-mitigation cybersecurity posture.</p>'
+  },
+  {
+    id: 'aspice',
+    name: 'ASPICE',
+    color: '#004D40',
+    clauses: 'Clauses: SYS.1, SWE.1, MAN.5',
+    title: 'Risk Integration in System and Software Engineering',
+    content: '<p><strong>ASPICE</strong> (Automotive SPICE v3.0) defines capability levels for system and software engineering processes. Risk items (SYS.1 System Requirements Definition, SWE.1 Software Requirements Analysis) feed into functional requirements. <strong>MAN.5 Management of Risk</strong> is a horizontal process requiring identification, analysis, and mitigation of project and product risks. The Risks tab fulfills both product risk (SYS.1/SWE.1 safety/security requirements) and project risk (schedule, resource, supplier) documentation. Each risk must be mapped to a requirement (column F) and tracked to test (via the <a href="/docs/requirements/">Requirements tab</a> and <a href="/docs/tests/">Tests tab</a>). ASPICE audits expect to see this traceability chain.</p>'
+  }
+];
+---
+
+<DocsLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd} breadcrumbs={breadcrumbs} activeSlug="risks">
+  <!-- Page Header -->
+  <header class="mb-12">
+    <h1 class="text-4xl font-bold text-[#1A1A2E] mb-2">Risks Tab</h1>
+    <p class="text-xl text-[#555555]">Hazard and Failure Mode Assessment with Risk Scoring and Traceability</p>
+  </header>
+
+  <!-- Overview Section -->
+  <section class="mb-12" id="overview">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Overview</h2>
+    <div class="border-l-4 border-[#1565C0] bg-blue-50 p-6 rounded-md mb-6">
+      <p class="text-[#1A1A2E] mb-4 leading-relaxed">
+        The <strong>Risks tab</strong> captures hazards and failure modes with severity × likelihood scoring before and after mitigation. Each risk links to the requirement that controls it via column F, completing the traceability chain: <strong>Risk → Requirement → Test</strong>. This creates a living document that demonstrates systematic risk management compliant with ISO 13485, ISO 26262, DO-178C, IEC 62304, ISO 21434, and AS9100.
+      </p>
+      <p class="text-[#1A1A2E] leading-relaxed">
+        Risk scoring (Severity × Likelihood) identifies risks requiring mitigation. Pre-mitigation scores justify the need for design or process controls. Post-mitigation (residual) scores document that residual risk is acceptable. RTMify's automated Status column flags risks with missing or invalid requirement links, preventing traceability gaps.
+      </p>
+    </div>
+  </section>
+
+  <!-- Field-by-Field Reference Section -->
+  <section class="mb-12" id="columns">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Field-by-Field Reference</h2>
+    <p class="text-[#555555] mb-6 leading-relaxed">The Risks tab comprises 9 columns (A–I), each with specific semantics and validation rules:</p>
+
+    <div class="overflow-x-auto border border-[#DDDDDD] rounded-lg">
+      <table class="w-full border-collapse bg-white">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="px-4 py-3 text-left font-semibold border-b-2 border-[#1A1A2E]">Column</th>
+            <th class="px-4 py-3 text-left font-semibold border-b-2 border-[#1A1A2E]">Field Name</th>
+            <th class="px-4 py-3 text-left font-semibold border-b-2 border-[#1A1A2E]">Data Type</th>
+            <th class="px-4 py-3 text-left font-semibold border-b-2 border-[#1A1A2E]">Example</th>
+            <th class="px-4 py-3 text-left font-semibold border-b-2 border-[#1A1A2E]">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {riskColumns.map(col => (
+            <tr class="hover:bg-[#F5F5F5] border-b border-[#DDDDDD]">
+              <td class="px-4 py-3 font-semibold text-[#1A1A2E] w-20">{col.column}</td>
+              <td class="px-4 py-3 font-semibold text-[#1A1A2E]">{col.field}</td>
+              <td class="px-4 py-3 text-[#555555]">{col.type}</td>
+              <td class="px-4 py-3 text-[#555555]"><code class="bg-[#F5F5F5] px-2 py-1 rounded text-sm font-mono">{col.example}</code></td>
+              <td class="px-4 py-3 text-[#555555] leading-relaxed">{col.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Risk Scoring Section -->
+  <section class="mb-12" id="risk-matrix">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Risk Scoring: Severity × Likelihood Matrix</h2>
+    <p class="text-[#555555] mb-6 leading-relaxed">
+      Risk Score = <strong>Severity × Likelihood</strong>. Multiply the values in columns C (Initial Severity) and D (Initial Likelihood) to obtain the pre-mitigation risk score. After mitigation is implemented, compute the residual risk score using columns G (Residual Severity) and H (Residual Likelihood).
+    </p>
+
+    <!-- 5×5 Risk Matrix -->
+    <div class="mb-8 border border-[#DDDDDD] rounded-lg p-4 bg-white overflow-x-auto">
+      <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">5×5 Risk Matrix (Pre-Mitigation or Residual)</h3>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-[#F5F5F5]">
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD]"></th>
+            <th colspan="5" class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Likelihood →</th>
+          </tr>
+          <tr class="bg-[#F5F5F5]">
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD]"></th>
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] text-sm">1 (Very Unlikely)</th>
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] text-sm">2 (Unlikely)</th>
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] text-sm">3 (Moderate)</th>
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] text-sm">4 (Likely)</th>
+            <th class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] text-sm">5 (Very Likely)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[5, 4, 3, 2, 1].map(severity => (
+            <tr>
+              <td class="px-3 py-2 text-center font-semibold text-[#1A1A2E] border border-[#DDDDDD] bg-[#F5F5F5] w-24">
+                <div class="font-bold text-lg">{severity}</div>
+                <div class="text-xs text-[#555555]">
+                  {severity === 5 && '(Critical)'}
+                  {severity === 4 && '(Major)'}
+                  {severity === 3 && '(Moderate)'}
+                  {severity === 2 && '(Minor)'}
+                  {severity === 1 && '(Negligible)'}
+                </div>
+              </td>
+              {[1, 2, 3, 4, 5].map(likelihood => {
+                const score = severity * likelihood;
+                let cellBg = 'bg-green-500';
+                let textColor = 'text-white';
+                if (score >= 16) {
+                  cellBg = 'bg-red-500';
+                } else if (score >= 10) {
+                  cellBg = 'bg-orange-500';
+                } else if (score >= 5) {
+                  cellBg = 'bg-yellow-400';
+                  textColor = 'text-[#1A1A2E]';
+                }
+                return (
+                  <td class={`px-3 py-2 text-center font-bold border border-[#DDDDDD] ${cellBg} ${textColor}`}>
+                    {score}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="text-[#555555] italic text-sm mt-4"><em>Read: Severity (rows, 1–5 bottom-to-top) × Likelihood (columns, 1–5 left-to-right).</em></p>
+    </div>
+
+    <!-- Risk Level Interpretation -->
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4 mt-8">Risk Level Interpretation</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      {severityLikelihoodScores.map(level => {
+        let bgColor = 'bg-green-500';
+        let textColorClass = 'text-white';
+        if (level.color === 'red') {
+          bgColor = 'bg-red-500';
+        } else if (level.color === 'orange') {
+          bgColor = 'bg-orange-500';
+        } else if (level.color === 'yellow') {
+          bgColor = 'bg-yellow-400';
+          textColorClass = 'text-[#1A1A2E]';
+        }
+        return (
+          <div class={`${bgColor} ${textColorClass} p-6 rounded-lg`}>
+            <h4 class="font-bold text-lg mb-2">{level.level} ({level.score})</h4>
+            <p class="leading-relaxed">{level.description}</p>
+          </div>
+        );
+      })}
+    </div>
+
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">Mitigation and Residual Risk</h3>
+    <p class="text-[#555555] leading-relaxed">
+      <strong>Pre-mitigation risk score</strong> (columns C × D) justifies the need for a control. If the score is 5 or higher, a requirement must be created to lower severity or likelihood. <strong>Residual risk score</strong> (columns G × H) is computed after the mitigation (requirement) is in place. For acceptance, many organizations require residual risk to fall into the green (1–4) or yellow (5–9) zone. Critical risks (16–25) require executive risk acceptance and continuous monitoring. ISO 13485 and ISO 26262 mandate documented risk acceptance for any risk not reduced to negligible levels.
+    </p>
+  </section>
+
+  <!-- Standards Guidance Section -->
+  <section class="mb-12" id="standards">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8">Standards Guidance</h2>
+
+    {standards.map(std => (
+      <div class="mb-6 border-l-4 p-6 bg-[#F5F5F5] rounded-md" style={`border-left-color: ${std.color}`}>
+        <div class="inline-block px-3 py-1 rounded text-white font-semibold mb-2" style={`background-color: ${std.color}`}>
+          {std.name}
+        </div>
+        <div class="text-sm text-[#555555] mb-3">{std.clauses}</div>
+        <h3 class="text-xl font-bold text-[#1A1A2E] mb-3">{std.title}</h3>
+        <div class="text-[#555555] leading-relaxed" set:html={std.content} />
+      </div>
+    ))}
+  </section>
+
+  <!-- Linking Risks to Requirements Section -->
+  <section class="mb-12" id="linking">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Linking Risks to Requirements</h2>
+    <p class="text-[#555555] mb-6 leading-relaxed">
+      Column F (<strong>Linked REQ</strong>) is the critical bridge in traceability. Each risk must be mitigated by one or more requirements. If a risk has no linked requirement, the mitigation exists only on paper—there is no way to verify it is implemented.
+    </p>
+
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">Traceability Chain</h3>
+    <pre class="bg-[#F5F5F5] border-l-4 border-[#1A1A2E] p-6 rounded-md font-mono text-[#1A1A2E] overflow-x-auto mb-6 leading-relaxed">Risk (RSK-047)
+  ↓ Mitigation
+Requirement (REQ-047: "Implement battery backup with 24h autonomy")
+  ↓ Implementation & Verification
+Test (TST-047: "Verify battery lasts ≥24h under idle load")
+  ↓ Acceptance
+Test Result (PASS)</pre>
+
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">RTMify Status Validation</h3>
+    <p class="text-[#555555] mb-4 leading-relaxed">RTMify automatically populates column I (RTMify Status) based on column F:</p>
+    <ul class="text-[#555555] mb-6 ml-6 space-y-2 leading-relaxed">
+      <li><strong>RESOLVED:</strong> Linked REQ exists and points to a valid requirement in the <a href="/docs/requirements/" class="text-[#1565C0] hover:underline">Requirements tab</a>.</li>
+      <li><strong>UNRESOLVED:</strong> Linked REQ is empty, contains a non-existent requirement ID, or points to a deleted requirement. RTMify flags this to prevent incomplete traceability.</li>
+    </ul>
+
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">Multiple Mitigations Per Risk</h3>
+    <p class="text-[#555555] mb-4 leading-relaxed">Some risks may require multiple requirements to achieve acceptable residual risk. For example:</p>
+    <pre class="bg-[#F5F5F5] border-l-4 border-[#1565C0] p-6 rounded-md font-mono text-[#1A1A2E] overflow-x-auto mb-6 leading-relaxed">Risk: RSK-102 "Loss of communications"
+Mitigation: "Implement redundant comm paths and watchdog timer"
+Linked REQ: REQ-053; REQ-054
+(REQ-053: "Implement dual CAN bus architecture")
+(REQ-054: "Implement 500ms watchdog timeout")</pre>
+    <p class="text-[#555555] mb-6 leading-relaxed">Separate multiple requirement IDs with a semicolon (and space). RTMify validates each ID independently.</p>
+
+    <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">Orphaned and Dangling Risks</h3>
+    <p class="text-[#555555] mb-4 leading-relaxed">
+      <strong>Orphaned Risk:</strong> A risk with no Linked REQ (column F is empty). This risk has been identified but no design or process control has been assigned. Decision: either assign a requirement or accept residual risk with documented justification.
+    </p>
+    <p class="text-[#555555] mb-6 leading-relaxed">
+      <strong>Dangling Risk:</strong> A risk with a Linked REQ that does not exist (e.g., REQ-047 is listed but does not appear in the Requirements tab). RTMify marks this UNRESOLVED. Corrective action: either create the missing requirement or remove the broken link.
+    </p>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="mb-12" id="faq">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      <details class="border border-[#DDDDDD] rounded-lg overflow-hidden group">
+        <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#EEEEEE] group-open:bg-blue-50 group-open:text-[#1565C0]">
+          What severity and likelihood scale should I use?
+        </summary>
+        <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed border-t border-[#DDDDDD]">
+          Use a 1–5 ordinal scale consistent with your standard and risk policy. ISO 13485 projects often align with ISO 14971 guidance: Severity (negligible, minor, serious, critical) maps to patient harm; Likelihood (rare, unlikely, moderate, likely, very likely) to occurrence probability. ISO 26262 HARA uses a similar scale but adds Exposure (how often hazard is encountered) and Controllability (driver ability to avoid harm) to compute ASIL. DO-178C uses qualitative risk levels mapped to DAL (Design Assurance Level). Document your scale definitions in your Risk Management Plan.
+        </div>
+      </details>
+
+      <details class="border border-[#DDDDDD] rounded-lg overflow-hidden group">
+        <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#EEEEEE] group-open:bg-blue-50 group-open:text-[#1565C0]">
+          What if one risk needs multiple mitigations (multiple requirements)?
+        </summary>
+        <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed border-t border-[#DDDDDD]">
+          List each requirement in column F separated by semicolons (e.g., REQ-047; REQ-048). RTMify will flag each link as valid if the corresponding requirements exist. Optionally, create a summary requirement (e.g., REQ-047 = "Implement battery backup and alarm circuit") that rolls up multiple design controls. This simplifies traceability while maintaining audit trail to detailed requirements.
+        </div>
+      </details>
+
+      <details class="border border-[#DDDDDD] rounded-lg overflow-hidden group">
+        <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#EEEEEE] group-open:bg-blue-50 group-open:text-[#1565C0]">
+          How do I handle risks that are already mitigated by standard practice?
+        </summary>
+        <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed border-t border-[#DDDDDD]">
+          If a risk is controlled by inherent design, manufacturing process, or industry best practice (e.g., use of certified components, standard operating procedures), still enter it with a mitigation reference. Link to a process requirement (e.g., REQ-PROC-042 = "Use ISO 9001 supplier controls for all purchased components") or a derived requirement. This ensures traceability and demonstrates systematic risk management to regulators. ASPICE MAN.5 requires process-based risk items to be visible.
+        </div>
+      </details>
+
+      <details class="border border-[#DDDDDD] rounded-lg overflow-hidden group">
+        <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#EEEEEE] group-open:bg-blue-50 group-open:text-[#1565C0]">
+          Should I include risks that are already mitigated by standard practice?
+        </summary>
+        <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed border-t border-[#DDDDDD]">
+          Yes. Including mitigated risks demonstrates completeness of hazard identification and justifies design choices. For ISO 13485 risk management file compliance, regulators expect to see that all identified hazards have been assessed and either accepted (with residual risk justification) or controlled. Omitting obvious risks creates audit gaps. Use residual risk acceptance criteria (e.g., residual score &lt; 5) to document that acceptability was evaluated.
+        </div>
+      </details>
+
+      <details class="border border-[#DDDDDD] rounded-lg overflow-hidden group">
+        <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#EEEEEE] group-open:bg-blue-50 group-open:text-[#1565C0]">
+          What's the difference between HARA and FMEA?
+        </summary>
+        <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed border-t border-[#DDDDDD]">
+          HARA (Hazard Analysis and Risk Assessment, ISO 26262 §8) is top-down: identify system-level hazards, assess severity and exposure, determine controllability, compute ASIL, and allocate requirements. FMEA (Failure Mode and Effects Analysis, IEC 60812) is bottom-up: start with component failures, trace effects through subsystems to system impact, then estimate severity and occurrence. Both are complementary. Use HARA for safety architecture, then FMEA to validate that lower-level failures cannot propagate to create system hazards. RTMify Risks tab accommodates both: use Risks for HARA-driven hazards and link to architecture requirements; use a separate Risk sub-sheet or external FMEA database for component-level failure modes.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Related Pages Section -->
+  <section class="mb-12 p-6 bg-[#F5F5F5] border border-[#DDDDDD] rounded-lg" id="related">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Related Pages</h2>
+    <ul class="space-y-2 text-[#555555]">
+      <li><a href="/docs/requirements/" class="text-[#1565C0] hover:underline">Requirements Tab</a> – Create and manage requirements that mitigate risks.</li>
+      <li><a href="/docs/tests/" class="text-[#1565C0] hover:underline">Tests Tab</a> – Define tests that verify requirements (which implement risk mitigations).</li>
+      <li><a href="/docs/traceability/" class="text-[#1565C0] hover:underline">Traceability View</a> – Visualize the risk → requirement → test chain.</li>
+      <li><a href="/docs/status-codes/" class="text-[#1565C0] hover:underline">Status Codes and Validation</a> – Understand RTMify's automated validation rules.</li>
+      <li><a href="/docs/" class="text-[#1565C0] hover:underline">Documentation Hub</a> – Overview of all tabs, standard-specific guides, and the traceability chain.</li>
+    </ul>
+  </section>
+</DocsLayout>

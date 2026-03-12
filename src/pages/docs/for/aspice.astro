@@ -1,0 +1,607 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify ASPICE Quick Start Guide';
+const description = 'Complete walkthrough of filling in the RTMify template for ASPICE (Automotive SPICE), the process assessment model used by automotive OEMs to audit supplier software development capabilities.';
+const canonical = 'https://rtmify.io/docs/for/aspice/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'ASPICE', url: '/docs/for/aspice/' }
+];
+
+const userNeedsExample = [
+  { id: 'UN-001', description: 'The body control module shall support keyless entry within 2m range', source: 'OEM Specification (Lastenheft)', priority: 'High' },
+  { id: 'UN-002', description: 'The BCM shall control interior lighting per OEM ambient lighting spec v3.2', source: 'OEM Specification', priority: 'Medium' },
+  { id: 'UN-003', description: 'The module shall meet OEM cybersecurity requirements per ISO 21434', source: 'Regulation', priority: 'High' },
+  { id: 'UN-004', description: 'The BCM shall be flashable via OBD-II for dealer service updates', source: 'OEM Specification', priority: 'Medium' }
+];
+
+const requirementsExample = [
+  { id: 'SYS-001', description: 'The BCM SHALL authenticate keyless entry fob within 200ms at ≤ 2m range using 125kHz/UHF challenge-response', traces: 'UN-001', priority: 'High', testGroup: 'TG-001', status: 'Approved', notes: 'SYS.2 system requirement' },
+  { id: 'SWE-001', description: 'The authentication software module SHALL complete challenge-response protocol within 150ms', traces: 'SYS-001', priority: 'High', testGroup: 'TG-002', status: 'Approved', notes: 'SWE.1 software requirement' },
+  { id: 'SWE-002', description: 'The lighting control module SHALL support 16.7 million color values (24-bit RGB) with fade transitions ≤ 500ms', traces: 'UN-002', priority: 'Medium', testGroup: 'TG-003', status: 'Approved', notes: 'SWE.1 software requirement' },
+  { id: 'SWE-003', description: 'The OBD-II flash module SHALL verify firmware signature per OEM PKI before installation', traces: 'UN-004', priority: 'Medium', testGroup: 'TG-004', status: 'Approved', notes: 'SWE.1 software requirement' }
+];
+
+const testsExample = [
+  { testGroup: 'TG-001', testId: 'T-001', type: 'Verification', method: 'Test', description: 'Keyless entry range test — anechoic chamber 0.5m–3m' },
+  { testGroup: 'TG-001', testId: 'T-002', type: 'Verification', method: 'Test', description: 'Authentication timing — 1000 challenge-response cycles' },
+  { testGroup: 'TG-002', testId: 'T-003', type: 'Verification', method: 'Test', description: 'SW authentication protocol unit test — mock RF interface' },
+  { testGroup: 'TG-003', testId: 'T-004', type: 'Verification', method: 'Test', description: 'LED color accuracy — spectrophotometer measurement' },
+  { testGroup: 'TG-003', testId: 'T-005', type: 'Validation', method: 'Demonstration', description: 'Ambient lighting OEM sign-off — visual inspection per spec' },
+  { testGroup: 'TG-004', testId: 'T-006', type: 'Verification', method: 'Test', description: 'OBD-II flash — valid/invalid signature acceptance/rejection' }
+];
+
+const risksExample = [
+  { id: 'RSK-101', description: 'Relay attack on keyless entry — vehicle theft', severity: '5', occurrence: '4', mitigation: 'UWB distance bounding + motion detection lockout', linkedReq: 'SYS-001', residualSeverity: '5', residualOccurrence: '2' },
+  { id: 'RSK-102', description: 'Flash update with malicious firmware — compromised BCM', severity: '5', occurrence: '2', mitigation: 'PKI signature verification, secure boot chain', linkedReq: 'SWE-003', residualSeverity: '5', residualOccurrence: '1' }
+];
+
+const faqItems = [
+  {
+    question: 'How do I separate system requirements (SYS.2) from software requirements (SWE.1)?',
+    answer: 'ASPICE distinguishes system-level requirements (SYS.1 stakeholder requirements elicitation, SYS.2 system requirements definition) from software-level requirements (SWE.1 software requirements). In RTMify, use prefixes to clarify: SYS-nnn for system requirements (hardware, mechanical, or cross-module) and SWE-nnn for software requirements. Example: SYS-001 "The BCM SHALL authenticate keyless entry within 200ms at ≤ 2m range" (system requirement—specifies the capability but not implementation) derives to SWE-001 "The authentication software module SHALL complete challenge-response protocol within 150ms" (software requirement—specifies the SW module implementation). System requirements may allocate functionality to multiple SW modules (SWE-001, SWE-002, etc.), and together they satisfy the SYS requirement. Trace each SWE requirement upward to its parent SYS requirement and trace the SYS requirement upward to the User Need (stakeholder requirement). This bidirectional traceability SYS.1 → SYS.2 → SWE.1 is mandatory for CL2+ assessments. In RTMify, link SWE requirements to their parent SYS requirement in the Traces column, making the allocation explicit.'
+  },
+  {
+    question: 'What evidence does an ASPICE assessor look for in the template?',
+    answer: 'ASPICE assessors (evaluators) conducting a CL2+ assessment will examine your RTMify template for evidence of specific base practices (BP) and generic practices (GP). Key evidence items: (1) SYS.1 / SYS.2 — stakeholder and system requirements with traceability to OEM specifications, regulations, and market standards (BP 1.1 / BP 1.2); (2) SWE.1 — software requirements derived from system requirements with bidirectional traceability (BP 1.1); (3) Bidirectional Traceability — every requirement traces upward to a stakeholder/system requirement and downward to tests (GP 2.1.7, mandatory for CL2+); (4) SWE.4–6 Verification Evidence — unit tests (SWE.4), integration tests (SWE.5), qualification tests (SWE.6) linked to requirements with test results documented (BP 2.1–2.3); (5) Risk Mitigation Linkage — risks identified (RSK) linked to requirements that mitigate them (GP 2.1.5, risk management); (6) Status & Approval — requirements marked as "Approved" with reviewer sign-off (GP 2.1.1, work product management). Assessors will request your RTMify report (export as traceability matrix or dashboard snapshot), test logs, and risk register. Gaps like untraced requirements, missing test links, or unapproved requirements will be scored as partial or nonconformant practice. Use RTMify\'s Trace feature to validate completeness before assessment.'
+  },
+  {
+    question: 'Do I need to reach CL3 for safety-critical projects?',
+    answer: 'Capability Level (CL) requirements depend on your OEM customer agreement and project risk. Most automotive OEM supplier agreements specify a minimum CL level: CL2 is standard for most Tier 1 and Tier 2 suppliers; CL3 is required for safety-critical software (brake, steering, airbag, powertrain control). Safety-critical is typically defined as ASIL B or higher per ISO 26262, or safety-related per IEC 62304. For example, a body control module (BCM) handling keyless entry and interior lighting (non-safety functions) may require CL2; a powertrain control module (PCM) handling engine torque and emission control (safety/emission-relevant) requires CL3 or higher. Check your OEM specification (often in the Lastenheft or supplier technical requirements document) for your target CL. If your project includes both safety and non-safety software, you may use a "graded approach": CL2 for non-safety modules, CL3 for safety-critical modules. In RTMify, annotate requirements with their CL level in the Notes column (e.g., "SWE-001 | CL2" vs. "SWE-002 | CL3") to clarify assessment scope. CL3 requires additional rigor: design review evidence (SWE.2 detailed design), integration test planning (SWE.5), and change control process (SUP.10). If unsure, aim for CL3 for any software interfacing with safety systems; your OEM can confirm acceptable CL during contract review.'
+  },
+  {
+    question: 'How does ASPICE relate to ISO 26262?',
+    answer: 'ASPICE and ISO 26262 are complementary: ISO 26262 is a functional safety standard defining what safety properties the software must have (e.g., "Unintended acceleration shall not occur"); ASPICE is a process assessment model defining how well your organization develops software (capability maturity). ASPICE addresses the "how" — requirements elicitation (SYS.1), design (SWE.2–3), verification (SWE.4–6), and risk management (GP 2.1.5) — while ISO 26262 addresses the "what" — HARA hazard identification, ASIL assignment, safety requirements, and verification rigor tied to ASIL level. In practice, ASPICE CL2 compliance demonstrates that your process can produce high-quality design input/output and bidirectional traceability, which is a prerequisite for ISO 26262 functional safety compliance. Many OEMs require ASPICE CL3 + ISO 26262 compliance for safety-critical software: CL3 ensures your process is disciplined; ISO 26262 ensures your design is hazard-aware and adequately verified. In RTMify, your template serves both: for ASPICE assessment, it demonstrates SYS.1–SYS.2 and SWE.1 practice and GP 2.1.7 traceability; for ISO 26262 compliance, it traces HARA results (safety goals) through requirements and tests. Assessors may review the same RTMify report against both ASPICE capability and ISO 26262 compliance criteria. If your project requires ISO 26262 compliance, ensure User Needs include HARA context (hazard, severity, exposure, controllability, ASIL) so requirements inherit ASIL level; if your project requires ASPICE CL3, ensure requirements are reviewed and approved (GP 2.1.1 work product management) before implementation.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((bc, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": bc.name,
+        "item": bc.url
+      }))
+    },
+    {
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "url": canonical,
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "datePublished": "2024-03-01",
+      "dateModified": "2026-03-12"
+    },
+    {
+      "@type": "HowTo",
+      "name": title,
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Capture Stakeholder Requirements (SYS.1)",
+          "text": "Elicit and document stakeholder requirements from OEM specifications, regulations, and market standards. These become User Needs in RTMify and form the basis for SYS.2 system requirements."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Define System and Software Requirements (SYS.2 and SWE.1)",
+          "text": "Derive system requirements (SYS) from stakeholder needs and allocate to software (SWE), hardware, and mechanical components. Establish bidirectional traceability SYS.1 → SYS.2 → SWE.1."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Plan Software Verification (SWE.4–SWE.6)",
+          "text": "Define unit verification (SWE.4), integration test (SWE.5), and qualification test (SWE.6) activities. Link each test to requirements and establish clear acceptance criteria."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Document Risk Identification and Mitigation",
+          "text": "Identify risks associated with requirements, assess severity and likelihood, and link to mitigation requirements. Track residual risk post-mitigation."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Validate Bidirectional Traceability (GP 2.1.7)",
+          "text": "Run RTMify Trace to ensure all requirements are bidirectionally traced: SYS.1 → SYS.2 → SWE.1 → Tests. Verify no orphaned items and all requirements have approval status for CL2+ assessment."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="aspice"
+>
+  <!-- Hero Section -->
+  <div class="mb-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4">
+          {title}
+        </h1>
+        <p class="text-lg text-[#555555] leading-relaxed">
+          Complete walkthrough of filling in the RTMify template for ASPICE (Automotive SPICE), the process assessment model used by automotive OEMs to audit Tier 1 and Tier 2 supplier software development capabilities.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- About This Guide -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">About This Guide</h2>
+    <div class="space-y-4 text-[#555555] leading-relaxed">
+      <p>
+        This guide walks you through filling in the RTMify template for <strong>ASPICE (Automotive SPICE)</strong>, an ISO/IEC 33002-based process assessment model used by automotive Original Equipment Manufacturers (OEMs) to audit Tier 1 and Tier 2 suppliers' software development processes. ASPICE defines a Capability Level (CL) scale from CL1 (initial/ad-hoc) to CL5 (optimizing), with most OEM supplier agreements requiring CL2 minimum and CL3 for safety-critical software.
+      </p>
+      <p>
+        ASPICE assesses how well your organization performs specific process elements: SYS.1 (stakeholder requirements elicitation), SYS.2 (system requirements definition), SWE.1 (software requirements derivation), SWE.2–3 (architecture and detailed design), SWE.4–6 (unit/integration/qualification verification), and generic practices like GP 2.1.7 (bidirectional traceability) and GP 2.1.1 (work product management and approval). The template demonstrates base practices (BP) and generic practices (GP) through structured documentation of requirements, tests, and traceability.
+      </p>
+      <p>
+        By the end of this guide, you'll have a complete requirements traceability matrix (RTM) linking stakeholder requirements (SYS.1) through system requirements (SYS.2), software requirements (SWE.1), verification activities (SWE.4–6), and risk mitigations. This RTM is key evidence in your ASPICE assessment and demonstrates compliance with capability level requirements for OEM audit readiness.
+      </p>
+    </div>
+  </section>
+
+  <!-- What ASPICE Requires -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">What ASPICE Requires</h2>
+
+    <div class="space-y-8">
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">SYS.1 — Stakeholder Requirements Elicitation</h3>
+        <p class="text-[#555555] mb-4">
+          ASPICE SYS.1 base practices require systematic elicitation of requirements from all stakeholders: OEM specification documents (Lastenheft), regulatory standards (ISO 21434, ISO 26262 if applicable), market demands, and industry best practices. Requirements sources include:
+        </p>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>OEM Specifications (Lastenheft)</strong> — Customer requirements documents defining expected functionality, performance, interfaces</li>
+          <li><strong>Regulatory Standards</strong> — Cybersecurity (ISO 21434), functional safety (ISO 26262), emissions, legal compliance</li>
+          <li><strong>Market & Industry Standards</strong> — Industry best practices, competitor analysis, emerging technologies</li>
+          <li><strong>System Constraints</strong> — Hardware limitations, platform constraints, integration interfaces</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          Record stakeholder requirements as User Needs (UN) in RTMify. Each UN must be traceable to a source (OEM spec, regulation, standard), assigned a priority, and linked forward to system requirements (SYS.2). Base practice BP 1.1 (stakeholder requirements elicitation) is demonstrated by a complete, sourced UN list.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">SYS.2 — System Requirements Definition</h3>
+        <p class="text-[#555555] mb-4">
+          SYS.2 requires deriving system requirements from stakeholder needs and allocating them to software (SWE), hardware, and mechanical subsystems. System requirements are measurable, testable specifications defining what the system (hardware + software) must accomplish; e.g., "The BCM SHALL authenticate keyless entry fob within 200ms at ≤ 2m range using 125kHz/UHF challenge-response" is a system requirement allocating both RF transceiver (hardware) and authentication logic (software) responsibilities. Base practice BP 1.2 (system requirement definition) requires:
+        </p>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>Traceability upward</strong> — Every SYS requirement traces to at least one stakeholder requirement (UN)</li>
+          <li><strong>Allocation downward</strong> — SYS requirements are allocated to SW (SWE) and hardware modules</li>
+          <li><strong>Testability</strong> — Requirements are measurable with clear acceptance criteria</li>
+          <li><strong>Completeness</strong> — All stakeholder needs are addressed by at least one SYS requirement</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          In RTMify, use ID format <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">SYS-nnn</code> for system requirements, trace them to User Needs (UN), and establish forward traceability to SWE requirements.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">SWE.1 — Software Requirements Derivation</h3>
+        <p class="text-[#555555] mb-4">
+          SWE.1 requires deriving software-specific requirements from system requirements and documenting software architectural decisions. Software requirements specify what the software must do to satisfy system requirements; e.g., SYS-001 (authenticate keyless entry) allocates to SWE-001 (software authentication protocol) and potentially SWE-002 (RF driver module). SWE.1 base practice BP 1.1 requires:
+        </p>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>Derivation from SYS requirements</strong> — Every SWE requirement traces to a parent SYS requirement</li>
+          <li><strong>Architectural allocation</strong> — SWE requirements identify which software module implements them (SWE-001 in "Authentication Module", SWE-002 in "RF Driver Module")</li>
+          <li><strong>Design rationale</strong> — Document why each SWE requirement is necessary to satisfy the parent SYS requirement</li>
+          <li><strong>Testability</strong> — SWE requirements include measurable acceptance criteria for unit and integration testing</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          In RTMify, use ID format <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">SWE-nnn</code> for software requirements, trace them to parent SYS requirements, and include notes on architectural allocation (e.g., "SWE-001 | Authentication Module | SWE.1 software requirement").
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">SWE.2 & SWE.3 — Software Architecture and Detailed Design</h3>
+        <p class="text-[#555555]">
+          SWE.2 (software architecture design) and SWE.3 (software detailed design and unit construction) are assessed through design documentation, module interfaces, and design reviews. While RTMify focuses on requirements and verification, design artifacts (architecture diagrams, module specifications, design review records) are maintained separately and referenced via links in requirement Notes. SWE.2/3 base practices require design review evidence (BP 2.1 design review).
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">SWE.4, SWE.5, SWE.6 — Software Verification (Unit, Integration, Qualification)</h3>
+        <p class="text-[#555555] mb-4">
+          ASPICE requires comprehensive verification activities:
+        </p>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>SWE.4 — Unit Verification (BP 2.1)</strong> — Test individual software units (functions, classes, modules) against SWE requirements. Methods: unit test, code review, static analysis.</li>
+          <li><strong>SWE.5 — Integration Test (BP 2.2)</strong> — Test module interactions and integrated subsystems. Methods: integration test, system simulation, HIL testing.</li>
+          <li><strong>SWE.6 — Qualification Test (BP 2.3)</strong> — End-to-end validation against system requirements. Methods: system testing, vehicle testing, field demonstration.</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          Each test must be linked to a requirement (via Test Group TG) and have documented acceptance criteria and results. For CL2+, traceability is mandatory: every requirement must have linked tests, and every test must trace to a requirement (GP 2.1.7).
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">GP 2.1.7 — Bidirectional Traceability (Mandatory for CL2+)</h3>
+        <p class="text-[#555555] mb-4">
+          Generic Practice 2.1.7 is the most critical for ASPICE CL2+ assessment: bidirectional traceability. All items must be traceable:
+        </p>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>Forward traceability</strong> — SYS.1 → SYS.2 → SWE.1 → SWE.4–6 (tests)</li>
+          <li><strong>Backward traceability</strong> — Tests → SWE requirements → SYS requirements → Stakeholder needs</li>
+          <li><strong>No orphaned items</strong> — Every requirement has a parent and at least one child; every test links to a requirement</li>
+          <li><strong>Coverage</strong> — All stakeholder needs are addressed by at least one requirement; all requirements are verified by at least one test</li>
+        </ul>
+        <p class="text-[#555555] mt-4">
+          RTMify's Trace feature validates this chain and flags missing links (MISSING_USER_NEED, NO_TEST_LINKED, ORPHAN_TEST). A clean trace report is mandatory evidence for CL2+ assessment.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">GP 2.1.1 — Work Product Management and Approval</h3>
+        <p class="text-[#555555]">
+          Generic Practice 2.1.1 requires all work products (requirements, designs, tests) to be reviewed and approved by authorized personnel before use. In RTMify, mark requirement status as "Approved" and include reviewer comments in Notes. For CL2+, all requirements must have Approved status; unapproved items indicate incomplete work product management and will result in lower capability rating.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-3">GP 2.1.5 — Risk Management Linkage</h3>
+        <p class="text-[#555555]">
+          Generic Practice 2.1.5 requires identifying risks to quality and linking mitigation measures (requirements, design decisions) to risks. Use the Risks tab to document identified risks, assess severity/likelihood, and link to mitigating requirements. Residual risk post-mitigation must be acceptable (low severity/low occurrence).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Walkthrough -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Step-by-Step Walkthrough</h2>
+
+    <div class="space-y-12">
+      <!-- Step 1 -->
+      <div class="border-l-4 border-[#004D40] pl-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[#004D40] text-white font-bold">
+              1
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Capture Stakeholder Requirements (SYS.1)</h3>
+            <p class="text-[#555555] mb-4">
+              Conduct systematic elicitation of stakeholder requirements from OEM specifications, regulatory standards, and market demands. ASPICE SYS.1 BP 1.1 requires documented evidence of elicitation methods and sources. Create User Needs (UN) for each unique stakeholder requirement.
+            </p>
+            <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
+              <li><strong>OEM Specifications (Lastenheft)</strong> — "The body control module shall support keyless entry within 2m range" (Requirement 3.2.1 of OEM Spec v2.1)</li>
+              <li><strong>Regulatory Standards</strong> — "The module shall meet OEM cybersecurity requirements per ISO 21434" (supplier technical agreement clause 5.3)</li>
+              <li><strong>Market & Customer Demand</strong> — "The BCM shall control interior lighting per OEM ambient lighting spec v3.2" (OEM feature requirement)</li>
+              <li><strong>System Constraints</strong> — "The BCM shall be flashable via OBD-II for dealer service updates" (OEM service requirement)</li>
+            </ul>
+            <p class="text-[#555555] mb-4">Use ID format <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">UN-nnn</code>. Include source reference (OEM doc, regulation, standard) in Source column. Assign priority: High for critical/safety functions, Medium for standard features, Low for nice-to-have.</p>
+
+            <div class="overflow-x-auto mb-4 border border-[#DDDDDD] rounded-lg">
+              <table class="w-full border-collapse text-sm">
+                <caption class="caption-top bg-[#F5F5F5] px-4 py-3 text-left font-semibold text-[#1A1A2E] border-b border-[#DDDDDD]">Stakeholder Requirements (SYS.1) Example</caption>
+                <thead>
+                  <tr class="border-b border-[#DDDDDD] bg-[#F5F5F5]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Source</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Priority</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userNeedsExample.map((row) => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 border-r border-[#DDDDDD] text-[#004D40] font-semibold">{row.id}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.description}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.source}</td>
+                      <td class="px-4 py-3">{row.priority}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm text-[#555555]">
+              <p class="font-semibold text-[#1A1A2E] mb-2">Tips:</p>
+              <p>Every stakeholder requirement must have a source reference for traceability. Include OEM document name, clause number, and version. For regulatory requirements, cite the standard (ISO 21434, etc.). Each UN must trace forward to at least one SYS requirement, ensuring complete coverage. RTMify's Trace will flag any UN not linked to a SYS requirement as ORPHAN_USER_NEED. Conduct stakeholder interviews, review OEM specification documents, and maintain a documented elicitation log (SYS.1 BP 1.1 evidence) of requirements sources.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="border-l-4 border-[#004D40] pl-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[#004D40] text-white font-bold">
+              2
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Define System and Software Requirements (SYS.2 and SWE.1)</h3>
+            <p class="text-[#555555] mb-4">
+              Derive system requirements (SYS.2) from stakeholder needs by specifying measurable, testable system-level specifications that allocate functionality to software, hardware, and mechanical subsystems. Then derive software requirements (SWE.1) from system requirements by specifying what each software module must do. Establish bidirectional traceability: SYS.1 → SYS.2 → SWE.1.
+            </p>
+            <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
+              <li><strong>System Requirement ID (SYS-nnn)</strong> — System-level allocation of functionality to SW/HW/mechanical</li>
+              <li><strong>Software Requirement ID (SWE-nnn)</strong> — Software module implementation of SYS requirement</li>
+              <li><strong>Description</strong> — Measurable, testable specification (use SHALL for mandatory requirements)</li>
+              <li><strong>Traces</strong> — Parent UN (stakeholder need) for SYS; parent SYS (system requirement) for SWE</li>
+              <li><strong>Priority</strong> — High (safety/critical), Medium (standard), Low (optional)</li>
+              <li><strong>Test Group</strong> — Link to verification activities (TG-nnn) for SWE.4–6</li>
+              <li><strong>Status</strong> — Draft, In Review, Approved (CL2+ requires Approved status)</li>
+              <li><strong>Notes</strong> — Architectural allocation (e.g., "SWE-001 | Authentication Module"), design rationale, requirements category (SWE.1)</li>
+            </ul>
+
+            <div class="overflow-x-auto mb-4 border border-[#DDDDDD] rounded-lg">
+              <table class="w-full border-collapse text-sm">
+                <caption class="caption-top bg-[#F5F5F5] px-4 py-3 text-left font-semibold text-[#1A1A2E] border-b border-[#DDDDDD]">System and Software Requirements (SYS.2 & SWE.1) Example</caption>
+                <thead>
+                  <tr class="border-b border-[#DDDDDD] bg-[#F5F5F5]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Traces</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Priority</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Test Group</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Status</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requirementsExample.map((row) => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 border-r border-[#DDDDDD] text-[#004D40] font-semibold">{row.id}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.description}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.traces}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.priority}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.testGroup}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.status}</td>
+                      <td class="px-4 py-3">{row.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm text-[#555555]">
+              <p class="font-semibold text-[#1A1A2E] mb-2">Tips:</p>
+              <p>Use SYS- prefix for system requirements and SWE- prefix for software requirements to distinguish allocation levels. For example, SYS-001 specifies the system-level behavior (keyless entry authentication within 200ms at 2m), while SWE-001 specifies the software module implementation (authentication protocol timing constraint). Every SWE requirement must trace to a parent SYS requirement (Traces column); every SYS requirement must trace to a UN. Include measurable parameters (timing: "150ms", range: "2m", accuracy: "±1 km/h"). Use SHALL for mandatory requirements, SHOULD for recommended, MAY for optional. Mark status as "Approved" only after review by product lead or systems engineer; unapproved requirements indicate incomplete SYS.2/SWE.1 practice and lower CL rating. For SYS.2 BP 1.2 (traceability) and SWE.1 BP 1.1 (derivation) assessment, ensure RTMify Trace shows 100% bidirectional coverage: no MISSING_USER_NEED, no ORPHAN_SYS, no ORPHAN_SWE. See <a href="/docs/requirements" class="text-[#004D40] hover:underline">Requirements</a> for detailed guidance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="border-l-4 border-[#004D40] pl-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[#004D40] text-white font-bold">
+              3
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Plan Software Verification (SWE.4–SWE.6)</h3>
+            <p class="text-[#555555] mb-4">
+              Define verification activities at three levels: SWE.4 unit verification (individual modules), SWE.5 integration test (module interactions), and SWE.6 qualification test (system end-to-end). Link each test to requirements via Test Group (TG). For CL2+, every requirement must have at least one linked test; every test must link to a requirement (GP 2.1.7 traceability). Include acceptance criteria and test method (Test, Analysis, Inspection, Demonstration).
+            </p>
+            <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
+              <li><strong>Test Group (TG-nnn)</strong> — Groups tests that verify a single requirement</li>
+              <li><strong>Test ID (T-nnn)</strong> — Individual test case identifier</li>
+              <li><strong>Type</strong> — Verification (SWE.4–6 test activity) or Validation (acceptance demonstration)</li>
+              <li><strong>Method</strong> — Test (functional/HIL/SIL/fault injection), Analysis (FMEA/FTA/code coverage), Inspection (review), Demonstration (real-world scenario)</li>
+              <li><strong>Description</strong> — Test objective, scenario, acceptance criteria (e.g., "Keyless entry range test — anechoic chamber 0.5m–3m; pass if authentication succeeds at all distances within spec")</li>
+            </ul>
+
+            <div class="overflow-x-auto mb-4 border border-[#DDDDDD] rounded-lg">
+              <table class="w-full border-collapse text-sm">
+                <caption class="caption-top bg-[#F5F5F5] px-4 py-3 text-left font-semibold text-[#1A1A2E] border-b border-[#DDDDDD]">Verification Activities (SWE.4–SWE.6) Example</caption>
+                <thead>
+                  <tr class="border-b border-[#DDDDDD] bg-[#F5F5F5]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Test Group</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Test ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Type</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Method</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {testsExample.map((row) => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.testGroup}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.testId}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.type}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.method}</td>
+                      <td class="px-4 py-3">{row.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm text-[#555555]">
+              <p class="font-semibold text-[#1A1A2E] mb-2">Tips:</p>
+              <p>Create test entries for each verification level: SWE.4 unit tests (T-001, T-002 per module), SWE.5 integration tests (T-003, T-004), SWE.6 qualification/validation (T-005, T-006). One requirement may have multiple tests covering different aspects or verification methods. For example, TG-001 (SYS-001 keyless entry verification) includes T-001 (range test) and T-002 (timing test)—together they verify the system requirement at the integration level. Link tests to requirements in the Test Group column; RTMify Trace will validate the connection. Include test acceptance criteria in the Description (e.g., "pass if response time ≤ 150ms for 99% of cycles"). For CL2+ assessment, ensure all requirements have linked tests and tests have linked requirements; untraced tests indicate scope creep or incomplete verification planning. Include test results (pass/fail, code coverage, defects found) in your design history file; RTMify links to test evidence but does not store test results. See <a href="/docs/tests" class="text-[#004D40] hover:underline">Tests & Verification</a> for detailed verification method selection and planning guidance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="border-l-4 border-[#004D40] pl-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[#004D40] text-white font-bold">
+              4
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Document Risk Identification and Mitigation</h3>
+            <p class="text-[#555555] mb-4">
+              Identify risks to quality and safe operation (e.g., "Relay attack on keyless entry — vehicle theft", "Malicious firmware flash — BCM compromise"). ASPICE GP 2.1.5 requires risk management linkage: risks identified, assessed for severity/likelihood, mitigated by requirements/design decisions, and residual risk tracked. Use the Risks tab to document and link mitigations.
+            </p>
+            <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
+              <li><strong>Risk ID (RSK-nnn)</strong> — Unique risk identifier</li>
+              <li><strong>Description</strong> — Clear description of the risk and potential impact (e.g., "Vehicle theft via relay attack on keyless entry")</li>
+              <li><strong>Severity / Occurrence</strong> — Assess on 1–5 scale: severity (impact if risk occurs), occurrence (likelihood)</li>
+              <li><strong>Mitigation</strong> — Design measure, requirement, or control that reduces risk (e.g., "UWB distance bounding + motion detection lockout")</li>
+              <li><strong>Linked Requirement</strong> — Requirement implementing the mitigation (e.g., SYS-001 or SWE-003)</li>
+              <li><strong>Residual Severity / Occurrence</strong> — Re-assessed severity/occurrence after mitigation; should be low (1–2)</li>
+            </ul>
+
+            <div class="overflow-x-auto mb-4 border border-[#DDDDDD] rounded-lg">
+              <table class="w-full border-collapse text-sm">
+                <caption class="caption-top bg-[#F5F5F5] px-4 py-3 text-left font-semibold text-[#1A1A2E] border-b border-[#DDDDDD]">Risks and Mitigations (GP 2.1.5) Example</caption>
+                <thead>
+                  <tr class="border-b border-[#DDDDDD] bg-[#F5F5F5]">
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Risk ID</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Description</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Severity</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Occurrence</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Mitigation</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Linked Req</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E] border-r border-[#DDDDDD]">Residual Severity</th>
+                    <th class="px-4 py-3 text-left font-semibold text-[#1A1A2E]">Residual Occurrence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {risksExample.map((row) => (
+                    <tr class="border-b border-[#DDDDDD] hover:bg-[#F5F5F5]">
+                      <td class="px-4 py-3 border-r border-[#DDDDDD] text-[#004D40] font-semibold">{row.id}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.description}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.severity}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.occurrence}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.mitigation}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.linkedReq}</td>
+                      <td class="px-4 py-3 border-r border-[#DDDDDD]">{row.residualSeverity}</td>
+                      <td class="px-4 py-3">{row.residualOccurrence}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm text-[#555555]">
+              <p class="font-semibold text-[#1A1A2E] mb-2">Tips:</p>
+              <p>Identify risks through FMEA, threat analysis (ISO 21434 TARA for cybersecurity), design review, and lessons learned. Include both safety risks (e.g., unintended acceleration) and quality risks (e.g., data corruption, communication timeout). Assess severity on impact scale: 5 = catastrophic (loss of life), 4 = critical (serious injury), 3 = major (moderate impact), 2 = minor, 1 = negligible. Assess occurrence on likelihood scale: 5 = frequent, 4 = probable, 3 = occasional, 2 = remote, 1 = extremely rare. Mitigation is implemented through requirements (SYS or SWE) and design decisions; link the specific requirement that mitigates each risk in the Linked Requirement column. Track residual risk post-mitigation; auditors expect risk reduction to acceptable levels (residual severity/occurrence both ≤ 2). Include cybersecurity risks (ISO 21434) with "TARA:" prefix if applicable. For SIL/ASIL projects (ISO 26262, IEC 62304), link risks to HARA hazard IDs. RTMify's Trace should show complete risk-to-requirement linkage: no unmitigated risks or unlinked requirements. See <a href="/docs/risks" class="text-[#004D40] hover:underline">Risk Management</a> for detailed FMEA and mitigation planning guidance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="border-l-4 border-[#004D40] pl-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[#004D40] text-white font-bold">
+              5
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Validate Bidirectional Traceability (GP 2.1.7)</h3>
+            <p class="text-[#555555] mb-4">
+              Run <strong>RTMify Trace</strong> to validate bidirectional traceability and identify gaps. Generic Practice 2.1.7 (traceability) is mandatory for CL2+ assessment: every requirement must have a parent User Need and linked tests; every test must link to a requirement; no orphaned items. Trace also validates that all stakeholder needs are addressed by at least one requirement (coverage).
+            </p>
+            <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">MISSING_USER_NEED</code> — SYS/SWE requirement with no parent UN (traceability broken upward)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">NO_TEST_LINKED</code> — Requirement with no Test Group (verification missing per SWE.4–6)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">ORPHAN_TEST</code> — Test Group with no Requirement (unscoped test or obsolete)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">ORPHAN_USER_NEED</code> — UN with no linked SYS/SWE requirement (design input not addressed)</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">INCOMPLETE_RISK</code> — Risk with no mitigation or residual risk unacceptable</li>
+              <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">UNLINKED_REQUIREMENT_PAIR</code> — SWE requirement with no parent SYS (allocation incomplete)</li>
+            </ul>
+            <p class="text-[#555555] mb-4">
+              Fix all trace issues before design completion and CL assessment. A clean RTM (zero trace errors) is mandatory evidence for CL2+ and demonstrates compliance with GP 2.1.7.
+            </p>
+
+            <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm text-[#555555]">
+              <p class="font-semibold text-[#1A1A2E] mb-2">Pro tip for ASPICE assessors:</p>
+              <p>Export your RTMify report (Trace summary + traceability matrix) as evidence of GP 2.1.7 implementation. Include a screenshot of the Trace dashboard showing zero errors and 100% coverage. Attach this to your ASPICE assessment submission. Auditors will verify that the report matches your current RTM and that approval status is "Approved" for all requirements (GP 2.1.1 work product management). If Trace reports errors, explain remediation steps in your assessment response. For CL2 assessment, traceability alone is sufficient; for CL3, add design review evidence (SWE.2/3 reviews) and change control records (SUP.10 process). See <a href="/docs/status-codes" class="text-[#004D40] hover:underline">Status Codes</a> for trace error definitions and remediation guidance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What This Template Covers vs. Doesn't Cover -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">What This Template Covers vs. Doesn't Cover</h2>
+
+    <div class="space-y-6">
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Covered by RTMify for ASPICE Assessment</h3>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>SYS.1 Stakeholder Requirements Elicitation</strong> — Systematic capture of OEM specifications, regulatory standards, and customer requirements as User Needs with source traceability</li>
+          <li><strong>SYS.2 System Requirements Definition (BP 1.2)</strong> — System-level requirement specification (SYS-nnn) derived from stakeholder needs, testable, and allocated to subsystems</li>
+          <li><strong>SWE.1 Software Requirements Derivation (BP 1.1)</strong> — Software-specific requirements (SWE-nnn) derived from system requirements with architectural allocation and design rationale</li>
+          <li><strong>SWE.4–SWE.6 Software Verification (BP 2.1–2.3)</strong> — Unit, integration, and qualification test specification linked to requirements with clear acceptance criteria</li>
+          <li><strong>Bidirectional Traceability (GP 2.1.7)</strong> — SYS.1 → SYS.2 → SWE.1 → SWE.4–6 traceability validation with gap analysis (Trace feature)</li>
+          <li><strong>Work Product Management (GP 2.1.1)</strong> — Requirement approval status tracking (Draft, In Review, Approved) for governance and review evidence</li>
+          <li><strong>Risk Management Linkage (GP 2.1.5)</strong> — Risk identification, severity/likelihood assessment, mitigation requirement linkage, and residual risk tracking</li>
+          <li><strong>Requirement Completeness & Coverage</strong> — RTMify Trace validates that all stakeholder needs are addressed by requirements and all requirements are verified by tests</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">NOT Covered (Separate ASPICE/ISO Process Documentation)</h3>
+        <ul class="space-y-2 text-[#555555] ml-6 list-disc">
+          <li><strong>SYS.1 Elicitation Evidence (Full Process Documentation)</strong> — RTMify captures elicited requirements but does not store the elicitation plan, interview notes, stakeholder list, or elicitation method documentation (SYS.1 BP 1.1 detailed evidence). These are maintained in your configuration management system or project documentation repository.</li>
+          <li><strong>SYS.2 Allocation and Architecture (System Design Specification)</strong> — RTMify indexes system requirements but does not contain detailed system architecture diagrams, module allocation tables, hardware-software interface specifications (SYS.2 detailed design). These are maintained in your system design documentation (CAD tools, design repositories).</li>
+          <li><strong>SWE.2 Software Architecture Design (Detailed Design Documents)</strong> — RTMify captures SWE requirements but does not maintain architecture diagrams, module interfaces, design patterns, or design review records (SWE.2 BP 2.1 design review evidence). Maintain architecture documentation separately and reference from RTMify Notes (e.g., "See Design Doc v2.3, section 3.2 for module interface").</li>
+          <li><strong>SWE.3 Detailed Design and Unit Construction (Code & Design Specs)</strong> — RTMify does not manage source code, unit-level design specifications, coding standards compliance, or code review records (SWE.3 BP 2.1). Maintain code and detailed design in your development environment (Git, design repositories) and reference from RTMify.</li>
+          <li><strong>Test Results and Evidence (SWE.4–6 Execution)</strong> — RTMify links requirements to tests but does not store test execution logs, test results, defect records, or code coverage metrics (SWE.4–6 BP 2.1–2.3 execution evidence). Maintain test results in your test management tool (TestRail, Azure DevOps) and reference pass/fail status from RTMify.</li>
+          <li><strong>Change Control and Problem Resolution (SUP.10, SUP.9)</strong> — RTMify does not manage change requests, impact analysis, problem reports, or corrective actions (SUP.9 / SUP.10 processes). Maintain change control records in your configuration management system (CM) and link from RTMify when requirements are modified.</li>
+          <li><strong>Configuration Management (SUP.8)</strong> — RTMify does not manage version control, baselines, or release management; this is handled by your CM tool (Git, Perforce). RTMify should be version-controlled as part of your design baseline.</li>
+          <li><strong>Project Management (MAN.3)</strong> — ASPICE project management process (planning, tracking, resource management, schedule) is assessed separately through project artifacts (schedules, resource plans, status reports). RTMify does not manage project administration.</li>
+          <li><strong>Supplier Management (SUP.1), Acquisition Management (MAN.4)</strong> — If using subcontractors or COTS components, supplier requirements and subcontractor assessment are managed separately per SUP.1. RTMify may include requirements for supplier interfaces but not supplier assessment evidence.</li>
+          <li><strong>Capability Level Scoring and Assessment Determination</strong> — RTMify provides evidence for BP and GP implementation but does not determine CL scores or assessment ratings. ASPICE certified assessors perform capability scoring; RTMify is input evidence to the assessment.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqItems.map((item) => (
+        <details class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+          <summary class="bg-[#F5F5F5] px-6 py-4 cursor-pointer font-semibold text-[#1A1A2E] hover:bg-[#E8E8E8] transition-colors">
+            {item.question}
+          </summary>
+          <div class="px-6 py-4 bg-white text-[#555555] leading-relaxed">
+            {item.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+</DocsLayout>

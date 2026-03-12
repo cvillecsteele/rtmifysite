@@ -1,0 +1,740 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify ISO 26262 Quick Start Guide';
+const description = 'Complete walkthrough of filling in the RTMify template for ISO 26262, the automotive functional safety standard for electrical/electronic systems.';
+const canonical = 'https://rtmify.io/docs/for/iso-26262/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'ISO 26262', url: '/docs/for/iso-26262/' }
+];
+
+const userNeedsExample = [
+  { id: 'UN-001', description: 'Unintended acceleration shall not occur', source: 'HARA (S3/E4/C3 = ASIL D)', priority: 'High' },
+  { id: 'UN-002', description: 'Driver shall be warned of imminent collision in time to react', source: 'HARA (S3/E3/C2 = ASIL C)', priority: 'High' },
+  { id: 'UN-003', description: 'Parking brake shall engage when vehicle is stationary and driver exits', source: 'HARA (S2/E4/C3 = ASIL B)', priority: 'Medium' },
+  { id: 'UN-004', description: 'Instrument cluster shall display vehicle speed accurately', source: 'HARA (S1/E4/C1 = ASIL A)', priority: 'Medium' }
+];
+
+const requirementsExample = [
+  { id: 'REQ-D-001', description: 'The throttle controller SHALL limit torque output to ≤ 0 Nm when brake pedal force > 50N', traces: 'UN-001', priority: 'High', testGroup: 'TG-001', status: 'Approved', notes: 'ASIL D' },
+  { id: 'REQ-D-002', description: 'The throttle controller SHALL detect sensor disagreement within 10ms and enter safe state', traces: 'UN-001', priority: 'High', testGroup: 'TG-002', status: 'Approved', notes: 'ASIL D' },
+  { id: 'REQ-C-001', description: 'The ADAS module SHALL issue forward collision warning ≥ 2.5 seconds before predicted impact at TTC < 4s', traces: 'UN-002', priority: 'High', testGroup: 'TG-003', status: 'Approved', notes: 'ASIL C' },
+  { id: 'REQ-B-001', description: 'The parking brake ECU SHALL engage brake within 500ms of driver exit detection when vehicle speed = 0', traces: 'UN-003', priority: 'Medium', testGroup: 'TG-004', status: 'Approved', notes: 'ASIL B' },
+  { id: 'REQ-A-001', description: 'The instrument cluster SHALL display vehicle speed with accuracy ±1 km/h at speeds > 20 km/h', traces: 'UN-004', priority: 'Medium', testGroup: 'TG-005', status: 'Approved', notes: 'ASIL A' }
+];
+
+const testsExample = [
+  { testGroup: 'TG-001', testId: 'T-001', type: 'Verification', method: 'Test', description: 'Torque limiting HIL test — brake + throttle simultaneous input' },
+  { testGroup: 'TG-001', testId: 'T-002', type: 'Verification', method: 'Analysis', description: 'Fault tree analysis — unintended acceleration paths' },
+  { testGroup: 'TG-002', testId: 'T-003', type: 'Verification', method: 'Test', description: 'Sensor disagreement detection timing — fault injection' },
+  { testGroup: 'TG-003', testId: 'T-004', type: 'Verification', method: 'Test', description: 'FCW timing validation — radar/camera target simulation' },
+  { testGroup: 'TG-003', testId: 'T-005', type: 'Validation', method: 'Demonstration', description: 'Test track validation — real-vehicle collision avoidance scenarios' },
+  { testGroup: 'TG-004', testId: 'T-006', type: 'Verification', method: 'Test', description: 'Parking brake engagement timing — vehicle dynamometer' },
+  { testGroup: 'TG-005', testId: 'T-007', type: 'Verification', method: 'Test', description: 'Speedometer accuracy — chassis dyno at 20–200 km/h' }
+];
+
+const risksExample = [
+  { id: 'RSK-D-101', description: 'Throttle stuck open due to software fault → unintended acceleration', severity: '5', occurrence: '3', mitigation: 'Independent monitoring processor with safe-state torque cutoff', linkedReq: 'REQ-D-001', residualSeverity: '5', residualOccurrence: '1' },
+  { id: 'RSK-D-102', description: 'Sensor disagree condition masked by software → undetected failure', severity: '5', occurrence: '2', mitigation: 'Diverse redundant sensing, independent diagnostic path', linkedReq: 'REQ-D-002', residualSeverity: '5', residualOccurrence: '1' },
+  { id: 'RSK-C-101', description: 'FCW triggers too late due to radar latency', severity: '4', occurrence: '3', mitigation: 'Dual sensor (radar + camera) with conservative TTC threshold', linkedReq: 'REQ-C-001', residualSeverity: '4', residualOccurrence: '1' }
+];
+
+const faqItems = [
+  {
+    question: 'How do I handle ASIL decomposition in the template?',
+    answer: 'ASIL decomposition (Part 8) allows you to break down a high-ASIL requirement (e.g., ASIL D) into multiple lower-ASIL requirements that collectively achieve the original safety goal. For example, an ASIL D unintended acceleration goal can decompose into REQ-D-001 (torque limit, ASIL D) and REQ-C-001 (brake override, ASIL C) plus REQ-B-001 (diagnostic monitoring, ASIL B) if the decomposition argument is sound. In RTMify, document the decomposition in the User Need (UN) Notes column: e.g., "ASIL D decomposed: REQ-D-001 (D) + REQ-C-001 (C) + RSK monitoring (B)". Link all decomposed requirements to the same User Need and cross-reference in requirement Notes. Your safety case must justify why the decomposed combination achieves the ASIL D safety goal; this argument is maintained in your HARA/Safety Case tool (not in RTMify, but referenced from it).'
+  },
+  {
+    question: 'What is the difference between functional safety requirements and technical safety requirements?',
+    answer: 'ISO 26262 Part 4 §6 defines functional safety requirements (FSRs) as high-level specifications of what the system must do to prevent or mitigate hazards; e.g., "Unintended acceleration shall not occur" (UN-001). Part 6 §6 defines technical safety requirements (TSRs) as software-specific implementations of FSRs; e.g., "The throttle controller SHALL limit torque to 0 Nm when brake > 50N" (REQ-D-001). In RTMify, User Needs (UN) correspond to system-level safety goals and FSRs. Requirements (REQ) correspond to technical safety requirements. Each TSR (REQ) must trace to at least one FSR/safety goal (UN). Distinguish FSRs from TSRs in your requirements document or in the Notes column of RTMify by prefixing TSR IDs (REQ-D-, REQ-C-, etc.) with ASIL level, making the traceability chain clear: Hazard → HARA → Safety Goal (UN) → FSR → TSR (REQ) → Implementation (code) → Tests (TG).'
+  },
+  {
+    question: 'Do QM (Quality Management) requirements go in the template?',
+    answer: 'Yes. ISO 26262 Part 6 §4 classifies requirements into two categories: Safety-Related (tagged with ASIL A–D) and Quality Management (QM). QM requirements are non-safety functions subject to standard quality practices but not functional safety rigor. In RTMify, include QM requirements but mark them as "ASIL QM" or "QM (no ASIL)" in the Notes column. Example: REQ-QM-001 "The instrument cluster shall display outside temperature" (ASIL QM, UN-004 parent). QM requirements follow the same Requirements/Tests/Risks structure as ASIL requirements, but may require lower verification rigor (e.g., unit testing alone vs. integration + validation). Use the Priority column to distinguish: High for ASIL (safety-critical), Medium for QM. When running RTMify Trace, ensure QM requirements are linked to tests (even if simpler tests) and do not appear as orphaned. This distinction helps auditors see which requirements are safety-critical vs. quality-managed.'
+  },
+  {
+    question: 'How does ISO 21434 (cybersecurity) fit with this template?',
+    answer: 'ISO 21434 (automotive cybersecurity risk and incident management) operates in parallel with ISO 26262 functional safety. ISO 21434 Part 4 requires a Threat Analysis and Risk Assessment (TARA) identifying cybersecurity threats (e.g., "Throttle command injection via CAN bus → unintended acceleration"). Cybersecurity mitigation requirements (e.g., "CAN message authentication via HMAC-SHA256") are incorporated into your Risks table with a "TARA:" prefix. Example: RSK-TARA-101 "Throttle CAN message spoofing" with mitigation REQ-SEC-001 (cryptographic authentication). In RTMify, create a Risks tab entry for each TARA item, link it to the mitigating requirement, and track residual cybersecurity risk. The functional safety requirement (REQ-D-001 torque limit) and the cybersecurity requirement (REQ-SEC-001 message authentication) are complementary: functional safety prevents hazards by design, and cybersecurity prevents malicious activation of those hazards. Your Design History File should cross-reference TARA items (managed in your cybersecurity tool) with corresponding RTMify requirements. For simplicity, you may manage cybersecurity requirements in a separate TARA register and link to RTMify via the Risks tab; your safety case then shows how functional safety and cybersecurity requirements together achieve overall vehicle safety.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["TechArticle", "HowTo"],
+      "headline": title,
+      "description": description,
+      "url": canonical,
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "datePublished": "2024-03-01",
+      "dateModified": "2026-03-12",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((bc, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": bc.name,
+          "item": bc.url
+        }))
+      },
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Define Safety Goals from HARA",
+          "text": "Conduct Hazard Analysis and Risk Assessment (Part 3 §7) identifying hazards, assessing Severity/Exposure/Controllability, and assigning ASIL A–D. Safety goals become User Needs in RTMify."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Write Functional & Technical Safety Requirements",
+          "text": "Document functional safety requirements (Part 4 §6) and technical safety requirements (Part 6 §6), each tagged with ASIL. Requirements trace to safety goals and form the basis for V&V."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Plan Verification & Validation per Part 6",
+          "text": "Define unit testing (§9), integration testing (§10), and qualification testing (§11) activities. Link tests to requirements via test groups."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Document HARA Hazards and Risk Mitigations",
+          "text": "Identify hazards from HARA, assess severity and likelihood, and link mitigation requirements. Track residual risk post-mitigation."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Validate Traceability and ASIL Consistency",
+          "text": "Run RTMify Trace to ensure all requirements are linked to safety goals, tests, and risks. Verify ASIL inheritance and decomposition compliance per Part 2 §5."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="iso-26262"
+>
+  <!-- About This Guide -->
+  <section class="doc-section">
+    <h2 class="section-heading">About This Guide</h2>
+    <p class="body-text">
+      This guide walks you through filling in the RTMify template for <strong>ISO 26262:2018</strong>, the road vehicle functional safety standard. ISO 26262 specifies processes for developing electrical/electronic systems in automotive applications to prevent or mitigate hazardous failures. It covers E/E systems architecture (Part 3), hardware design (Part 5), and software design/verification (Part 6). Part 2 defines ASIL (Automotive Safety Integrity Level) A through D, which drives the rigor of requirements specification, design, testing, and documentation.
+    </p>
+    <p class="body-text">
+      The standard mandates a V-model development cycle: Hazard Analysis and Risk Assessment (HARA, Part 3 §7) identifies safety goals; Functional Safety Requirements (FSRs, Part 4 §6) and Technical Safety Requirements (TSRs, Part 6 §6) implement those goals; and Verification/Validation per Part 6 §9–§11 confirms correctness. ASIL inheritance and decomposition rules (Part 2 §5) govern how ASILs propagate through the architecture.
+    </p>
+    <p class="body-text">
+      By the end of this guide, you'll have a complete RTM linking safety goals through functional and technical requirements, test plans, and risk controls. This RTM is a key artifact in your design documentation and demonstrates compliance with ISO 26262 Part 6 traceability requirements.
+    </p>
+  </section>
+
+  <!-- What ISO 26262 Requires -->
+  <section class="doc-section">
+    <h2 class="section-heading">What ISO 26262 Requires</h2>
+
+    <h3 class="subsection-heading">Hazard Analysis and Risk Assessment (Part 3 §7, HARA)</h3>
+    <p class="body-text">
+      The first step is HARA, which identifies potential hazards in E/E systems and assigns risk levels. Each hazard is evaluated on a 3×4 severity/exposure/controllability matrix to determine ASIL:
+    </p>
+    <ul class="bullet-list">
+      <li><strong>Severity (S1–S3)</strong> — Potential injury level: S1 (no/minor injury), S2 (serious injury), S3 (death or multiple serious injuries)</li>
+      <li><strong>Exposure (E0–E4)</strong> — Probability of hazard occurrence: E0 (not exposed), E1 (very low), E2 (low), E3 (medium), E4 (high)</li>
+      <li><strong>Controllability (C1–C3)</strong> — Ability of driver to control hazard: C1 (easily controllable), C2 (normally controllable), C3 (difficult to control)</li>
+      <li><strong>ASIL (A–D)</strong> — Resulting safety integrity level: ASIL A (lowest rigor) to ASIL D (highest rigor); ASIL QM for non-safety functions</li>
+    </ul>
+    <p class="body-text">
+      Examples: "Unintended acceleration" (S3/E4/C3 → ASIL D); "Parking brake failure" (S2/E4/C3 → ASIL B). Record HARA results in User Needs (UN) with the hazard context and assigned ASIL.
+    </p>
+
+    <h3 class="subsection-heading">Functional Safety Requirements (Part 4 §6)</h3>
+    <p class="body-text">
+      Part 4 §6 mandates functional safety requirements (FSRs) derived from safety goals. FSRs are system-level specifications defining what the E/E system must accomplish to prevent or mitigate hazards; e.g., "Unintended acceleration shall not occur" (addresses S3/E4/C3 hazard). FSRs form the contract between system design and implementation and are typically documented in a separate System Safety Requirements Specification. In RTMify, FSRs map to User Needs (UN).
+    </p>
+
+    <h3 class="subsection-heading">Technical Safety Requirements (Part 6 §6)</h3>
+    <p class="body-text">
+      Part 6 §6 specifies technical safety requirements (TSRs) for software implementation. TSRs are derived from FSRs and define verifiable, measurable specifications for software modules; e.g., "The throttle controller SHALL limit output to 0 Nm when brake force > 50N". Each TSR must:
+    </p>
+    <ul class="bullet-list">
+      <li><strong>Be traceable</strong> to an FSR/safety goal (UN) and ASIL</li>
+      <li><strong>Be testable</strong> — measurable success criteria, SHALL language</li>
+      <li><strong>Specify ASIL</strong> — inherited from FSR or decomposed per Part 2 §5</li>
+      <li><strong>Include design rationale</strong> — Why this requirement prevents the hazard</li>
+    </ul>
+    <p class="body-text">
+      RTMify's Requirements tab captures TSRs with ASIL-prefixed IDs (REQ-D-, REQ-C-, etc.) for clarity.
+    </p>
+
+    <h3 class="subsection-heading">Software Verification (Part 6 §9–§11)</h3>
+    <p class="body-text">
+      Part 6 mandates verification activities: Unit Testing (§9) validates individual modules; Integration Testing (§10) validates module interactions; and Qualification Testing (§11) validates end-to-end correctness. Verification methods include:
+    </p>
+    <ul class="bullet-list">
+      <li><strong>Test</strong> — Functional testing, HIL (hardware-in-the-loop), fault injection, SIL (software-in-the-loop)</li>
+      <li><strong>Analysis</strong> — FMEA, fault tree analysis, algorithm correctness proofs, static analysis</li>
+      <li><strong>Inspection</strong> — Code review, design review, traceability review</li>
+      <li><strong>Demonstration</strong> — Real-vehicle testing, test track validation, operational scenarios</li>
+    </ul>
+    <p class="body-text">
+      Each requirement must be linked to verification activities per §9–§11. ASIL D requirements require more rigorous verification (multiple independent tests, high code coverage) than ASIL A.
+    </p>
+
+    <h3 class="subsection-heading">ASIL Inheritance and Decomposition (Part 2 §5)</h3>
+    <p class="body-text">
+      ASIL propagates through the design hierarchy: if a module implements an ASIL D requirement, the module itself is ASIL D and must meet ASIL D verification rigor. Decomposition allows breaking a high-ASIL requirement into multiple lower-ASIL requirements if the combination achieves the safety goal; e.g., an ASIL D unintended acceleration goal can decompose into REQ-D-001 (torque limit, D) + REQ-C-001 (brake override, C) + diagnostic monitoring (B). Document decomposition arguments in your safety case and link decomposed requirements in RTMify Notes.
+    </p>
+
+    <h3 class="subsection-heading">Bidirectional Traceability (Part 6)</h3>
+    <p class="body-text">
+      ISO 26262 requires full traceability: every hazard → safety goal (UN) → FSR/TSR (REQ) → test (TG) → verification results. Every requirement must have a parent User Need and linked tests. Untraced items indicate incomplete design and compliance gaps. RTMify's Trace feature validates this chain.
+    </p>
+  </section>
+
+  <!-- Step-by-Step Walkthrough -->
+  <section class="doc-section">
+    <h2 class="section-heading">Step-by-Step Walkthrough</h2>
+
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3 class="step-title">Define Safety Goals from HARA (Part 3 §7)</h3>
+      <p class="body-text">
+        Conduct Hazard Analysis and Risk Assessment (HARA) per Part 3 §7. Identify potential hazards, assess Severity/Exposure/Controllability, and assign ASIL. Document safety goals derived from hazards as User Needs (UN). Sources include:
+      </p>
+      <ul class="bullet-list">
+        <li>Hazards identified through FMEA or other systematic analysis (e.g., "Throttle stuck open → unintended acceleration")</li>
+        <li>Risk assessment: S/E/C matrix → ASIL assignment</li>
+        <li>Safety goals: e.g., "Unintended acceleration shall not occur" (ASIL D)</li>
+        <li>Regulatory/industry standards (ISO 26262, OEM safety goals)</li>
+      </ul>
+      <p class="body-text">Use ID format <code>UN-nnn</code>. Include HARA context (S/E/C values) in Source column. Be specific: "Unintended acceleration shall not occur" is a clear safety goal; "System shall be safe" is not.</p>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="table-caption">User Needs / Safety Goals from HARA Example</caption>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Description</th>
+              <th>Source</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userNeedsExample.map(row => (
+              <tr>
+                <td class="code-cell">{row.id}</td>
+                <td>{row.description}</td>
+                <td class="source-cell">{row.source}</td>
+                <td class="priority-cell">{row.priority}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tip-text">
+        <strong>Tips:</strong> Every User Need must correspond to a safety goal from your HARA. Include S/E/C values and resulting ASIL in the Source column for auditor visibility. Each UN should trace forward to at least one TSR (REQ). Unlinked User Needs indicate incomplete design. The HARA itself is maintained in your safety case documentation (not in RTMify), but RTMify serves as the traceability index linking HARA results to requirements and tests.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3 class="step-title">Write Functional & Technical Safety Requirements (Part 4 §6 & Part 6 §6)</h3>
+      <p class="body-text">
+        Document functional safety requirements (FSRs) from Part 4 §6 and technical safety requirements (TSRs) from Part 6 §6. FSRs are system-level (e.g., "Unintended acceleration shall not occur"); TSRs are software-specific (e.g., "Throttle controller SHALL limit torque to 0 Nm when brake > 50N"). Each requirement must include ASIL and trace to a safety goal.
+      </p>
+      <ul class="bullet-list">
+        <li><strong>Requirement ID (REQ-X-nnn)</strong> — Prefix with ASIL letter (D, C, B, A) or QM for clarity; e.g., REQ-D-001</li>
+        <li><strong>Description</strong> — Functional specification, measurable, testable (use SHALL for mandatory requirements)</li>
+        <li><strong>Traces</strong> — Parent safety goal (UN-nnn)</li>
+        <li><strong>Priority</strong> — Safety-critical (High) or quality-managed (Medium/Low)</li>
+        <li><strong>Test Group</strong> — Link to verification activities (TG-nnn)</li>
+        <li><strong>Status</strong> — Approved, In Review, Draft</li>
+        <li><strong>Notes</strong> — ASIL (D/C/B/A/QM), design rationale, risk mitigation reference</li>
+      </ul>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="table-caption">Technical Safety Requirements Example (with ASIL)</caption>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Description</th>
+              <th>Traces</th>
+              <th>Priority</th>
+              <th>Test Group</th>
+              <th>Status</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {requirementsExample.map(row => (
+              <tr>
+                <td class="code-cell">{row.id}</td>
+                <td>{row.description}</td>
+                <td class="code-cell">{row.traces}</td>
+                <td class="priority-cell">{row.priority}</td>
+                <td class="code-cell">{row.testGroup}</td>
+                <td class="status-cell">{row.status}</td>
+                <td class="code-cell">{row.notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tip-text">
+        <strong>Tips:</strong> Use SHALL for safety-critical requirements (ASIL A–D). Include numeric success criteria (±1 km/h, ≤ 10ms, etc.) for verifiability per Part 6 §6. Assign ASIL based on HARA: ASIL D for S3/E4/C3 hazards, ASIL B for S2/E4/C3, etc. If decomposing a high-ASIL requirement, document decomposition rationale in Notes and link to sibling REQs. Every requirement must have a Test Group for verification per Part 6 §9–§11. For ASIL D, ensure multiple independent tests are specified. See <a href="/docs/requirements" class="inline-link">Requirements</a> for detailed guidance on requirement quality and traceability depth.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3 class="step-title">Plan Verification & Validation (Part 6 §9–§11)</h3>
+      <p class="body-text">
+        Define verification and validation activities per Part 6 §9 (Unit Testing), §10 (Integration Testing), and §11 (Qualification Testing). Link tests to requirements via Test Group. Verification methods include:
+      </p>
+      <ul class="bullet-list">
+        <li><strong>Test</strong> — Functional testing, HIL, SIL, fault injection, dynamometer testing</li>
+        <li><strong>Analysis</strong> — FMEA, fault tree analysis, algorithm analysis, code coverage metrics</li>
+        <li><strong>Inspection</strong> — Code review, design review, traceability review, safety plan review</li>
+        <li><strong>Demonstration</strong> — Test track validation, real-vehicle testing, operational scenarios</li>
+      </ul>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="table-caption">Tests & Verification Example (Part 6 §9–§11)</caption>
+          <thead>
+            <tr>
+              <th>Test Group</th>
+              <th>Test ID</th>
+              <th>Type</th>
+              <th>Method</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testsExample.map(row => (
+              <tr>
+                <td class="code-cell">{row.testGroup}</td>
+                <td class="code-cell">{row.testId}</td>
+                <td>{row.type}</td>
+                <td>{row.method}</td>
+                <td>{row.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tip-text">
+        <strong>Tips:</strong> Create test entries for unit testing (T-001, T-002 per §9), integration testing (T-003 per §10), and validation (T-004, T-005 per §11). Each Test Group (TG) must link to a requirement. One requirement may have multiple tests: e.g., TG-001 includes T-001 (HIL test) and T-002 (fault tree analysis) verifying torque limiting. ASIL D requirements require more rigorous verification: multiple independent test methods, fault injection, high code coverage (>90%). ASIL A may require simpler testing (unit test only). Include test track validation (Demonstration) for high-ASIL functions; e.g., TG-003 includes T-005 real-vehicle collision avoidance test for ASIL C forward collision warning. See <a href="/docs/tests" class="inline-link">Tests & Verification</a> for detailed verification guidance and method selection per ASIL level.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <h3 class="step-title">Document HARA Hazards and Risk Mitigations (Part 3 §7 Integration)</h3>
+      <p class="body-text">
+        Identify hazards from HARA, assess severity/occurrence/detectability, and link mitigation requirements. Track residual risk post-mitigation. Per Part 3 §7, every identified hazard must have documented mitigation (requirements, design features, or diagnostic measures).
+      </p>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="table-caption">Risks & Mitigations Example (HARA Integration)</caption>
+          <thead>
+            <tr>
+              <th>Risk ID</th>
+              <th>Description</th>
+              <th>Severity</th>
+              <th>Occurrence</th>
+              <th>Mitigation</th>
+              <th>Linked Req</th>
+              <th>Residual Severity</th>
+              <th>Residual Occurrence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {risksExample.map(row => (
+              <tr>
+                <td class="code-cell">{row.id}</td>
+                <td>{row.description}</td>
+                <td class="severity-cell">{row.severity}</td>
+                <td class="severity-cell">{row.occurrence}</td>
+                <td>{row.mitigation}</td>
+                <td class="code-cell">{row.linkedReq}</td>
+                <td class="severity-cell">{row.residualSeverity}</td>
+                <td class="severity-cell">{row.residualOccurrence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tip-text">
+        <strong>Tips:</strong> Use ASIL-prefixed Risk IDs (RSK-D-, RSK-C-, etc.) matching mitigation requirement ASIL. Assess severity/occurrence on a 1–5 scale; severity typically maps to HARA Severity (S1–S3 → 1–5), occurrence to Exposure. Mitigation is implemented through requirements: e.g., "Throttle stuck open" (RSK-D-101) is mitigated by REQ-D-001 (independent torque cutoff). Track residual risk post-mitigation; auditors expect risk reduction to acceptable levels. Include cybersecurity threats (TARA items per ISO 21434) with "TARA:" prefix if applicable; e.g., RSK-TARA-101 "CAN message spoofing → unintended acceleration" mitigated by REQ-SEC-001 (message authentication). Link each Risk to the requirements that mitigate it; tests (TG) verify mitigation effectiveness. See <a href="/docs/risks" class="inline-link">Risk Management</a> for detailed FMEA and mitigation assessment guidance.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">5</div>
+      <h3 class="step-title">Validate Traceability and ASIL Consistency (Part 6 Compliance)</h3>
+      <p class="body-text">
+        Run <strong>RTMify Trace</strong> to validate bidirectional traceability and ASIL consistency. Every requirement should trace to a safety goal (UN), have linked tests, and respect ASIL inheritance/decomposition rules (Part 2 §5). The trace checks:
+      </p>
+      <ul class="bullet-list">
+        <li><code>MISSING_USER_NEED</code> — Requirement with no parent safety goal (traceability upward broken)</li>
+        <li><code>NO_TEST_LINKED</code> — Requirement with no Test Group (verification per §9–§11 missing)</li>
+        <li><code>ORPHAN_TEST</code> — Test Group with no Requirement (scope creep or obsolete test)</li>
+        <li><code>INCOMPLETE_RISK</code> — Risk with no mitigation or residual risk unacceptable</li>
+        <li><code>ORPHAN_USER_NEED</code> — Safety goal with no linked requirement (design input not addressed)</li>
+        <li><code>ASIL_MISMATCH</code> — Requirement ASIL conflicts with parent safety goal or decomposition rules</li>
+      </ul>
+      <p class="body-text">
+        Fix all issues before design completion and formal review. A clean RTM demonstrates compliance with Part 6 traceability requirements and is mandatory evidence in your Design History File (DHF) and Design Input/Output documentation per Part 8.
+      </p>
+      <p class="tip-text">
+        <strong>Pro tip:</strong> Export your RTM as a traceability report and include it in your Design History File per Part 8 §8.3. Auditors review Part 6 §9–§11 verification and traceability completeness. RTMify's status checks help ensure no orphaned requirements or tests. Cross-reference ASIL decomposition arguments: if your design decomposes ASIL D unintended acceleration into multiple lower-ASIL requirements, document the safety justification in your safety case and link to RTMify via requirement Notes. See <a href="/docs/status-codes" class="inline-link">Status Codes</a> for full error definitions and remediation steps.
+      </p>
+    </div>
+  </section>
+
+  <!-- Coverage and Scope -->
+  <section class="doc-section">
+    <h2 class="section-heading">What This Template Covers vs. Doesn't Cover</h2>
+
+    <h3 class="subsection-heading">Covered</h3>
+    <ul class="bullet-list">
+      <li><strong>HARA-to-Safety-Goal Traceability (Part 3 §7)</strong> — Hazard identification, S/E/C assessment, ASIL assignment, and safety goal derivation mapped to User Needs</li>
+      <li><strong>Functional & Technical Safety Requirements (Part 4 §6 & Part 6 §6)</strong> — FSR and TSR specification with ASIL annotation and design rationale</li>
+      <li><strong>ASIL Inheritance and Decomposition (Part 2 §5)</strong> — ASIL-prefixed requirement IDs, decomposition documentation in Notes, and consistency validation</li>
+      <li><strong>Software Verification (Part 6 §9–§11)</strong> — Unit, integration, and qualification testing strategy; bidirectional traceability per §9–§11; multiple verification methods per ASIL level</li>
+      <li><strong>Risk-to-Requirement Linkage (Part 3 §7 Integration)</strong> — Hazard mitigation tracking, residual risk assessment, and verification of mitigation effectiveness</li>
+      <li><strong>Design Input/Output Documentation (Part 8)</strong> — RTM serves as traceability evidence for Design Input (safety goals, requirements) and Design Output (tests, verifications)</li>
+    </ul>
+
+    <h3 class="subsection-heading">NOT Covered (separate ISO 26262 documentation)</h3>
+    <ul class="bullet-list">
+      <li><strong>Detailed HARA Documentation (Part 3 §7 full FMEA/HARA report)</strong> — RTMify captures HARA results as User Needs but does not maintain the detailed HARA spreadsheet, severity matrix, or hazard decomposition. Your HARA tool (FMEA software, spreadsheet) is the source; RTMify indexes safety goals.</li>
+      <li><strong>Hardware Design & Metrics (Part 5, PMHF, SPFM, LFM)</strong> — ISO 26262 Part 5 covers hardware architecture, fault metrics (PMHF, SPFM, LFM for hardware diagnostics). RTMify focuses on software requirements and tests; hardware safety metrics and FMEA are maintained separately per your hardware design process.</li>
+      <li><strong>Dependent Failure Analysis (DFA, Part 5)</strong> — DFA documents how failures propagate between hardware and software modules. DFA results inform software requirement rigor but are not captured in RTMify; they are part of your safety case documentation.</li>
+      <li><strong>Software Architecture & Detailed Design (Part 6 §5–§6 detailed documents)</strong> — RTMify captures requirements; detailed architecture diagrams, module interfaces, design specifications are maintained separately in your design documentation tool (CAD, design repository).</li>
+      <li><strong>Production & Operation Phases (Part 7)</strong> — Part 7 covers post-release maintenance, problem reporting, corrective action. RTMify is design-phase focused; production phase is handled by your QMS change control and field support processes.</li>
+      <li><strong>Design History File (DHF) Assembly (Part 8 §8.3)</strong> — RTMify generates the traceability matrix portion. You assemble the complete DHF with design inputs, design outputs, verification records, design changes, and compliance evidence per Part 8.</li>
+      <li><strong>Cybersecurity (ISO 21434 TARA in detail)</strong> — While the Risks tab can accommodate TARA items with a "TARA:" prefix, detailed cybersecurity threat analysis and mitigation strategies are managed in your ISO 21434 TARA register. RTMify indexes cybersecurity requirements that mitigate functional safety hazards.</li>
+    </ul>
+  </section>
+
+  <!-- FAQ -->
+  <section class="doc-section">
+    <h2 class="section-heading">Frequently Asked Questions</h2>
+    <div class="faq-container">
+      {faqItems.map((item) => (
+        <details class="faq-item">
+          <summary class="faq-summary">{item.question}</summary>
+          <p class="faq-answer">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</DocsLayout>
+
+<style>
+  /* Section Styling */
+  .doc-section {
+    margin-bottom: 3rem;
+  }
+
+  .section-heading {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1A1A2E;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .subsection-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .body-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555555;
+    margin-bottom: 1rem;
+  }
+
+  .bullet-list {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    list-style-type: disc;
+  }
+
+  .bullet-list li {
+    margin-bottom: 0.5rem;
+    color: #555555;
+    line-height: 1.6;
+  }
+
+  /* Code Styling */
+  code {
+    background-color: #F5F5F5;
+    color: #E65100;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    font-size: 0.9em;
+  }
+
+  /* Link Styling */
+  .inline-link {
+    color: #E65100;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .inline-link:hover {
+    border-bottom-color: #E65100;
+  }
+
+  /* Step Card Styling */
+  .step-card {
+    border: 1px solid #DDDDDD;
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #E65100;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    grid-row: 1 / 3;
+  }
+
+  .step-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin: 0 0 1rem 0;
+    grid-column: 2;
+  }
+
+  .step-card > p,
+  .step-card > ul,
+  .step-card > div {
+    grid-column: 2;
+  }
+
+  .tip-text {
+    font-size: 0.95rem;
+    color: #555555;
+    line-height: 1.6;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #DDDDDD;
+  }
+
+  /* Table Styling */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .table-caption {
+    padding: 0.75rem;
+    background-color: #F5F5F5;
+    color: #1A1A2E;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: left;
+    border-bottom: 1px solid #DDDDDD;
+  }
+
+  .data-table thead {
+    background-color: #F5F5F5;
+  }
+
+  .data-table thead th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #1A1A2E;
+    border-bottom: 2px solid #DDDDDD;
+  }
+
+  .data-table tbody tr {
+    border-bottom: 1px solid #DDDDDD;
+  }
+
+  .data-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .data-table td {
+    padding: 0.75rem;
+    color: #555555;
+  }
+
+  .code-cell {
+    font-family: 'Courier New', monospace;
+    color: #E65100;
+    font-weight: 500;
+  }
+
+  .priority-cell,
+  .status-cell,
+  .source-cell,
+  .severity-cell {
+    font-weight: 500;
+    color: #1A1A2E;
+  }
+
+  /* FAQ Styling */
+  .faq-container {
+    margin: 1.5rem 0;
+  }
+
+  .faq-item {
+    margin-bottom: 1rem;
+    border: 1px solid #DDDDDD;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .faq-summary {
+    padding: 1rem;
+    background-color: #F5F5F5;
+    color: #1A1A2E;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .faq-summary:hover {
+    background-color: #efefef;
+  }
+
+  .faq-summary::marker {
+    color: #E65100;
+  }
+
+  .faq-answer {
+    padding: 1.25rem;
+    background-color: #fff;
+    color: #555555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .section-heading {
+      font-size: 1.5rem;
+    }
+
+    .subsection-heading {
+      font-size: 1.1rem;
+    }
+
+    .step-card {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .step-number {
+      grid-row: auto;
+      grid-column: auto;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+    }
+
+    .step-title {
+      grid-column: 1;
+    }
+
+    .step-card > p,
+    .step-card > ul,
+    .step-card > div {
+      grid-column: 1;
+    }
+
+    .table-wrapper {
+      margin: 1rem 0;
+    }
+
+    .data-table {
+      font-size: 0.85rem;
+    }
+
+    .data-table thead th,
+    .data-table td {
+      padding: 0.5rem;
+    }
+
+    .faq-summary {
+      padding: 0.875rem;
+    }
+
+    .faq-answer {
+      padding: 1rem;
+    }
+  }
+</style>

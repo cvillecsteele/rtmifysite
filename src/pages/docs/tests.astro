@@ -1,0 +1,498 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+const title = 'Tests Tab Documentation | RTMify';
+const description = 'Complete guide to the Tests tab in the RTMify requirements traceability template. Learn to structure test groups and test cases, understand Verification vs. Validation, apply TAID methods (Test/Analysis/Inspection/Demonstration), and ensure compliance with AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE standards.';
+const canonical = 'https://rtmify.io/docs/tests/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Tests', url: '/docs/tests/' }
+];
+
+const faqs = [
+  {
+    question: 'How many tests should a test group have?',
+    answer: 'A test group (TG-001) may have one or more individual test cases (T-001, T-002, T-003…). The number depends on the complexity of the requirement. A simple requirement (e.g., "System SHALL respond within 200ms") might be verified by a single test. A complex requirement with multiple conditions might require multiple tests. Example: Requirement "System SHALL operate correctly at temperatures 0–50°C and −40–70°C" might be verified by a test group containing T-001 (test at 25°C nominal), T-002 (test at 0°C), T-003 (test at 50°C), T-004 (test at −40°C), T-005 (test at 70°C)—five tests total. Ensure that all test conditions and boundary cases are covered by the test group. If you have more than 10 tests in a single group, consider breaking the group into multiple test groups for clarity.'
+  },
+  {
+    question: 'Can one test group cover multiple requirements?',
+    answer: 'Yes. A system-level integration test (e.g., TG-010 "End-to-End Functional Test") may verify multiple related requirements simultaneously. Example: A single test exercising the complete login flow might verify REQ-045 (password validation), REQ-046 (rate limiting), and REQ-047 (session creation) in one test run. This is common and appropriate for integration and system tests. However, the traceability matrix must clearly show which test verifies which requirement. In the Requirements tab, the Test Group ID column for REQ-045, REQ-046, and REQ-047 would all reference TG-010. If you need to ensure fine-grained traceability, you might create multiple test groups (TG-010a, TG-010b, TG-010c) for each requirement, even if the underlying test execution is combined. For audit purposes, document the relationship (e.g., in Notes: "TG-010a, TG-010b, TG-010c are executed as part of the integrated test TG-010: End-to-End Functional Test").'
+  },
+  {
+    question: 'When do I use Analysis vs. Inspection?',
+    answer: 'Analysis and Inspection are both non-execution methods. Use Analysis when you need to evaluate properties through computation, logic, or mathematical reasoning. Use Inspection when you need to examine the artifact (code, design, drawing) visually or structurally. Example: For a requirement "The software SHALL not have buffer overflows," you might use (1) Analysis: static analysis tool (e.g., Coverity, Clang Static Analyzer) scanning the code for buffer overflow patterns, and (2) Inspection: peer code review examining each buffer operation for bounds checking. For a requirement "The algorithm SHALL have a worst-case time complexity of O(n log n)," use Analysis: mathematical proof or code tracing showing the algorithm adheres to the complexity bound. For a requirement "The PCB SHALL have solder joints per IPC-A-610 Grade A," use Inspection: visual or X-ray inspection of solder joints comparing to IPC standard photographs. In practice, many requirements use both: Analysis (FMEA of failure modes) + Inspection (design review of the FMEA) + Test (functional test of the mitigation).'
+  },
+  {
+    question: 'Where do I record test results and pass/fail status?',
+    answer: 'The Tests tab documents the test cases and methods. The actual test results (pass/fail, measured values, any deviations) should be recorded in a separate Test Results or Test Execution log, which may be a separate sheet, a linked document, or an external test management tool (e.g., TestRail, JIRA). The Notes column in the Tests tab can reference the test result location: e.g., "Results in TestRail project XYZ, test run 2024-02-15" or "See ATP-001-Results.xlsx, Sheet \'Test Execution.\'" Some teams include a Notes entry like "PASS" or "PASS (3/3 conditions met)" directly in the Tests tab for quick visibility, but official results are typically recorded externally for audit trail and version control. For regulated environments, ensure your test results are time-stamped, signed by the test engineer, and linked to the corresponding test case in the Tests tab. Create a bidirectional reference: from the test case to the result document and back. For compliance audits, reviewers will ask to see the test results; have them organized and easily accessible.'
+  },
+  {
+    question: 'What about regression testing?',
+    answer: 'Regression testing verifies that recent changes (code fixes, requirement clarifications) do not break previously verified functionality. Regression tests are typically a subset of your full test suite, re-executed after each change. In the RTMify template, you can handle regression testing in a few ways: (1) Create a separate Test Group for regression: TG-REGR-001, TG-REGR-002, … listing the specific tests that must be re-run. Link these to the requirements affected by the change. (2) Add a Notes entry: "Regression Test – execute after CR-2024-045 approved" to flag which tests must be re-run. (3) For impact analysis, track which requirements are affected by a change and ensure their linked test groups are re-executed. Many teams maintain a "Regression Test Suite" document listing the critical test cases that must pass on every build. If you use test management tools (TestRail, JIRA, Azure Test Plans), mark test cases as part of the "regression suite" and execute them automatically on each build. The key is traceability: the RTMify Tests tab should link to the external test results, and you should have a clear policy for what triggers regression testing and when the full suite must be re-run.'
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((item, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": item.name,
+        "item": item.url
+      }))
+    },
+    {
+      "@type": "TechArticle",
+      "headline": "Tests Tab Documentation",
+      "description": description,
+      "url": canonical,
+      "datePublished": new Date().toISOString().split('T')[0],
+      "author": {
+        "@type": "Organization",
+        "name": "RTMify"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Test Verification" },
+        { "@type": "Thing", "name": "Test Validation" },
+        { "@type": "Thing", "name": "TAID Methods" },
+        { "@type": "Thing", "name": "Requirements Traceability" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+const standards = [
+  {
+    name: 'AS9100 Rev D',
+    clause: '§8.3.5 Design Verification & Validation',
+    description: 'Design verification and validation must be performed to ensure design outputs meet design inputs and the intended use. Configuration management applies throughout.',
+    guidance: 'Verify each design output (requirement) against its corresponding design input (user need). Use the Test Group ID column to link test groups to requirements. Document all V&V activities in the Tests tab: include test method (TAID), test results, and any nonconformance findings. Maintain traceability from each test back to the requirement it verifies and the requirement back to the user need. Baseline all approved test cases for configuration management.'
+  },
+  {
+    name: 'ISO 13485:2016',
+    clause: '§7.3.5 Design Verification & §7.3.6 Design Validation',
+    description: 'Verification confirms outputs meet inputs. Validation confirms the product meets user needs (intended use). Clinical or field validation activities must be recorded separately from bench verification. Auditors SPECIFICALLY check this distinction.',
+    guidance: 'Separate verification tests (bench, lab, component-level: Test Type = "Verification") from validation tests (clinical, field, system-level: Test Type = "Validation"). In the Notes column, mark which tests are clinical validation (e.g., "Clinical validation study conducted per ISO 14155" or "Post-market clinical follow-up data"). Each test must have a test method (Analysis, Test, Inspection, Demonstration). Record pass/fail and any deviations. ISO 13485 auditors will verify that verification and validation are recorded as distinct activities and that validation includes evidence of intended use.'
+  },
+  {
+    name: 'DO-178C',
+    clause: '§6.3 Structural Testing (Code Coverage) & §6.4 Reviews & Analyses',
+    description: 'Software must be verified through structural testing (code coverage by test cases) and through analyses/reviews. DAL A/B require independence of verification. Coverage metrics (Statement, Decision, MC/DC) depend on DAL.',
+    guidance: 'Each test must have a test method: "Test" (execution), "Analysis" (code review, FMEA, static analysis), "Inspection" (peer review of code), or "Demonstration" (field demonstration). Record coverage metrics in Notes (e.g., "Statement Coverage: 98%" or "MC/DC Coverage: 95% for DAL A"). DAL A/B tests require an independent test engineer (not the developer); document independence claim in Notes. For DAL A, MC/DC (Modified Condition/Decision Coverage) is typically required; for DAL B, decision coverage may be acceptable. DAL C/D/E may use simpler metrics. Reference Table A test objectives (DO-178C Table A.1–A.7) by objective number in Notes to show alignment.'
+  },
+  {
+    name: 'IEC 62304',
+    clause: '§5.5 Software Integration Testing & §5.7 Software Release (Validation)',
+    description: 'Software safety class determines verification rigor. Class A requires formal testing and validation; Class C permits simplified testing. Integration and system testing must be traced to software requirements.',
+    guidance: 'Annotate each test with the software safety class it addresses (Class A/B/C) in Notes. For Class A, all tests must be documented with detailed test cases, expected results, and actual results. Class B requires documented tests; Class C may allow simpler test records. Use Test Type "Verification" for unit/integration/system tests; use "Validation" for system-level tests verifying intended use. Test Method should reflect the verification activity: "Test" for execution, "Analysis" for code review, "Inspection" for walk-throughs. Ensure all software requirements have corresponding tests; unmapped requirements indicate incomplete verification planning.'
+  },
+  {
+    name: 'ISO 26262',
+    clause: '§10 ASIL-Determined Qualification Testing & §6 Coverage Metrics',
+    description: 'ASIL (Automotive Safety Integrity Level) determines test coverage and independence requirements. ASIL D requires the highest rigor (formal methods, back-to-back testing, independent verification). Untagged requirements are QM (Quality Management) and use standard testing.',
+    guidance: 'Link each test to the requirements it verifies via Test Group ID. For safety-critical requirements marked with ASIL, ensure the test method and rigor match the ASIL level. ASIL A: basic testing acceptable. ASIL B: statement or decision coverage. ASIL C: decision coverage. ASIL D: MC/DC coverage and independent verification (separate tester). In Notes, record the ASIL level being verified and coverage metric achieved (e.g., "ASIL D – MC/DC 98%, Independent Tester: Jane Smith"). Back-to-back testing (comparing two independent implementations) is often required for ASIL D; document the back-to-back pair in Notes. Non-safety-critical (QM) requirements use standard V&V practices.'
+  },
+  {
+    name: 'ASPICE',
+    clause: 'SWE.4 (Unit Verification), SWE.5 (Integration Test), SWE.6 (Qualification Test), SYS.4 (System Integration Test)',
+    description: 'ASPICE separates unit, integration, and qualification testing. Each level must be traceable to corresponding requirements (LLR → Unit tests, HLR → Integration tests, SYS-xxx → System tests). CL2+ requires bidirectional traceability.',
+    guidance: 'Use Test Group IDs to link tests to requirements at each level: unit tests (SWE.4) verify LLR (low-level requirements), integration tests (SWE.5) verify HLR (high-level requirements), qualification tests (SWE.6) verify system-level SYS-xxx requirements. Document the test level in Notes (e.g., "Unit Test: LLR-045", "Integration Test: HLR-012", "System Test: SYS-005"). For CL2+ maturity, ensure every requirement has at least one traced test and every test has a parent requirement. Record test results (pass/fail), metrics (coverage, defect density), and any rework needed for CL3+ maturity claims.'
+  }
+];
+
+const taidMethods = [
+  {
+    name: 'Test',
+    description: 'Executing the system (hardware, software, or integrated product) and measuring output against expected results.',
+    examples: [
+      'Bench test: Power-on self-test, functional test suite executed on the device',
+      'Environmental test: Temperature cycling, humidity, vibration, or shock testing',
+      'EMC test: Electromagnetic compatibility testing per FCC/CE standards',
+      'Protocol test: CAN bus message validation, network packet injection and response verification',
+      'Stress test: Load testing, boundary-condition testing (max/min values, null inputs)',
+      'System test: End-to-end test of the integrated product in a controlled lab environment'
+    ],
+    standards: ['DO-178C §6.3 (Structural Testing)', 'ISO 26262 Part 6 §11', 'IEC 62304 §5.5'],
+    when: 'Use Test when you need to execute and measure the actual product behavior. This is the most direct and high-confidence verification method. Suitable for requirements where observable output (return codes, state changes, physical measurements) exists.'
+  },
+  {
+    name: 'Analysis',
+    description: 'Evaluating the system through mathematical, computational, or logical analysis without executing the product.',
+    examples: [
+      'Static analysis: Code review for adherence to coding standards, security vulnerabilities, memory leaks (using tools or manual review)',
+      'Stress analysis: Finite element analysis (FEA) of mechanical components under load',
+      'Thermal analysis: Computational fluid dynamics (CFD) or thermal simulation to verify temperature limits',
+      'Formal proof: Mathematical proof that an algorithm or logic is correct (e.g., proving a sorting function always terminates)',
+      'FMEA (Failure Mode & Effects Analysis): Systematic evaluation of failure modes and their impact',
+      'Traceability analysis: Verification that all requirements are traced and all user needs are covered',
+      'Security analysis: Threat modeling, attack surface analysis, crypto algorithm review'
+    ],
+    standards: ['DO-178C §6.4 (Reviews & Analyses)', 'ISO 26262 Part 6 §9', 'IEC 62304 §5.3.6'],
+    when: 'Use Analysis when test execution is impractical, costly, or unsafe (e.g., testing a failure mode for a safety system would damage the device). Analysis is also preferred for algorithm correctness, formal properties, and security claims. Analysis typically produces a detailed report or proof artifact.'
+  },
+  {
+    name: 'Inspection',
+    description: 'Visual, dimensional, or structural examination of the product (hardware, code, documents, drawings) to verify conformance.',
+    examples: [
+      'Code review: Peer review of source code for logic errors, style compliance, commenting adequacy',
+      'PCB inspection: Visual inspection of solder joints, component placement, board layout per IPC standards',
+      'Drawing review: Checking mechanical drawings for dimensioning accuracy, tolerances, surface finishes',
+      'Design review: Walk-through of architecture diagram, control flow diagram, or design specification',
+      'Configuration audit: Verification that produced code/documents match the design specification',
+      'Trace code inspection: Manual tracing of control flow to verify a requirement is implemented correctly'
+    ],
+    standards: ['DO-178C §6.4 (Reviews & Analyses)', 'ISO 13485 §7.3.4/5 Design Review', 'ASPICE SWE.3'],
+    when: 'Use Inspection when you need to verify implementation details, adherence to standards, or presence of expected artifacts. Inspection is effective for checking design correctness before full system test. It is often combined with Test (e.g., code review + unit test, drawing check + hardware test).'
+  },
+  {
+    name: 'Demonstration',
+    description: 'Showing that the product functions correctly in realistic or operational conditions (field trial, user acceptance test, live environment).',
+    examples: [
+      'Field trial: Real-world deployment with end-users under normal operating conditions',
+      'User acceptance test (UAT): End-user validation that the product meets their needs',
+      'Clinical validation: Patient use or clinical study demonstrating safety and effectiveness (ISO 13485)',
+      'In-service monitoring: Operational data collection showing that the product functions as intended in the field',
+      'Bench demonstration: Live demonstration to stakeholders showing the product executing a key use case',
+      'Environmental field test: Operating the product in its actual deployment environment (e.g., automotive on test track, aerospace in flight)'
+    ],
+    standards: ['ISO 13485 §7.3.6 Design Validation', 'ISO 26262 Part 6 §11', 'IEC 62304 §5.7'],
+    when: 'Use Demonstration for validation (verifying the product meets user needs in intended use) and for requirements where realistic conditions are critical. Demonstrations are typically used for system-level validation, user acceptance, and compliance with user needs. They provide high confidence but may be expensive and time-consuming.'
+  }
+];
+
+const vvComparison = [
+  {
+    aspect: 'Definition',
+    verification: 'Confirms that outputs (design, code, product) meet inputs (requirements, design intent). "Did we build it right?"',
+    validation: 'Confirms that the product meets user needs and is fit for intended use. "Did we build the right thing?"'
+  },
+  {
+    aspect: 'Scope',
+    verification: 'Component-level, integration-level, system-level bench testing. Lab environment.',
+    validation: 'System-level. Realistic or operational environment (field trial, clinical study, customer use).'
+  },
+  {
+    aspect: 'Timing',
+    verification: 'Throughout development: unit test, integration test, system test in lab.',
+    validation: 'Late in development: after verification complete, before release. Often post-release in-service monitoring.'
+  },
+  {
+    aspect: 'Independence (Regulated)',
+    verification: 'May require independent tester (DAL B/C/D, ASIL D, Class A) to show impartiality.',
+    validation: 'Often requires independent evaluator (clinical validation, field trial monitoring).'
+  },
+  {
+    aspect: 'Test Type Column',
+    verification: 'Test Type = "Verification"',
+    validation: 'Test Type = "Validation"'
+  },
+  {
+    aspect: 'Example (Medical Device)',
+    verification: 'Lab bench test: confirm the blood glucose meter displays correct values when tested with calibration solutions of known glucose concentration.',
+    validation: 'Clinical validation: 50 diabetic patients use the device over 30 days and achieve ≥95% accuracy compared to reference lab measurements in real-world conditions.'
+  },
+  {
+    aspect: 'Auditor Focus (ISO 13485)',
+    verification: 'Auditors verify that all design outputs (requirements) have corresponding design verification tests (bench tests). Test results and traceability matrix are reviewed.',
+    validation: 'Auditors SPECIFICALLY check that design validation is documented separately. Clinical or field validation data must be recorded. This distinction is a key audit point.'
+  },
+  {
+    aspect: 'Standard Emphasis',
+    verification: 'DO-178C (§6.3 Structural Testing): All requirements must be covered by test cases. ISO 26262: All ASIL requirements must be verified. IEC 62304 (§5.5): All software requirements must have integration tests.',
+    validation: 'ISO 13485 (§7.3.6): Design validation must demonstrate the product meets user needs. IEC 62304 (§5.7): Software release validation. ASPICE (SWE.6): Qualification testing confirms product is ready for release.'
+  }
+];
+
+---
+
+<DocsLayout {title} {description} {canonical} jsonLd={jsonLd} {breadcrumbs} activeSlug="tests">
+  <div class="space-y-12">
+    <!-- Header -->
+    <div>
+      <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4">Tests Tab</h1>
+      <p class="text-lg text-[#555555] leading-relaxed">Complete field reference, Verification vs. Validation guidance, TAID method explanations, and per-standard compliance mapping for the Tests tab in the RTMify requirements traceability template.</p>
+    </div>
+
+    <!-- Answer Block -->
+    <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded">
+      <p class="text-[#1565c0] text-base leading-relaxed">
+        <strong>The Tests tab contains test groups and individual test cases. A Test Group (TG-001) maps to one or more requirements via the Requirements tab's Test Group ID column. Each group contains one or more individual tests (T-001, T-002…), each typed as Verification or Validation and assigned a method (Test, Analysis, Inspection, or Demonstration).</strong> Tests form the third pillar of the requirements traceability matrix, linking every requirement to a specific verification activity. Across all regulated standards (AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, ASPICE), the Tests tab ensures that every requirement is independently verifiable and that verification evidence is recorded and traceable.
+      </p>
+    </div>
+
+    <!-- Field Reference Section -->
+    <div>
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6 pb-3 border-b-2 border-[#1A1A2E]">Field-by-Field Reference</h2>
+      <p class="text-[#555555] mb-6">The Tests tab contains six columns that systematically define test groups, individual tests, and verification methods.</p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-[#DDDDDD]">
+          <thead class="bg-[#1A1A2E] text-white">
+            <tr>
+              <th class="p-3 text-left font-semibold text-sm">Column</th>
+              <th class="p-3 text-left font-semibold text-sm">Field Name</th>
+              <th class="p-3 text-left font-semibold text-sm">Description</th>
+              <th class="p-3 text-left font-semibold text-sm">Valid Values & Tips</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-[#DDDDDD]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">A</td>
+              <td class="p-3 text-sm"><strong>Test Group ID</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Unique identifier for a test group that verifies one or more requirements. Groups related test cases and provides upward traceability to requirements.</td>
+              <td class="p-3 text-sm text-[#555555]"><code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">TG-001, TG-002, …</code> Auto-populated. Sequential format. One test group may have multiple test cases (T-001, T-002, T-003…). Multiple requirements may reference the same test group. Each test group should have a descriptive name.</td>
+            </tr>
+            <tr class="border-t border-[#DDDDDD] bg-[#F5F5F5]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">B</td>
+              <td class="p-3 text-sm"><strong>Test ID</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Unique identifier for an individual test case within a test group. Enables detailed traceability and test result tracking.</td>
+              <td class="p-3 text-sm text-[#555555]"><code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">T-001, T-002, …</code> Scoped to the test group. Each test case should have a concise title.</td>
+            </tr>
+            <tr class="border-t border-[#DDDDDD]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">C</td>
+              <td class="p-3 text-sm"><strong>Test Type</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Indicates whether the test is Verification or Validation. Critical for regulated audits.</td>
+              <td class="p-3 text-sm text-[#555555]"><code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Verification</code> or <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Validation</code> — Verification: lab test, bench test. Validation: field trial, clinical study, UAT.</td>
+            </tr>
+            <tr class="border-t border-[#DDDDDD] bg-[#F5F5F5]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">D</td>
+              <td class="p-3 text-sm"><strong>Test Method</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Specifies how verification/validation is performed. Chosen from TAID.</td>
+              <td class="p-3 text-sm text-[#555555]"><code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Test</code> | <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Analysis</code> | <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Inspection</code> | <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Demonstration</code></td>
+            </tr>
+            <tr class="border-t border-[#DDDDDD]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">E</td>
+              <td class="p-3 text-sm"><strong>Notes</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Free-text field for test details, standards compliance references, test results, and traceability metadata.</td>
+              <td class="p-3 text-sm text-[#555555]">Link external test results, compliance references, and auditor-relevant information.</td>
+            </tr>
+            <tr class="border-t border-[#DDDDDD] bg-[#F5F5F5]">
+              <td class="p-3 font-semibold text-[#1A1A2E] text-sm">F</td>
+              <td class="p-3 text-sm"><strong>RTMify Status</strong></td>
+              <td class="p-3 text-sm text-[#555555]">Automatically populated field indicating whether this test is fully traced.</td>
+              <td class="p-3 text-sm text-[#555555]"><code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Complete</code> | <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">In Progress</code> | <code class="bg-[#F5F5F5] text-[#d84315] px-1 rounded">Not Started</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Verification vs. Validation -->
+    <div>
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6 pb-3 border-b-2 border-[#1A1A2E]">Verification vs. Validation Deep-Dive</h2>
+      <p class="text-[#555555] mb-6">Verification and Validation are complementary but distinct activities. This distinction is critical for ISO 13485 audits, where auditors specifically check that V&V are recorded separately and that validation includes evidence of intended use.</p>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full border-collapse border border-[#DDDDDD]">
+          <thead class="bg-[#F5F5F5]">
+            <tr>
+              <th class="p-3 text-left font-semibold text-sm border border-[#DDDDDD]">Aspect</th>
+              <th class="p-3 text-left font-semibold text-sm border border-[#DDDDDD] bg-green-50">Verification</th>
+              <th class="p-3 text-left font-semibold text-sm border border-[#DDDDDD] bg-orange-50">Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vvComparison.map(row => (
+              <tr>
+                <td class="p-3 font-semibold text-[#1A1A2E] text-sm border border-[#DDDDDD]">{row.aspect}</td>
+                <td class="p-3 text-sm text-[#555555] border border-[#DDDDDD] bg-green-50">{row.verification}</td>
+                <td class="p-3 text-sm text-[#555555] border border-[#DDDDDD] bg-orange-50">{row.validation}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-yellow-50 border-l-4 border-yellow-600 p-6 rounded mb-6">
+        <p class="text-[#555555] text-sm leading-relaxed">
+          <strong>Auditor Focus (ISO 13485):</strong> During medical device audits, ISO 13485 inspectors closely examine the Requirements and Tests tabs. They verify that: (1) Every design output (requirement) has a linked test (verification activity). (2) Design verification tests are recorded separately from design validation tests. (3) Clinical validation activities are documented with evidence. (4) The RTMify status shows complete traceability. If your Tests tab shows only verification tests with no validation tests, auditors will ask: "Where is your clinical/field validation evidence?"
+        </p>
+      </div>
+
+      <h3 class="text-xl font-semibold text-[#1A1A2E] mt-8 mb-4">Per-Standard Guidance on V&V</h3>
+
+      <div class="space-y-4 text-[#555555] text-sm leading-relaxed">
+        <p>
+          <strong>DO-178C:</strong> Verification covers all testing activities (§6.3 Structural Testing, §6.4 Reviews & Analyses). Validation is system-level qualification. Both are required for all DAL levels. Verification must achieve code coverage targets based on DAL. Independence of verification is mandatory for DAL A/B.
+        </p>
+        <p>
+          <strong>ISO 26262:</strong> Verification is per Part 6 (unit testing, integration testing, qualification testing). Validation is system-level verification that ASIL safety requirements are met. ASIL D requires the highest verification rigor. Validation includes test evidence linking back to HARA safety goals.
+        </p>
+        <p>
+          <strong>IEC 62304:</strong> Verification is software integration and system testing (§5.5). Validation is software release verification (§5.7). Software safety class (A/B/C) determines verification rigor. Ensure every software requirement is traced to a test.
+        </p>
+      </div>
+    </div>
+
+    <!-- TAID Methods Section -->
+    <div>
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6 pb-3 border-b-2 border-[#1A1A2E]">TAID Methods Explained</h2>
+      <p class="text-[#555555] mb-8">TAID stands for Test, Analysis, Inspection, Demonstration—the four fundamental methods for verification and validation. Each method is suited to different types of requirements and provides different types of evidence.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {taidMethods.map(method => (
+          <div class="border border-[#DDDDDD] rounded p-6 bg-white">
+            <h3 class="text-lg font-semibold text-[#1A1A2E] mb-3">{method.name}</h3>
+            <p class="text-sm text-[#555555] font-medium mb-4">{method.description}</p>
+
+            <div class="mb-4">
+              <div class="font-semibold text-[#1A1A2E] text-sm mb-2">Examples:</div>
+              <ul class="text-sm text-[#555555] space-y-1">
+                {method.examples.map(ex => (
+                  <li class="pl-5 relative before:content-['→'] before:absolute before:left-0 before:text-blue-600 before:font-bold">{ex}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="mb-4">
+              <div class="font-semibold text-[#1A1A2E] text-sm mb-2">Standards:</div>
+              <ul class="text-sm text-[#555555] space-y-1">
+                {method.standards.map(std => (
+                  <li class="pl-5 relative before:content-['→'] before:absolute before:left-0 before:text-blue-600 before:font-bold">{std}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-[#DDDDDD] text-sm text-[#555555]">
+              <strong>When to use:</strong> {method.when}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="text-xl font-semibold text-[#1A1A2E] mt-8 mb-4">Combining TAID Methods</h3>
+      <p class="text-[#555555] text-sm mb-4">A complete verification strategy often combines multiple TAID methods for comprehensive coverage. Examples:</p>
+
+      <ul class="text-[#555555] text-sm space-y-3 mb-6 ml-4">
+        <li><strong>Requirement:</strong> "Buffer overflow vulnerabilities SHALL be prevented." <strong>Methods:</strong> (1) Analysis: static analysis tool scanning. (2) Inspection: code review. (3) Test: fuzz testing with oversized inputs.</li>
+        <li><strong>Requirement:</strong> "System SHALL operate correctly in temperatures 0–50°C." <strong>Methods:</strong> (1) Analysis: thermal simulation (FEA). (2) Test: environmental chamber testing. (3) Demonstration: field trial.</li>
+        <li><strong>Requirement:</strong> "Software SHALL implement CRC-32 error detection." <strong>Methods:</strong> (1) Inspection: design review. (2) Analysis: formal proof of CRC detection. (3) Test: protocol test with corrupted packets.</li>
+      </ul>
+
+      <div class="bg-yellow-50 border-l-4 border-yellow-600 p-6 rounded">
+        <p class="text-[#555555] text-sm leading-relaxed">
+          <strong>Coverage Strategy:</strong> For critical requirements (safety, security, regulatory), use at least two TAID methods. This provides defense-in-depth: if one method has a blind spot, another may catch it. A combination of methods provides higher confidence in requirement closure.
+        </p>
+      </div>
+    </div>
+
+    <!-- Per-Standard Compliance Section -->
+    <div>
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-6 pb-3 border-b-2 border-[#1A1A2E]">Per-Standard Compliance Mapping</h2>
+      <p class="text-[#555555] mb-8">The Tests tab satisfies specific clauses and processes in each regulated standard. Below is a standard-by-standard breakdown showing how to structure tests, annotate them, and ensure compliance.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {standards.map(std => {
+          const standardKey = std.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+          const borderColors = {
+            'as9100revd': 'border-blue-600',
+            'iso134852016': 'border-green-600',
+            'do178c': 'border-purple-600',
+            'iec62304': 'border-red-600',
+            'iso26262': 'border-orange-600',
+            'aspice': 'border-teal-600'
+          };
+
+          return (
+            <div class={`border-l-4 ${borderColors[standardKey] || 'border-blue-600'} p-6 bg-[#F5F5F5] rounded`}>
+              <h3 class="text-lg font-semibold text-[#1A1A2E] mb-2">{std.name}</h3>
+              <div class="text-xs font-semibold text-[#555555] mb-3 font-mono">{std.clause}</div>
+              <p class="text-sm text-[#555555] mb-4">{std.description}</p>
+              <div class="bg-white border border-[#DDDDDD] p-3 rounded text-sm text-[#555555]">
+                <strong>Guidance:</strong> {std.guidance}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <h3 class="text-xl font-semibold text-[#1A1A2E] mt-8 mb-6">Key Compliance Requirements by Standard</h3>
+
+      <div class="space-y-6">
+        <div>
+          <h4 class="text-base font-semibold text-blue-600 mb-3">AS9100 Rev D (Aerospace)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">Design verification (§8.3.5) must ensure design outputs meet design inputs. Maintain configuration management of all approved test cases. Create a Design Verification and Validation Plan (DV&V Plan) documenting the test strategy, methods, and acceptance criteria. Link each test group to the requirements it verifies. Record test results with traceability to the test case and date of execution. All critical tests require sign-off by the configuration manager or quality engineer.</p>
+        </div>
+
+        <div>
+          <h4 class="text-base font-semibold text-green-600 mb-3">ISO 13485:2016 (Medical Device)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">Separate design verification (§7.3.5) from design validation (§7.3.6). Verification tests confirm design outputs meet design inputs. Validation tests confirm the product meets user needs and is safe and effective in intended use. Auditors will specifically request to see: (1) Design verification test plan and results. (2) Design validation plan with clinical or field trial evidence. (3) Traceability linking requirements to verification tests and validation evidence. If you lack clinical validation data, document the rationale. Record all V&V evidence and maintain it for audit.</p>
+        </div>
+
+        <div>
+          <h4 class="text-base font-semibold text-purple-600 mb-3">DO-178C (Aerospace Software)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">All requirements must be verified through structural testing (code coverage) and/or reviews/analyses. DAL A/B require independence: the test engineer must be different from the developer. Document independence in Notes. Coverage metrics are mandatory: Statement Coverage (SC), Decision Coverage (DC), and Modified Condition/Decision Coverage (MC/DC). For DAL A, MC/DC is typically required; for DAL B, DC may be acceptable; for DAL C/D/E, SC may suffice. Track coverage metrics for each test group. Reference DO-178C Table A test objectives in your test documentation.</p>
+        </div>
+
+        <div>
+          <h4 class="text-base font-semibold text-red-600 mb-3">IEC 62304 (Medical Device Software)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">Software safety classification (Class A/B/C) drives verification rigor. Class A requires the most comprehensive testing: detailed test cases, expected results, actual results, and sign-off by an independent reviewer. Class B requires documented tests and documented results. Class C may allow simpler test documentation. Annotate each test with the software safety class addressed in Notes. Ensure all software requirements have corresponding integration and system tests. Record integration test results and system test results separately.</p>
+        </div>
+
+        <div>
+          <h4 class="text-base font-semibold text-orange-600 mb-3">ISO 26262 (Automotive Functional Safety)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">ASIL determines verification rigor and independence requirements. ASIL A requires standard verification. ASIL B requires decision coverage. ASIL C requires decision coverage and likely independent verification. ASIL D requires MC/DC coverage and mandatory independent verification. Annotate each safety-critical test with the ASIL level and coverage achieved. Back-to-back testing (two independent implementations compared) is often required for ASIL D. QM (Quality Management, non-safety) requirements use standard V&V.</p>
+        </div>
+
+        <div>
+          <h4 class="text-base font-semibold text-teal-600 mb-3">ASPICE (Automotive Development Process)</h4>
+          <p class="text-[#555555] text-sm leading-relaxed">ASPICE separates unit verification (SWE.4), integration testing (SWE.5), and qualification testing (SWE.6) from system integration testing (SYS.4). Each level must trace to corresponding requirements: LLR (low-level requirements) are verified by unit tests, HLR (high-level requirements) by integration tests, and SYS-xxx (system requirements) by system/qualification tests. Document the test level in Notes for traceability. For CL2+ maturity, ensure bidirectional traceability. Record test results, metrics, and any rework needed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div>
+      <h2 class="text-3xl font-bold text-[#1A1A2E] mb-8 pb-3 border-b-2 border-[#1A1A2E]">Frequently Asked Questions</h2>
+
+      <div class="space-y-8">
+        {faqs.map(faq => (
+          <div class="pb-8 border-b border-[#DDDDDD] last:border-b-0">
+            <div class="text-base font-semibold text-[#1A1A2E] mb-3">{faq.question}</div>
+            <div class="text-sm text-[#555555] leading-relaxed">{faq.answer}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Related Documentation -->
+    <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded">
+      <h3 class="text-lg font-semibold text-blue-600 mb-4">Related Documentation</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/docs/requirements/" class="text-blue-600 font-medium hover:underline">Requirements Tab</a> — Defining testable SHALL statements and requirement traceability</li>
+        <li><a href="/docs/user-needs/" class="text-blue-600 font-medium hover:underline">User Needs Tab</a> — Capturing stakeholder expectations and regulatory inputs</li>
+        <li><a href="/docs/traceability/" class="text-blue-600 font-medium hover:underline">Traceability</a> — Building and validating traceability matrices across all tabs</li>
+        <li><a href="/docs/status-codes/" class="text-blue-600 font-medium hover:underline">Status Codes</a> — Understanding RTMify status indicators and completion criteria</li>
+        <li><a href="/standards/as9100/" class="text-blue-600 font-medium hover:underline">AS9100 Guidance</a> — Design verification and validation, configuration management</li>
+        <li><a href="/standards/iso-13485/" class="text-blue-600 font-medium hover:underline">ISO 13485 Guidance</a> — Design verification and validation, clinical validation requirements</li>
+        <li><a href="/standards/do-178c/" class="text-blue-600 font-medium hover:underline">DO-178C Guidance</a> — Structural testing, code coverage, independence requirements</li>
+        <li><a href="/standards/iec-62304/" class="text-blue-600 font-medium hover:underline">IEC 62304 Guidance</a> — Software safety classification, testing by class level</li>
+        <li><a href="/standards/iso-26262/" class="text-blue-600 font-medium hover:underline">ISO 26262 Guidance</a> — ASIL-determined verification rigor and coverage metrics</li>
+        <li><a href="/standards/aspice/" class="text-blue-600 font-medium hover:underline">ASPICE Guidance</a> — Unit, integration, and qualification testing levels and traceability</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-20 pt-8 border-t border-[#DDDDDD] text-xs text-[#999999]">
+      <p class="mb-2"><strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      <p class="mb-4"><strong>Standards Covered:</strong> AS9100 Rev D, ISO 13485:2016, DO-178C, IEC 62304, ISO 26262:2018, ASPICE 3.1</p>
+      <p class="italic">RTMify is a compliance-aware requirements traceability manager designed for regulated engineering environments. This documentation reflects best practices across aerospace, medical device, automotive, and industrial safety standards.</p>
+    </div>
+  </div>
+</DocsLayout>
