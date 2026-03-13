@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Trace: Gap Summary';
-const description = 'The three gap conditions Trace detects, where they appear, how strict mode uses them in CI pipelines, and the gaps JSON output format.';
+const description = 'Trace gap conditions, how hard and advisory findings differ, how strict mode behaves in CI, and what the gaps JSON artifact contains.';
 const canonical = 'https://rtmify.io/docs/trace/gaps/';
 
 const breadcrumbs = [
@@ -42,54 +42,99 @@ const jsonLd = {
       Gap Summary
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      A gap is a traceability condition that auditors will flag. Trace always detects and surfaces gaps — even when they don't block report generation.
+      A gap is a workbook-level traceability finding that auditors will flag. Trace always detects and surfaces gaps, but only hard gaps fail strict mode.
     </p>
   </div>
 
   <!-- Key principle -->
   <div class="border border-[#1565C0] border-opacity-30 bg-[#EFF3FB] rounded-lg p-5 mb-10">
-    <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Gaps don't block output.</strong> When Trace detects gaps it still generates the report — the Gap Summary section at the end of the report lists every issue. Gaps only block output if you pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.</p>
+    <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Gaps don't block output by default.</strong> Trace still generates reports when gaps are present. The report's Gap Summary section lists them, grouped into hard and advisory findings. Only hard gaps block CI when you pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.</p>
   </div>
 
-  <!-- The three gap types -->
+  <!-- Gap classes -->
   <section class="mb-12">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Gap conditions</h2>
+
+    <div class="border border-[#DDDDDD] rounded-lg bg-[#FAFAFA] px-5 py-4 mb-6">
+      <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Diagnostics are separate.</strong> Parser warnings, schema issues, and broken references still appear in Diagnostics. The Gap Summary only describes workbook traceability structure and audit-readiness findings.</p>
+    </div>
 
     <div class="space-y-5">
 
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="flex items-center gap-3 bg-[#FEF9C3] px-5 py-3 border-b border-[#DDDDDD]">
           <span class="text-base">⚠</span>
-          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Untested requirement</h3>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Requirement with no test-group link</h3>
         </div>
         <div class="px-5 py-4 space-y-2">
-          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement has no <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TESTED_BY</code> edge — its Test Group IDs field is empty, or every referenced test group ID is unresolvable.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> Untested requirements are the most common audit finding. Regulators expect every requirement to map to at least one test that verifies it.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add a test group entry to the Tests tab and reference its ID in the requirement's Test Group IDs field.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Hard gap</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement declares no test-group references at all.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> The requirement has no verification linkage. Strict mode treats this as a blocking traceability failure.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add one or more test groups to the Tests tab and reference them from the requirement's <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">Test Group IDs</code> cell.</p>
         </div>
       </div>
 
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="flex items-center gap-3 bg-[#FEF9C3] px-5 py-3 border-b border-[#DDDDDD]">
           <span class="text-base">⚠</span>
-          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Orphan requirement</h3>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Requirement with only unresolved test-group references</h3>
         </div>
         <div class="px-5 py-4 space-y-2">
-          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement has no <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DERIVES_FROM</code> edge — its User Need ID field is empty, or references a user need ID that doesn't exist in the User Needs tab.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> Requirements that can't be traced to a user need or regulatory input are considered unmotivated. Auditors will ask why the requirement exists.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add the originating user need to the User Needs tab and reference its ID in the requirement row.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Hard gap</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement declares one or more test-group IDs, but none resolve to a valid <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestGroup</code> node.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> The workbook looks traced at first glance, but every declared verification target is broken. This is a strict-mode failure.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Correct the test-group IDs or add the missing test groups to the Tests tab.</p>
         </div>
       </div>
 
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="flex items-center gap-3 bg-[#FEE2E2] px-5 py-3 border-b border-[#DDDDDD]">
           <span class="text-base">✕</span>
-          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Unresolved risk mitigation</h3>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Requirement with no user need</h3>
         </div>
         <div class="px-5 py-4 space-y-2">
-          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A risk row references a requirement ID in its mitigation field, but no requirement with that ID exists in the Requirements tab.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> A risk with a broken mitigation link is effectively unmitigated — the control it depends on can't be verified. This is a hard finding under ISO 14971, DO-178C, and most automotive safety standards.</p>
-          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Correct the requirement ID in the risk row, or add the missing requirement to the Requirements tab.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Hard gap</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement has no upstream <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DERIVES_FROM</code> link to a user need.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> The requirement has no documented rationale or originating need, which auditors typically treat as a blocking traceability gap.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add the originating user need and reference it from the requirement row.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#FEE2E2] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">✕</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Risk with no mitigation requirement</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Hard gap</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A risk row does not declare any mitigation requirement at all.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> The risk is structurally unmitigated in the workbook.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Link the risk to one or more mitigating requirements.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#FEE2E2] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">✕</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Risk with unresolved mitigation requirement</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Hard gap</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A risk declares a mitigation requirement ID, but it does not resolve to an existing requirement.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> The risk appears mitigated, but the mitigation target is broken.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Correct the requirement ID or add the missing requirement.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#EFF3FB] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">ℹ</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Advisory graph gaps</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Advisory only</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Conditions:</strong> Trace also reports user needs with no requirements, requirements linked to empty test groups, and test groups with no requirements.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> These do not fail <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>, but they are still valuable audit-prep signals.</p>
         </div>
       </div>
 
@@ -123,11 +168,11 @@ const jsonLd = {
   <!-- Strict mode -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Strict mode and CI</h2>
-    <p class="text-[#555555] text-sm mb-4">Pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> to make the process exit non-zero when gaps are detected. This makes Trace usable as a CI gate — a pull request or build step can fail if the traceability matrix is incomplete.</p>
+    <p class="text-[#555555] text-sm mb-4">Pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> to make the process exit non-zero when <em>hard</em> gaps are detected. Advisory findings are still reported, but they do not fail CI.</p>
 
     <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-4" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict</pre>
 
-    <p class="text-[#555555] text-sm mb-4">In strict mode the exit code reflects the gap count. A CI step configured to check for a non-zero exit code will catch any regression in traceability completeness.</p>
+    <p class="text-[#555555] text-sm mb-4">In strict mode the exit code reflects the hard-gap count only. A CI step configured to check for a non-zero exit code will catch regressions in required traceability completeness without failing on advisory-only findings.</p>
 
     <p class="text-[#555555] text-sm">Combine with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json</code> to get a machine-readable artifact alongside the exit code:</p>
     <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mt-3" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict --gaps-json gaps.json</pre>
@@ -139,8 +184,8 @@ const jsonLd = {
     <p class="text-[#555555] text-sm mb-4">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json &lt;path&gt;</code> is passed, Trace writes a structured JSON file at that path. It captures:</p>
     <ul class="space-y-1.5 text-sm text-[#555555] mb-6">
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Parser and ingest diagnostics (warnings, errors, and their codes)</span></li>
-      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Each gap condition, the affected requirement or risk ID, and the gap type</span></li>
-      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Total gap count and warning count</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Each gap finding, including severity, kind, primary ID, and related ID when applicable</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Hard gap count plus warning and error totals</span></li>
     </ul>
     <p class="text-[#555555] text-sm">This file is intended for downstream tooling — build dashboards, custom reporters, or RTMify Live ingestion. It does not need to be read by humans to understand gaps; the report's Gap Summary section is the human-readable version.</p>
   </section>
