@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     question: 'Can one requirement link to multiple test groups?',
-    answer: 'Yes. A complex requirement may be verified by multiple test groups (TG-xxx) or multiple test cases within a group. For example, "The system SHALL operate correctly in temperature ranges 0–50°C (normal) and −40–70°C (extended)" might be verified by both TG-005 (Environmental Testing) and TG-012 (Functional Testing at Temperature Extremes). Conversely, one test group may verify multiple related requirements. The Requirements tab Test Group ID field can hold multiple references (comma-separated or structured as needed by your template variant). During traceability review, ensure every requirement has at least one linked test; unmarked requirements indicate incomplete verification planning.'
+    answer: 'Yes. A complex requirement may be verified by multiple test groups (TG-xxx) or multiple test cases within a group. For example, "The system SHALL operate correctly in temperature ranges 0–50°C (normal) and −40–70°C (extended)" might be verified by both TG-005 (Environmental Testing) and TG-012 (Functional Testing at Temperature Extremes). Conversely, one test group may verify multiple related requirements. The Requirements tab Test Group IDs field holds multiple references as a comma-separated list. During traceability review, ensure every requirement has at least one linked test; unmarked requirements indicate incomplete verification planning.'
   },
   {
     question: 'When should I mark a requirement Obsolete vs. deleting it?',
@@ -179,6 +179,7 @@ const examplesBad = [
   jsonLd={jsonLd}
   breadcrumbs={breadcrumbs}
   activeSlug="requirements"
+  lane="template"
 >
   <!-- Header -->
   <h1 class="text-[#1A1A2E]">Requirements Tab</h1>

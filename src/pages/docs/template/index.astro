@@ -1,0 +1,115 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Template Documentation: How to Use the Requirements Traceability Template';
+const description = 'Complete guide to filling in the RTMify requirements traceability template. Field-by-field reference for User Needs, Requirements, Tests, and Risks tabs. Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE.';
+const canonical = 'https://rtmify.io/docs/template/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Template', url: '/docs/template/' }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Template", "item": "https://rtmify.io/docs/template/" }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="docs"
+  lane="template"
+>
+  <div class="mb-10">
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Template Documentation
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      The RTMify template is a single .xlsx file with four tabs that satisfies traceability requirements for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE.
+    </p>
+  </div>
+
+  <!-- Quick Start -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Quick start</h2>
+    <ol class="space-y-5 list-none">
+      <li class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1A1A2E] text-white font-bold text-sm">1</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Download the template.</strong>
+          <p class="text-[#555555] text-sm">Free .xlsx file. No account, no email. <a href="/download" class="text-[#1A1A2E] underline hover:no-underline">Download it here.</a></p>
+        </div>
+      </li>
+      <li class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1A1A2E] text-white font-bold text-sm">2</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Fill in your data.</strong>
+          <p class="text-[#555555] text-sm">Populate the four tabs: <a href="/docs/user-needs/" class="text-[#1A1A2E] underline hover:no-underline">User Needs</a>, <a href="/docs/requirements/" class="text-[#1A1A2E] underline hover:no-underline">Requirements</a>, <a href="/docs/tests/" class="text-[#1A1A2E] underline hover:no-underline">Tests</a>, <a href="/docs/risks/" class="text-[#1A1A2E] underline hover:no-underline">Risks</a>.</p>
+        </div>
+      </li>
+      <li class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1A1A2E] text-white font-bold text-sm">3</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Run RTMify Trace.</strong>
+          <p class="text-[#555555] text-sm">Drop the .xlsx on <a href="/docs/trace/" class="text-[#1A1A2E] underline hover:no-underline">RTMify Trace</a>. Runs locally — nothing is uploaded.</p>
+        </div>
+      </li>
+      <li class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1A1A2E] text-white font-bold text-sm">4</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Get your RTM.</strong>
+          <p class="text-[#555555] text-sm">Download a full requirements traceability matrix as PDF, Word, or Markdown.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- The Four Tabs -->
+  <section class="mb-16 border-t border-[#DDDDDD] pt-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">The four tabs</h2>
+    <div class="space-y-4">
+      <a href="/docs/user-needs/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">User Needs</h3>
+        <p class="text-[#555555] m-0 text-sm">Top of the traceability chain. Stakeholder needs, voice of customer, regulatory inputs. Every downstream artifact traces back here.</p>
+      </a>
+      <a href="/docs/requirements/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">Requirements</h3>
+        <p class="text-[#555555] m-0 text-sm">SHALL statements. One per row, uniquely identified, independently verifiable. Links up to a User Need and down to Test Groups.</p>
+      </a>
+      <a href="/docs/tests/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">Tests</h3>
+        <p class="text-[#555555] m-0 text-sm">Test groups and individual test cases. Each Test Group maps to one or more requirements.</p>
+      </a>
+      <a href="/docs/risks/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">Risks</h3>
+        <p class="text-[#555555] m-0 text-sm">Hazards and failure modes with severity-times-likelihood scoring, pre- and post-mitigation. Each risk links to the requirement that controls it.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Reference -->
+  <section class="border-t border-[#DDDDDD] pt-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Reference</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <a href="/docs/status-codes/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">Status Codes</h3>
+        <p class="text-[#555555] m-0 text-sm">What each RTMify status means, what triggers it, and how to fix it.</p>
+      </a>
+      <a href="/docs/traceability/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline">
+        <h3 class="text-lg font-bold text-[#1A1A2E] m-0 mb-1">Traceability Chain</h3>
+        <p class="text-[#555555] m-0 text-sm">How the four tabs connect. Bidirectional traceability, suspect flagging, and impact analysis.</p>
+      </a>
+    </div>
+  </section>
+</DocsLayout>

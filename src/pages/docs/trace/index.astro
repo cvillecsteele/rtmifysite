@@ -1,0 +1,136 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Trace: Generate Requirements Traceability Matrices';
+const description = 'RTMify Trace reads your filled-in requirements traceability template and generates a complete RTM as PDF, Word, or Markdown. Runs locally — your data never leaves your machine.';
+const canonical = 'https://rtmify.io/docs/trace/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Trace', url: '/docs/trace/' }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" }
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="trace-overview"
+  lane="trace"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#1565C0] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#1565C0] uppercase tracking-wide">Trace</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      RTMify Trace
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      Drop your filled-in template onto RTMify Trace and get a complete requirements traceability matrix. Runs entirely on your machine — nothing is uploaded, no account required.
+    </p>
+  </div>
+
+  <!-- What it does -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What it does</h2>
+    <p class="text-[#555555] mb-4">RTMify Trace parses your .xlsx file, validates the traceability graph, and renders a full RTM package in your choice of output format.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Validates</h3>
+        <p class="text-[#555555] text-sm m-0">7-layer validation catches broken references, missing links, and gap patterns before they reach an audit.</p>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Generates</h3>
+        <p class="text-[#555555] text-sm m-0">Produces PDF, Word (.docx), and Markdown RTM reports. Each output is fully formatted and audit-ready.</p>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Summarizes gaps</h3>
+        <p class="text-[#555555] text-sm m-0">Outputs a machine-readable gap summary listing every unresolved reference, missing test, and uncovered requirement.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to run -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How to run</h2>
+
+    <div class="space-y-5">
+      <div class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1565C0] text-white font-bold text-sm">1</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Download RTMify Trace.</strong>
+          <p class="text-[#555555] text-sm"><a href="/download" class="text-[#1565C0] underline hover:no-underline">Get the binary</a> for your platform — macOS, Windows, or Linux. No installer, no dependencies.</p>
+        </div>
+      </div>
+      <div class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1565C0] text-white font-bold text-sm">2</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Run it on your template.</strong>
+          <p class="text-[#555555] text-sm">On macOS and Windows, drag and drop your .xlsx onto the Trace app. On any platform, run it from the command line:</p>
+          <pre class="mt-2 bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx</pre>
+        </div>
+      </div>
+      <div class="flex gap-4 items-start">
+        <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#1565C0] text-white font-bold text-sm">3</span>
+        <div>
+          <strong class="text-[#1A1A2E] block mb-1">Get your outputs.</strong>
+          <p class="text-[#555555] text-sm">Trace writes a PDF, a .docx, and a .md file alongside your template. Open the PDF to review, or attach it to your DHF/TCF/DAH.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Output formats -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Output formats</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Format</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">File</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">PDF</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.pdf</td>
+            <td class="px-4 py-3 text-[#555555]">Audit submissions, DHF/TCF packages</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">Word</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.docx</td>
+            <td class="px-4 py-3 text-[#555555]">Editable reports, customer deliverables</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">Markdown</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.md</td>
+            <td class="px-4 py-3 text-[#555555]">Version control, wiki integration, CI pipelines</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Privacy callout -->
+  <section class="border border-[#1565C0] border-opacity-30 bg-[#EFF3FB] rounded-lg p-6">
+    <h2 class="text-base font-bold text-[#1565C0] mb-2 m-0">Runs entirely on your machine</h2>
+    <p class="text-[#555555] text-sm m-0">RTMify Trace is a single binary with no network dependencies. It reads your .xlsx, writes your output files, and exits. No telemetry, no cloud sync, no account. Your IP, design inputs, and test data stay local.</p>
+  </section>
+</DocsLayout>
