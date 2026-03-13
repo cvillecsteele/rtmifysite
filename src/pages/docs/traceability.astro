@@ -70,16 +70,12 @@ const jsonLd = {
 ---
 
 <DocsLayout {title} {description} {canonical} {breadcrumbs} {jsonLd} activeSlug="traceability">
-  <section class="bg-[#1A1A2E] text-white py-16 px-4">
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-4xl font-black mb-4" style="font-family: var(--font-family-display);">The Traceability Chain</h1>
-      <p class="text-lg text-gray-300 max-w-2xl">
-        The four tabs in the RTMify template form a directed graph. User Needs flow down to Requirements, which link to Test Groups containing individual Tests. Risks link sideways to the Requirements that mitigate them. Every regulated standard requires this chain to be complete and bidirectional.
-      </p>
-    </div>
-  </section>
+  <div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4">Traceability Chain</h1>
+    <p class="text-lg text-[#555555] leading-relaxed">The four tabs in the RTMify template form a directed graph. User Needs flow down to Requirements, which link to Test Groups containing individual Tests. Risks link sideways to the Requirements that mitigate them. Every regulated standard requires this chain to be complete and bidirectional.</p>
+  </div>
 
-  <div class="max-w-3xl mx-auto px-4 py-12">
+  <div>
 
     <!-- The Graph -->
     <section>
@@ -94,7 +90,7 @@ const jsonLd = {
 <span class="text-blue-300">Requirement</span> (REQ-001)
     │                           ◄──── <span class="text-red-300">Risk</span> (RSK-101)
     │  Requirements tab,               Risks tab,
-    │  Column E ("Test Group ID")      Column F ("Linked REQ")
+    │  Column E ("Test Group IDs")     Column F ("Linked REQ")
     ▼
 <span class="text-purple-300">Test Group</span> (TG-001)
     │

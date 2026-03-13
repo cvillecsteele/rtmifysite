@@ -124,7 +124,7 @@ const jsonLd = {
 <DocsLayout {title} {description} {canonical} {jsonLd} {breadcrumbs} activeSlug="status-codes">
   <article class="prose max-w-4xl mx-auto">
     <header class="mb-12 border-b border-[#DDDDDD] pb-8">
-      <h1 class="text-4xl font-bold text-[#1A1A2E] mb-4">{title}</h1>
+      <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4">{title}</h1>
       <p class="text-lg text-[#555555] leading-relaxed">
         The RTMify Status column (last column on every tab) tells you whether each row is fully linked and audit-ready, or has gaps that need fixing. Five possible values: <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">OK</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">NO_TEST_LINKED</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_USER_NEED</code>, <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">UNRESOLVED</code>, and <code class="bg-[#F5F5F5] text-[#1A1A2E] px-2 py-1 rounded text-sm font-mono">MISSING_ID</code>. Any non-OK status is an audit finding waiting to happen.
       </p>

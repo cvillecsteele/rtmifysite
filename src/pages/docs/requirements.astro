@@ -398,15 +398,15 @@ const examplesBad = [
 
   /* Breadcrumbs - handled by DocsLayout */
 
-  /* Headings */
-  :global(h1) {
+  /* Headings — scoped to main content only, not sidebar */
+  :global(article h1) {
     @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-0 mb-3;
     font-size: 48px;
     font-weight: 700;
     line-height: 1.3;
   }
 
-  :global(h2) {
+  :global(article h2) {
     @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-12 mb-5;
     font-size: 32px;
     font-weight: 700;
@@ -415,14 +415,14 @@ const examplesBad = [
     line-height: 1.3;
   }
 
-  :global(h3) {
+  :global(article h3) {
     @apply font-[family:var(--font-syne)] text-[#1A1A2E] mt-12 mb-5;
     font-size: 20px;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  :global(h4) {
+  :global(article h4) {
     @apply text-[#1A1A2E];
     font-size: 16px;
     font-weight: 600;
@@ -451,6 +451,11 @@ const examplesBad = [
     font-size: 16px;
     line-height: 1.7;
     margin: 0;
+    color: white;
+  }
+
+  .answer-block strong {
+    color: white;
   }
 
   /* Content sections */

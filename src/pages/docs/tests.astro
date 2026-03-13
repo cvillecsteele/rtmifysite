@@ -82,7 +82,7 @@ const standards = [
     name: 'AS9100 Rev D',
     clause: '§8.3.5 Design Verification & Validation',
     description: 'Design verification and validation must be performed to ensure design outputs meet design inputs and the intended use. Configuration management applies throughout.',
-    guidance: 'Verify each design output (requirement) against its corresponding design input (user need). Use the Test Group ID column to link test groups to requirements. Document all V&V activities in the Tests tab: include test method (TAID), test results, and any nonconformance findings. Maintain traceability from each test back to the requirement it verifies and the requirement back to the user need. Baseline all approved test cases for configuration management.'
+    guidance: 'Verify each design output (requirement) against its corresponding design input (user need). Use the Test Group IDs column to link one or more test groups to a requirement. Document all V&V activities in the Tests tab: include test method (TAID), test results, and any nonconformance findings. Maintain traceability from each test back to the requirement it verifies and the requirement back to the user need. Baseline all approved test cases for configuration management.'
   },
   {
     name: 'ISO 13485:2016',
@@ -232,7 +232,7 @@ const vvComparison = [
     <!-- Answer Block -->
     <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded">
       <p class="text-[#1565c0] text-base leading-relaxed">
-        <strong>The Tests tab contains test groups and individual test cases. A Test Group (TG-001) maps to one or more requirements via the Requirements tab's Test Group ID column. Each group contains one or more individual tests (T-001, T-002…), each typed as Verification or Validation and assigned a method (Test, Analysis, Inspection, or Demonstration).</strong> Tests form the third pillar of the requirements traceability matrix, linking every requirement to a specific verification activity. Across all regulated standards (AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, ASPICE), the Tests tab ensures that every requirement is independently verifiable and that verification evidence is recorded and traceable.
+        <strong>The Tests tab contains test groups and individual test cases. A Test Group (TG-001) maps to one or more requirements via the Requirements tab's Test Group IDs column. Each group contains one or more individual tests (T-001, T-002…), each typed as Verification or Validation and assigned a method (Test, Analysis, Inspection, or Demonstration).</strong> Tests form the third pillar of the requirements traceability matrix, linking every requirement to a specific verification activity. Across all regulated standards (AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, ASPICE), the Tests tab ensures that every requirement is independently verifiable and that verification evidence is recorded and traceable.
       </p>
     </div>
 
