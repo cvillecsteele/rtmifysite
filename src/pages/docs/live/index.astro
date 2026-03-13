@@ -1,14 +1,14 @@
 ---
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
-const title = 'RTMify Live: Real-Time Requirements Traceability';
-const description = 'RTMify Live watches your spreadsheet and your codebase, keeps traceability up to date automatically, and answers questions about coverage through an MCP integration for AI assistants.';
+const title = 'RTMify Live Overview';
+const description = 'RTMify Live is a local-first traceability runtime that continuously syncs your spreadsheet, scans your codebase, ingests test results, and answers coverage questions through an MCP integration.';
 const canonical = 'https://rtmify.io/docs/live/';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
   { name: 'Docs', url: '/docs/' },
-  { name: 'Live', url: '/docs/live/' }
+  { name: 'Live', url: '/docs/live/' },
 ];
 
 const jsonLd = {
@@ -17,7 +17,7 @@ const jsonLd = {
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
     { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
-    { "@type": "ListItem", "position": 3, "name": "Live", "item": "https://rtmify.io/docs/live/" }
+    { "@type": "ListItem", "position": 3, "name": "Live", "item": "https://rtmify.io/docs/live/" },
   ]
 };
 ---
@@ -37,84 +37,81 @@ const jsonLd = {
       <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
     </div>
     <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
-      RTMify Live
+      Live Overview
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      A local server that keeps your traceability graph synchronized with both your spreadsheet and your codebase — in real time.
+      RTMify Live is a local-first traceability runtime. It runs on your machine, connects to your spreadsheet, watches your codebase, and keeps the full traceability graph current — continuously, in the background.
     </p>
   </div>
 
-  <!-- What it does -->
+  <!-- Architecture -->
   <section class="mb-12">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What it does</h2>
-    <p class="text-[#555555] mb-6">RTMify Live runs as a background process on your machine. It watches your .xlsx template for changes, scans your source and test files for requirement annotations, ingests test results from your CI pipeline, and maintains a live graph of your entire traceability chain.</p>
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Architecture</h2>
+    <p class="text-[#555555] text-sm mb-6">Live uses a three-layer model: a native OS shell, a local runtime, and a browser dashboard. The browser dashboard is the main operator surface. The native shell is a thin OS-integration wrapper.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="p-5 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Spreadsheet sync</h3>
-        <p class="text-[#555555] text-sm m-0">Watches your template for changes. Status cells update automatically as you add or fix requirements.</p>
+    <div class="space-y-3">
+      <div class="flex gap-4 items-start p-4 border border-[#DDDDDD] rounded-lg">
+        <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#1A1A2E] text-white text-xs font-bold">1</span>
+        <div>
+          <strong class="text-[#1A1A2E] text-sm block mb-0.5">Native shell</strong>
+          <p class="text-[#555555] text-sm m-0">A menu-bar app (macOS) or system tray app (Windows) that manages the runtime process: start/stop, launch-at-login, crash restart, and license gate. It is not the product UI.</p>
+        </div>
       </div>
-      <div class="p-5 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Repo scanning</h3>
-        <p class="text-[#555555] text-sm m-0">Scans your codebase for <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">@req</code> annotations. Surfaces where each requirement is implemented and tested.</p>
+      <div class="flex gap-4 items-start p-4 border border-[#DDDDDD] rounded-lg">
+        <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#1A1A2E] text-white text-xs font-bold">2</span>
+        <div>
+          <strong class="text-[#1A1A2E] text-sm block mb-0.5">Local runtime (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem;">rtmify-live</code>)</strong>
+          <p class="text-[#555555] text-sm m-0">The core process. Owns SQLite graph persistence, workbook sync, status write-back, repo scanning, test-results ingestion, report generation, and MCP. Binds exclusively to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">127.0.0.1</code>.</p>
+        </div>
       </div>
-      <div class="p-5 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Test results API</h3>
-        <p class="text-[#555555] text-sm m-0">Accepts test result ingestion from CI pipelines. Maps pass/fail status back to requirements automatically.</p>
-      </div>
-      <div class="p-5 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">MCP integration</h3>
-        <p class="text-[#555555] text-sm m-0">Exposes a Model Context Protocol server so AI assistants (Claude, Cursor, etc.) can query your traceability graph directly.</p>
+      <div class="flex gap-4 items-start p-4 border border-[#DDDDDD] rounded-lg">
+        <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#1A1A2E] text-white text-xs font-bold">3</span>
+        <div>
+          <strong class="text-[#1A1A2E] text-sm block mb-0.5">Browser dashboard</strong>
+          <p class="text-[#555555] text-sm m-0">The operator UI, served by the local runtime and opened in your default browser at <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">http://127.0.0.1:8000</code>. Shows graph views, analysis, code traceability, reports, and operator tooling.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- How it works -->
+  <!-- What it owns -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How it works</h2>
-
-    <div class="space-y-6">
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">The graph</h3>
-        <p class="text-[#555555] text-sm">Live maintains a directed graph that connects every node in your traceability chain: user needs → requirements → tests → risks, plus design inputs, design outputs, source files, test files, and CI annotations. Every edge is typed and timestamped.</p>
-      </div>
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Profiles</h3>
-        <p class="text-[#555555] text-sm">Live adapts to your regulatory context. The <strong>medical</strong> profile adds design input/output tabs and risk-control linkage. The <strong>aerospace</strong> profile adds configuration items and CI evidence. <strong>Automotive</strong> adds ASPICE SWE process evidence. The <strong>generic</strong> profile covers everything else.</p>
-      </div>
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Dashboard</h3>
-        <p class="text-[#555555] text-sm">A local web UI at <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">http://localhost:8000</code> shows your live traceability graph, coverage metrics, gap reports, and recent test results.</p>
-      </div>
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What Live owns</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {[
+        ['Workbook sync', 'Polls your Google Sheets or Excel Online workbook every 30 seconds. Detects changes via a change token and ingests only when needed.'],
+        ['Graph persistence', 'Stores the full traceability graph in a local SQLite database. Survives restarts. Supports historical tracking and suspect propagation.'],
+        ['Status write-back', 'After each sync, writes RTMify status codes and row formatting back into the connected workbook. Writes the RTMify Verification column after test results are ingested.'],
+        ['Repo scanning', 'Scans local git repositories for requirement annotations in source and test files, commit references, and blame data.'],
+        ['Test results ingestion', 'Accepts test execution evidence via HTTP POST or inbox file-drop. Computes verification rollups per requirement.'],
+        ['Report generation', 'Generates RTM (PDF, Word, Markdown), DHR (PDF, Markdown), and code coverage (Markdown) reports from the live graph on demand.'],
+        ['MCP', 'Exposes a Model Context Protocol server on the same loopback address. AI assistants can query requirements, tests, risks, gaps, code, and verification state without screen-scraping.'],
+        ['Dashboard', 'The browser UI providing tabular graph views, impact analysis, gap review, code traceability, and report launch — all driven by the SQLite graph.'],
+      ].map(([title, desc]) => (
+        <div class="p-4 border border-[#DDDDDD] rounded-lg">
+          <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">{title}</h3>
+          <p class="text-[#555555] text-xs m-0 leading-relaxed">{desc}</p>
+        </div>
+      ))}
     </div>
   </section>
 
-  <!-- Annotation syntax -->
-  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Annotation syntax</h2>
-    <p class="text-[#555555] mb-4 text-sm">Add <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">@req</code> comments to your source and test files. Live scans for these on every sync cycle.</p>
-
-    <div class="space-y-4">
-      <div>
-        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-2">Implementation annotation</p>
-        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">// @req REQ-042 Validate input before processing
-function validatePayload(data) &#123;
-  // ...
-&#125;</pre>
-      </div>
-      <div>
-        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-2">Test annotation</p>
-        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">// @req REQ-042 @test TG-007
-test('rejects malformed payload', () =&gt; &#123;
-  // ...
-&#125;);</pre>
-      </div>
-    </div>
+  <!-- Local-only callout -->
+  <section class="mb-12 border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-6">
+    <h2 class="text-base font-bold text-[#2E7D32] mb-3 m-0">Local-first, always</h2>
+    <p class="text-[#555555] text-sm mb-2">Live is not a hosted service and not a team-shared server. The HTTP server binds <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F1F8F2; padding: 0 0.3rem; border-radius: 0.2rem;">127.0.0.1</code> only. Remote access is unsupported by design. Foreign <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F1F8F2; padding: 0 0.3rem; border-radius: 0.2rem;">Host</code> headers and cross-origin requests from external origins are rejected at the server level.</p>
+    <p class="text-[#555555] text-sm m-0">The MCP endpoint is equally local — it is not a public internet MCP server. Only processes on the same machine can reach it.</p>
   </section>
 
-  <!-- Coming soon note -->
-  <section class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-6">
-    <h2 class="text-base font-bold text-[#2E7D32] mb-2 m-0">Detailed docs coming soon</h2>
-    <p class="text-[#555555] text-sm m-0">Full setup guides, configuration reference, API documentation, and the MCP integration guide are in progress. If you want early access, <a href="/download" class="text-[#2E7D32] underline hover:no-underline">join the waitlist</a>.</p>
+  <!-- What it is not -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What Live is not</h2>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A remote multi-user SaaS or team-shared server</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A spreadsheet editor — it reads and writes status cells but does not edit requirement content</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A GitHub or GitLab integration — it reads local git history, not remote APIs</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A public MCP endpoint — MCP is loopback-only, same-machine</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A replacement for <a href="/docs/trace/" class="text-[#1565C0] underline hover:no-underline">Trace</a> — Trace is a single-run report generator; Live is a continuous runtime</span></li>
+    </ul>
   </section>
 </DocsLayout>

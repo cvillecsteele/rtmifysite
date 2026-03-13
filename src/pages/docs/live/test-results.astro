@@ -1,0 +1,224 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Live: Test Results API';
+const description = 'How to send test execution evidence to RTMify Live via HTTP POST or inbox file-drop, the payload schema, auth model, and how results feed requirement verification.';
+const canonical = 'https://rtmify.io/docs/live/test-results/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Live', url: '/docs/live/' },
+  { name: 'Test Results API', url: '/docs/live/test-results/' },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Live", "item": "https://rtmify.io/docs/live/" },
+    { "@type": "ListItem", "position": 4, "name": "Test Results API", "item": "https://rtmify.io/docs/live/test-results/" },
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="live-test-results"
+  lane="live"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#2E7D32] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Test Results API
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      Live accepts test execution evidence from CI pipelines and test runners. Results are stored in the graph, rolled up per requirement, and written back to the workbook's RTMify Verification column.
+    </p>
+  </div>
+
+  <!-- Two ingestion paths -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Two ingestion paths</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">HTTP POST</h3>
+        <p class="text-[#555555] text-sm mb-2">Send a JSON payload to the local API endpoint. Best for CI pipelines, test runners, and scripts that run on the same machine as Live.</p>
+        <code class="text-xs text-[#1A1A2E] bg-[#F5F5F5] px-2 py-1 rounded block" style="font-family: var(--font-family-mono);">POST http://127.0.0.1:8000/api/v1/test-results</code>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">File-drop inbox</h3>
+        <p class="text-[#555555] text-sm mb-2">Drop JSON files into the inbox directory. Live polls every 5 seconds and ingests automatically. Best for tools that can write files but not make HTTP requests.</p>
+        <code class="text-xs text-[#1A1A2E] bg-[#F5F5F5] px-2 py-1 rounded block" style="font-family: var(--font-family-mono);">~/.rtmify/inbox/</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Authentication</h2>
+    <p class="text-[#555555] text-sm mb-4">HTTP ingestion requires a bearer token. The token is stored at:</p>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm mb-4" style="font-family: var(--font-family-mono);">~/.rtmify/api-token</pre>
+    <p class="text-[#555555] text-sm mb-4">Include it in the <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">Authorization</code> header:</p>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm mb-6" style="font-family: var(--font-family-mono);">Authorization: Bearer &lt;your-token&gt;</pre>
+    <p class="text-[#555555] text-sm">The dashboard's <strong>Guide → MCP & AI</strong> tab shows your current token and lets you regenerate it. You can also regenerate it via the API:</p>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm mt-3" style="font-family: var(--font-family-mono);">POST /api/v1/test-results/token/regenerate</pre>
+    <p class="text-[#555555] text-xs mt-2">File-drop ingestion does not require a bearer token — it uses filesystem access control instead.</p>
+  </section>
+
+  <!-- Payload -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Payload structure</h2>
+    <p class="text-[#555555] text-sm mb-5">The payload is a JSON object describing a test execution. Both the HTTP and file-drop paths accept the same format.</p>
+
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-6" style="font-family: var(--font-family-mono);">{'{'}
+  "execution_id": "ci-run-20260313-001",
+  "executed_at": "2026-03-13T14:00:00Z",
+  "serial_number": "UNIT-042",       <span class="text-[#888888]">// optional</span>
+  "executor": "pytest",              <span class="text-[#888888]">// optional</span>
+  "source": "ci/github-actions",    <span class="text-[#888888]">// optional</span>
+  "test_cases": [
+    {'{'}
+      "result_id": "result-001",
+      "test_case_ref": "TG-007/TC-001",
+      "status": "passed",
+      "duration_ms": 142,
+      "notes": "All assertions passed",
+      "measurements": [],            <span class="text-[#888888]">// optional structured data</span>
+      "attachments": []              <span class="text-[#888888]">// optional file references</span>
+    {'}'},
+    {'{'}
+      "result_id": "result-002",
+      "test_case_ref": "TG-007/TC-002",
+      "status": "failed",
+      "duration_ms": 89,
+      "notes": "Expected 200, got 422"
+    {'}'}
+  ]
+{'}'}</pre>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Field</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Required</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['execution_id', 'Yes', 'Unique identifier for this test run. Used for idempotent replacement.'],
+            ['executed_at', 'Yes', 'ISO 8601 timestamp of when the execution occurred.'],
+            ['serial_number', 'No', 'Physical unit or device identifier, for hardware/embedded test evidence.'],
+            ['executor', 'No', 'Name of the test framework or runner.'],
+            ['source', 'No', 'CI system or execution context label.'],
+            ['test_cases[].result_id', 'Yes', 'Unique identifier for this individual test case result.'],
+            ['test_cases[].test_case_ref', 'Yes', 'Reference to a test case in your Tests tab. Dangling refs are accepted as warnings.'],
+            ['test_cases[].status', 'Yes', 'One of: passed, failed, error, blocked, skipped.'],
+            ['test_cases[].duration_ms', 'No', 'Execution time in milliseconds.'],
+            ['test_cases[].notes', 'No', 'Free-text notes or failure message.'],
+            ['test_cases[].measurements', 'No', 'Array of structured measurement objects for quantitative evidence.'],
+            ['test_cases[].attachments', 'No', 'Array of file references (logs, screenshots, etc.).'],
+          ].map(([field, req, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{field}</td>
+              <td class="px-4 py-3 text-sm">{req === 'Yes' ? <span class="text-[#CC0000] font-medium">Required</span> : <span class="text-[#888888]">Optional</span>}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Ingestion computation -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What happens on ingestion</h2>
+    <ol class="space-y-3 text-sm text-[#555555] list-decimal list-inside mb-6">
+      <li>Validates the JSON payload structure</li>
+      <li>Computes an execution-level rollup status from the individual test case statuses</li>
+      <li>Creates or updates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestExecution</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestResult</code> graph nodes</li>
+      <li>Creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">HAS_RESULT</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">EXECUTION_OF</code> edges linking results to test cases</li>
+      <li>Accepts dangling <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">test_case_ref</code> values as warnings rather than rejecting the request</li>
+      <li>On the next workbook sync, computes requirement verification rollups and writes the <strong>RTMify Verification</strong> column</li>
+    </ol>
+
+    <h3 class="text-sm font-bold text-[#1A1A2E] mb-3">Execution rollup statuses</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Rollup</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['passed', 'All test cases in the execution passed.'],
+            ['failed', 'At least one test case failed, errored, or was blocked.'],
+            ['partial', 'Mixed results — some passed, some did not reach a concrete outcome.'],
+          ].map(([s, d]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{s}</td>
+              <td class="px-4 py-3 text-[#555555]">{d}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">Idempotency</h3>
+    <p class="text-[#555555] text-sm">Submissions are idempotent by <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">execution_id</code>. Re-sending the same execution ID replaces the previous results, unless a newer execution has already superseded it (returns <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">409</code>).</p>
+  </section>
+
+  <!-- Inbox -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">File-drop inbox</h2>
+    <p class="text-[#555555] text-sm mb-4">Drop JSON files into <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">~/.rtmify/inbox/</code>. Live polls every 5 seconds and processes them automatically.</p>
+    <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm mb-4" style="font-family: var(--font-family-mono);">
+      ~/.rtmify/inbox/<br/>
+      &nbsp;&nbsp;processed/   <span class="text-[#888888]"># successfully ingested files moved here</span><br/>
+      &nbsp;&nbsp;rejected/    <span class="text-[#888888]"># invalid or unprocessable files moved here</span>
+    </div>
+    <p class="text-[#555555] text-sm">The inbox directory can be changed with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--inbox-dir &lt;path&gt;</code> at startup. The current inbox path is shown in the dashboard Guide → MCP & AI tab.</p>
+  </section>
+
+  <!-- API errors -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">API error codes</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white w-20">Code</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['200', 'Ingestion successful.'],
+            ['401', 'Missing or invalid bearer token.'],
+            ['400', 'Invalid payload structure. Response body contains structured error detail.'],
+            ['409', 'Execution ID conflict — a newer execution has already superseded this ID.'],
+            ['413', 'Payload too large.'],
+          ].map(([code, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">{code}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DocsLayout>
