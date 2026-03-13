@@ -64,7 +64,7 @@ import ConversationDemo from '../components/ConversationDemo.astro';
             <div>
               <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Reads your git repo</h3>
               <p class="text-[#555555]">
-                Point Live at your repository and it walks your source tree, finds every comment where a developer tagged a requirement ID — a simple annotation like <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">// REQ-047</code>, no tooling change required — and runs <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">git blame</code> on each one. The result is a live map from requirement to source file to author to commit. You can see exactly which requirements have been implemented, by whom, and when — and which haven't been touched since the spec was written.
+                Point Live at your working tree and it scans your source files for inline requirement tags — a simple annotation like <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">// REQ-047</code>, no tooling change required. Every poll cycle, Live re-reads your code as it exists on disk right now and maps each tag back to its requirement. The result is a live view of which requirements have implementation claims in your codebase, which files carry them, and which requirements have no code reference at all. Git attribution (author, commit, date) is available as metadata on each tag, but the signal is the current state of your source tree — not a commit from three months ago.
               </p>
             </div>
           </div>
