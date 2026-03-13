@@ -1,0 +1,276 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Trace: Validation & Errors';
+const description = 'How RTMify Trace validates workbooks: the two-stage pipeline (XLSX parsing and schema ingest), what constitutes a fatal error vs a warning, and how failures are reported.';
+const canonical = 'https://rtmify.io/docs/trace/validation/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Trace', url: '/docs/trace/' },
+  { name: 'Validation & Errors', url: '/docs/trace/validation/' },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" },
+    { "@type": "ListItem", "position": 4, "name": "Validation & Errors", "item": "https://rtmify.io/docs/trace/validation/" },
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="trace-validation"
+  lane="trace"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#1565C0] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#1565C0] uppercase tracking-wide">Trace</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Validation &amp; Errors
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      Before any output is generated, Trace runs every workbook through a two-stage validation pipeline. This page explains what each stage checks, what constitutes a fatal error, and how issues are reported.
+    </p>
+  </div>
+
+  <!-- Errors vs warnings -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+    <div class="border border-[#DDDDDD] rounded-lg p-5">
+      <h2 class="text-base font-bold text-[#CC0000] mb-2">Errors — block output</h2>
+      <p class="text-[#555555] text-sm m-0">A fatal problem Trace cannot work around. The workbook is rejected and no report is generated. The CLI exits with code 1. Native apps show a failure message and do not advance to the generation state.</p>
+    </div>
+    <div class="border border-[#DDDDDD] rounded-lg p-5">
+      <h2 class="text-base font-bold text-[#B45309] mb-2">Warnings — report still generated</h2>
+      <p class="text-[#555555] text-sm m-0">A condition worth knowing about that doesn't prevent Trace from producing output. Warnings appear in the CLI output, in the native app's load summary, and in the gaps JSON file.</p>
+    </div>
+  </div>
+
+  <!-- Stage 1 -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Stage 1: XLSX parsing</h2>
+    <p class="text-[#555555] text-sm mb-6">The first stage validates the workbook as a file before any traceability logic runs.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Check</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Fatal?</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Cause</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">File exists and is readable</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Error</td>
+            <td class="px-4 py-3 text-[#555555]">Path does not exist, or process lacks read permission</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Valid ZIP/OOXML container</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Error</td>
+            <td class="px-4 py-3 text-[#555555]">File is not a valid <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> — may be <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xls</code>, corrupted, or misidentified</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Required workbook parts present</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Error</td>
+            <td class="px-4 py-3 text-[#555555]">Missing <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">[Content_Types].xml</code> or workbook XML — broken container</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Workbook XML readable</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Error</td>
+            <td class="px-4 py-3 text-[#555555]">Malformed XML in the workbook structure</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Shared strings file present</td>
+            <td class="px-4 py-3 font-medium text-[#B45309]">Warning + empty string table</td>
+            <td class="px-4 py-3 text-[#555555]">Workbook has no shared strings. Cells that rely on it will appear empty.</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">Worksheet XML readable</td>
+            <td class="px-4 py-3 font-medium text-[#B45309]">Warning + skip sheet</td>
+            <td class="px-4 py-3 text-[#555555]">A single broken sheet doesn't fail the whole parse — the sheet is skipped</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Stage 2 -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Stage 2: Schema ingest</h2>
+    <p class="text-[#555555] text-sm mb-6">Once the file is parsed, the schema layer maps workbook content to the RTMify traceability model. This involves three sub-stages.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Tab discovery</h3>
+    <p class="text-[#555555] text-sm mb-4">Trace locates the four expected tabs using a four-tier matching strategy:</p>
+    <ol class="text-sm text-[#555555] space-y-1.5 list-decimal list-inside mb-6">
+      <li>Exact name match</li>
+      <li>Synonym match (e.g. "User Requirements" → Requirements tab)</li>
+      <li>Substring match</li>
+      <li>Fuzzy match with Levenshtein distance ≤ 2</li>
+    </ol>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Tab</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Required?</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">If missing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Requirements</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Required</td>
+            <td class="px-4 py-3 text-[#555555]">Fatal error — no requirements, no RTM</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">User Needs</td>
+            <td class="px-4 py-3 text-[#B45309]">Optional</td>
+            <td class="px-4 py-3 text-[#555555]">INFO diagnostic; all requirements will be orphaned</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Tests</td>
+            <td class="px-4 py-3 text-[#B45309]">Optional</td>
+            <td class="px-4 py-3 text-[#555555]">INFO diagnostic; all requirements will be untested</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">Risks</td>
+            <td class="px-4 py-3 text-[#B45309]">Optional</td>
+            <td class="px-4 py-3 text-[#555555]">INFO diagnostic; Risk Register section will be empty</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-[#555555] text-sm mb-8">Ambiguous matches (two tabs that both score equally) produce a WARN diagnostic and use the first match.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Column matching</h3>
+    <p class="text-[#555555] text-sm mb-4">Within each discovered tab, columns are matched using a four-tier strategy identical to tab discovery, plus an ID-pattern heuristic for ID-type columns. Headers are matched case-insensitively. Extra columns are ignored.</p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Column failure</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Severity</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Required column not found</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Error</td>
+            <td class="px-4 py-3 text-[#555555]">Cannot ingest the tab; treated as missing</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Ambiguous column match</td>
+            <td class="px-4 py-3 font-medium text-[#B45309]">Warning</td>
+            <td class="px-4 py-3 text-[#555555]">Leftmost matching column wins; WARN emitted</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">Optional column not found</td>
+            <td class="px-4 py-3 text-[#555555]">Silent</td>
+            <td class="px-4 py-3 text-[#555555]">Field treated as empty for all rows</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Semantic validation</h3>
+    <p class="text-[#555555] text-sm mb-4">After rows are ingested, Trace performs semantic checks on requirement text and structure:</p>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Requirements missing the word "shall" — flagged as potentially non-normative</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Requirements containing vague terms (e.g. "appropriate", "adequate") — flagged as potentially ambiguous</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>High-risk items with no associated mitigation requirement — flagged as unmitigated</span></li>
+    </ul>
+    <p class="text-[#555555] text-sm mt-3">These are warnings, not errors. They appear in the warning count and the gaps JSON, but they don't block report generation.</p>
+  </section>
+
+  <!-- Failure reference -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Failure reference</h2>
+    <p class="text-[#555555] text-sm mb-6">A summary of all failure categories, their severity, and the user-visible effect:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Category</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Severity</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">CLI exit</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Native app effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">File not found / unreadable</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">1</td>
+            <td class="px-4 py-3 text-[#555555]">Load failure; stays in drop zone</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Invalid XLSX container</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">1</td>
+            <td class="px-4 py-3 text-[#555555]">Load failure; stays in drop zone</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Requirements tab missing</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">1</td>
+            <td class="px-4 py-3 text-[#555555]">Load failure; file rejected</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Required column not found</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">1</td>
+            <td class="px-4 py-3 text-[#555555]">Load failure; file rejected</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Traceability gaps</td>
+            <td class="px-4 py-3 font-medium text-[#B45309]">Warning</td>
+            <td class="px-4 py-3 text-[#555555]">0 (or N in --strict)</td>
+            <td class="px-4 py-3 text-[#555555]">Gap count shown; report generated</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Semantic warnings</td>
+            <td class="px-4 py-3 font-medium text-[#B45309]">Warning</td>
+            <td class="px-4 py-3 text-[#555555]">0</td>
+            <td class="px-4 py-3 text-[#555555]">Warning count shown; report generated</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">Output path not writable</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">3</td>
+            <td class="px-4 py-3 text-[#555555]">Generation failure; no done state</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">License not activated</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">2</td>
+            <td class="px-4 py-3 text-[#555555]">Remains on license gate</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">License expired / mismatch</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">2</td>
+            <td class="px-4 py-3 text-[#555555]">Remains on license gate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DocsLayout>

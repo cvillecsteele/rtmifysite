@@ -1,0 +1,244 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'Running RTMify Trace';
+const description = 'How to run RTMify Trace from the CLI, the macOS app, and the Windows app. Command flags, format options, output path behavior, and CI usage.';
+const canonical = 'https://rtmify.io/docs/trace/running/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Trace', url: '/docs/trace/' },
+  { name: 'Running Trace', url: '/docs/trace/running/' },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" },
+    { "@type": "ListItem", "position": 4, "name": "Running Trace", "item": "https://rtmify.io/docs/trace/running/" },
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="trace-running"
+  lane="trace"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#1565C0] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#1565C0] uppercase tracking-wide">Trace</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Running Trace
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      Trace can be run from the command line, from the macOS app, or from the Windows app. All three paths use the same engine and produce identical outputs.
+    </p>
+  </div>
+
+  <!-- CLI -->
+  <section class="mb-14">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">CLI</h2>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Basic usage</h3>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-6" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx</pre>
+
+    <p class="text-[#555555] text-sm mb-6">This writes <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">my-template-rtm.docx</code> alongside the input file. The default output format is Word.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">All flags</h3>
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white" style="font-family: var(--font-family-mono); font-weight: 600;">Flag</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">&lt;workbook.xlsx&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Path to the input workbook. Required for report generation.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--format &lt;fmt&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Output format: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">md</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">docx</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">pdf</code>, or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">all</code>. Default: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">docx</code>.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--output &lt;path&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Output path. Directory: writes derived-name files inside it. File: used as exact path when one format is selected. Omitted: writes beside the input file.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--project &lt;name&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Project name to embed in report headers.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--strict</td>
+            <td class="px-4 py-3 text-[#555555]">Exit non-zero if gaps are detected. Use in CI pipelines to gate on traceability completeness.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--gaps-json &lt;path&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Write a machine-readable gap and diagnostics file at the given path.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--activate &lt;key&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Activate with a license key. Does not generate a report.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--deactivate</td>
+            <td class="px-4 py-3 text-[#555555]">Release the current activation. Does not generate a report.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--version</td>
+            <td class="px-4 py-3 text-[#555555]">Print the Trace version and exit.</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--help</td>
+            <td class="px-4 py-3 text-[#555555]">Print usage and exit.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Common invocations</h3>
+    <div class="space-y-4 mb-8">
+      <div>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Generate all three formats</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --format all</pre>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Write outputs to a specific directory</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --format all --output ./reports/</pre>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">CI: fail the build if gaps exist</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --format md --strict --gaps-json gaps.json</pre>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Activate a license</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace --activate RTMIFY-XXXX-XXXX-XXXX</pre>
+      </div>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Exit codes</h3>
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white w-24">Code</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">0</td>
+            <td class="px-4 py-3 text-[#555555]">Success. Report generated, no fatal errors.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">1</td>
+            <td class="px-4 py-3 text-[#555555]">Input error. File not found, not a valid <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code>, schema failure, or unresolvable workbook.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">2</td>
+            <td class="px-4 py-3 text-[#555555]">License error. Not activated, expired, fingerprint mismatch, or provider unavailable outside grace period.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">3</td>
+            <td class="px-4 py-3 text-[#555555]">Output error. Output path not writable or renderer write failure.</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">N</td>
+            <td class="px-4 py-3 text-[#555555]">In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, the gap count may be returned as the exit code.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Processing sequence</h3>
+    <p class="text-[#555555] text-sm mb-3">For a normal generation run the CLI does, in order:</p>
+    <ol class="text-sm text-[#555555] space-y-1.5 list-decimal list-inside">
+      <li>Initialize licensing</li>
+      <li>Parse arguments</li>
+      <li>Handle fast-path flags (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--activate</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--deactivate</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--version</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--help</code>) and exit if matched</li>
+      <li>Load and validate the workbook</li>
+      <li>Ingest workbook rows into the traceability graph</li>
+      <li>Compute warnings and gaps</li>
+      <li>Generate one or more report files</li>
+      <li>Optionally write the gaps JSON file</li>
+    </ol>
+  </section>
+
+  <!-- macOS -->
+  <section class="mb-14 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">macOS app</h2>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
+    <p class="text-[#555555] text-sm mb-4">The macOS app accepts <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> files by drag-and-drop onto the drop zone, or via <strong>Browse…</strong> (NSOpenPanel). Other file types are rejected with an explanatory message:</p>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">File type</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Message shown</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.xls</td>
+            <td class="px-4 py-3 text-[#555555]">Old Excel format not supported — save as .xlsx first</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.csv</td>
+            <td class="px-4 py-3 text-[#555555]">CSV files are not supported</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.ods</td>
+            <td class="px-4 py-3 text-[#555555]">ODS files are not supported</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#555555]">Other</td>
+            <td class="px-4 py-3 text-[#555555]">Only .xlsx files are accepted</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">App state flow</h3>
+    <ol class="text-sm text-[#555555] space-y-2 list-none mb-6">
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">licenseGate</span><span>Launch checks license. Unlicensed users see the license key entry screen.</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">dropZone</span><span>Licensed users land here. Drag a workbook or click Browse.</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">fileLoaded</span><span>Valid file loaded. Shows filename, gap count, warning count, and format picker (PDF / Word / Markdown / All).</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">generating</span><span>Report is being written. Progress indicator shown.</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">done</span><span>Output complete. Options to open the generated file, reveal it in Finder, or generate another.</span></li>
+    </ol>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Output naming</h3>
+    <p class="text-[#555555] text-sm">Output filenames are derived from the input stem. If a collision exists, a numeric suffix is added. The files appear in the same directory as the input workbook.</p>
+  </section>
+
+  <!-- Windows -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Windows app</h2>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
+    <p class="text-[#555555] text-sm mb-4">The Windows app accepts <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> files by drag-and-drop (WM_DROPFILES) or via a browse dialog. Rejection messages mirror the macOS app, adapted for Windows context (e.g. "open in Excel and re-save as .xlsx" for <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xls</code> files).</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">App state flow</h3>
+    <p class="text-[#555555] text-sm mb-4">The Windows app follows the same five-state model as macOS — <strong>license_gate → drop_zone → file_loaded → generating → done</strong> — with the done state offering open, show in Explorer, and reset actions.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Async execution</h3>
+    <p class="text-[#555555] text-sm mb-4">Load, generate, and activate operations run on background worker threads. Completion is signaled back to the UI thread via Windows messages (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LOAD_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_GENERATE_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_ACTIVATE_COMPLETE</code>), keeping the UI responsive during library work.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Output naming</h3>
+    <p class="text-[#555555] text-sm">Names are derived from the input stem (e.g. <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">requirements-rtm.pdf</code>). Collisions are resolved first with a numbered suffix (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-2</code> through <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-99</code>), then with a timestamp suffix as a last resort.</p>
+  </section>
+</DocsLayout>

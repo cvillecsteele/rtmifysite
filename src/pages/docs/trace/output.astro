@@ -1,0 +1,187 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Trace: Output Formats';
+const description = 'Output formats produced by RTMify Trace: PDF, Word (.docx), and Markdown. Report sections, content of each section, and output file naming.';
+const canonical = 'https://rtmify.io/docs/trace/output/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Trace', url: '/docs/trace/' },
+  { name: 'Output Formats', url: '/docs/trace/output/' },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" },
+    { "@type": "ListItem", "position": 4, "name": "Output Formats", "item": "https://rtmify.io/docs/trace/output/" },
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="trace-output"
+  lane="trace"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#1565C0] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#1565C0] uppercase tracking-wide">Trace</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Output Formats
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      Trace generates three output formats from the same traceability graph. All three contain identical logical content — only the presentation layer differs.
+    </p>
+  </div>
+
+  <!-- Format overview -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Formats</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Format</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Extension</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">CLI flag</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">PDF</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.pdf</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">--format pdf</td>
+            <td class="px-4 py-3 text-[#555555]">Audit submissions, DHF/TCF packages, read-only distribution</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">Word</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.docx</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">--format docx</td>
+            <td class="px-4 py-3 text-[#555555]">Editable reports, customer deliverables, review cycles</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">Markdown</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">.md</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">--format md</td>
+            <td class="px-4 py-3 text-[#555555]">Version control, wiki integration, CI pipeline artifacts</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]">All three</td>
+            <td class="px-4 py-3 text-[#555555]">—</td>
+            <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono);">--format all</td>
+            <td class="px-4 py-3 text-[#555555]">Generate all formats in one run</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-[#555555] text-sm mt-3">The default format when <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--format</code> is omitted is <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">docx</code>.</p>
+  </section>
+
+  <!-- Report sections -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Report sections</h2>
+    <p class="text-[#555555] text-sm mb-6">Every output file — regardless of format — is organized into five sections in this order:</p>
+
+    <div class="space-y-6">
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">1. User Needs</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm m-0">A table of all user need rows from the workbook: ID, statement, source, and priority. Forms the top of the traceability chain.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">2. Requirements Traceability</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm mb-3">The core RTM table. Each row represents one requirement–test pairing. A requirement with multiple tests or multiple test groups expands into multiple rows.</p>
+          <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-2">Columns</p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1.5">
+            {[
+              'Requirement ID',
+              'User Need',
+              'Requirement statement',
+              'Test Group',
+              'Test ID',
+              'Test Type',
+              'Test Method',
+              'Requirement status',
+              'Source File',
+              'Test File',
+              'Last Commit',
+            ].map(col => (
+              <span class="text-xs text-[#555555] flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#BBBBBB] shrink-0"></span>
+                {col}
+              </span>
+            ))}
+          </div>
+          <p class="text-[#888888] text-xs mt-3 m-0">Source File, Test File, and Last Commit are populated when RTMify Live has linked the spreadsheet to a codebase. They will be empty in pure Trace-only runs.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">3. Tests</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm mb-3">A table of all test groups and individual test cases. Columns: Test Group, Test ID, Type, Method, and linked requirements.</p>
+          <p class="text-[#555555] text-sm m-0">A test group that verifies multiple requirements shows all of them — the relationship is never silently collapsed to a single requirement.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">4. Risk Register</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm m-0">All risk rows with severity, likelihood, mitigation description, linked requirement, and residual risk scores. Risks whose mitigation requirement cannot be resolved are flagged.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">5. Gap Summary</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm mb-3">A structured list of every detected gap condition. See the <a href="/docs/trace/gaps/" class="text-[#1565C0] underline hover:no-underline">Gap Summary</a> page for details on what gap types are reported and how to interpret them.</p>
+          <p class="text-[#555555] text-sm m-0">If there are no gaps, this section appears with a clean bill of health.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Output naming -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Output file naming</h2>
+    <p class="text-[#555555] text-sm mb-4">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--output</code> is not specified, output files are written alongside the input workbook using a name derived from the input stem:</p>
+
+    <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm mb-6" style="font-family: var(--font-family-mono);">
+      my-template.xlsx<br/>
+      my-template-rtm.pdf<br/>
+      my-template-rtm.docx<br/>
+      my-template-rtm.md
+    </div>
+
+    <p class="text-[#555555] text-sm mb-2">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--output</code> is a directory, derived-name files are written inside that directory. When it is a file path and only one format is being generated, that exact path is used.</p>
+    <p class="text-[#555555] text-sm">Collision handling differs slightly by platform wrapper. The macOS app adds numeric suffixes. The Windows app tries <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-2</code> through <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-99</code>, then falls back to a timestamp suffix.</p>
+  </section>
+</DocsLayout>

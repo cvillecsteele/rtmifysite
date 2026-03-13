@@ -1,0 +1,147 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Trace: Gap Summary';
+const description = 'The three gap conditions Trace detects, where they appear, how strict mode uses them in CI pipelines, and the gaps JSON output format.';
+const canonical = 'https://rtmify.io/docs/trace/gaps/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Trace', url: '/docs/trace/' },
+  { name: 'Gap Summary', url: '/docs/trace/gaps/' },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" },
+    { "@type": "ListItem", "position": 4, "name": "Gap Summary", "item": "https://rtmify.io/docs/trace/gaps/" },
+  ]
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="trace-gap-summary"
+  lane="trace"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#1565C0] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#1565C0] uppercase tracking-wide">Trace</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Gap Summary
+    </h1>
+    <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
+      A gap is a traceability condition that auditors will flag. Trace always detects and surfaces gaps — even when they don't block report generation.
+    </p>
+  </div>
+
+  <!-- Key principle -->
+  <div class="border border-[#1565C0] border-opacity-30 bg-[#EFF3FB] rounded-lg p-5 mb-10">
+    <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Gaps don't block output.</strong> When Trace detects gaps it still generates the report — the Gap Summary section at the end of the report lists every issue. Gaps only block output if you pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.</p>
+  </div>
+
+  <!-- The three gap types -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Gap conditions</h2>
+
+    <div class="space-y-5">
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#FEF9C3] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">⚠</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Untested requirement</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement has no <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TESTED_BY</code> edge — its Test Group IDs field is empty, or every referenced test group ID is unresolvable.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> Untested requirements are the most common audit finding. Regulators expect every requirement to map to at least one test that verifies it.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add a test group entry to the Tests tab and reference its ID in the requirement's Test Group IDs field.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#FEF9C3] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">⚠</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Orphan requirement</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A requirement has no <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DERIVES_FROM</code> edge — its User Need ID field is empty, or references a user need ID that doesn't exist in the User Needs tab.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> Requirements that can't be traced to a user need or regulatory input are considered unmotivated. Auditors will ask why the requirement exists.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Add the originating user need to the User Needs tab and reference its ID in the requirement row.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#FEE2E2] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">✕</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Unresolved risk mitigation</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A risk row references a requirement ID in its mitigation field, but no requirement with that ID exists in the Requirements tab.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Risk:</strong> A risk with a broken mitigation link is effectively unmitigated — the control it depends on can't be verified. This is a hard finding under ISO 14971, DO-178C, and most automotive safety standards.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Correct the requirement ID in the risk row, or add the missing requirement to the Requirements tab.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Where gaps appear -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Where gaps appear</h2>
+    <p class="text-[#555555] text-sm mb-4">Detected gaps are surfaced in four places:</p>
+    <ul class="space-y-2.5 text-sm text-[#555555]">
+      <li class="flex gap-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#1565C0] mt-1.5 shrink-0"></span>
+        <span><strong class="text-[#1A1A2E]">CLI output</strong> — a gap count is printed after the run. Non-zero means something needs attention.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#1565C0] mt-1.5 shrink-0"></span>
+        <span><strong class="text-[#1A1A2E]">Native app summary</strong> — the macOS and Windows apps show gap count and warning count after a file loads, before generation.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#1565C0] mt-1.5 shrink-0"></span>
+        <span><strong class="text-[#1A1A2E]">Report Gap Summary section</strong> — the last section of every generated report lists all gaps by type and requirement ID.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#1565C0] mt-1.5 shrink-0"></span>
+        <span><strong class="text-[#1A1A2E]">Gaps JSON file</strong> — when <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json</code> is passed, a machine-readable file is written with full gap and diagnostic detail.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Strict mode -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Strict mode and CI</h2>
+    <p class="text-[#555555] text-sm mb-4">Pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> to make the process exit non-zero when gaps are detected. This makes Trace usable as a CI gate — a pull request or build step can fail if the traceability matrix is incomplete.</p>
+
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-4" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict</pre>
+
+    <p class="text-[#555555] text-sm mb-4">In strict mode the exit code reflects the gap count. A CI step configured to check for a non-zero exit code will catch any regression in traceability completeness.</p>
+
+    <p class="text-[#555555] text-sm">Combine with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json</code> to get a machine-readable artifact alongside the exit code:</p>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mt-3" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict --gaps-json gaps.json</pre>
+  </section>
+
+  <!-- Gaps JSON -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Gaps JSON</h2>
+    <p class="text-[#555555] text-sm mb-4">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json &lt;path&gt;</code> is passed, Trace writes a structured JSON file at that path. It captures:</p>
+    <ul class="space-y-1.5 text-sm text-[#555555] mb-6">
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Parser and ingest diagnostics (warnings, errors, and their codes)</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Each gap condition, the affected requirement or risk ID, and the gap type</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Total gap count and warning count</span></li>
+    </ul>
+    <p class="text-[#555555] text-sm">This file is intended for downstream tooling — build dashboards, custom reporters, or RTMify Live ingestion. It does not need to be read by humans to understand gaps; the report's Gap Summary section is the human-readable version.</p>
+  </section>
+</DocsLayout>
