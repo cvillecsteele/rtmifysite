@@ -42,7 +42,7 @@ const jsonLd = {
       Setup &amp; First Sync
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Getting Live running involves three things: installing the app, activating your license, and connecting your workbook through the onboarding flow. First sync happens automatically once the connection is established.
+      Getting Live running involves three things: installing the app, installing a signed license file, and connecting your workbook through the onboarding flow. First sync happens automatically once the connection is established.
     </p>
   </div>
 
@@ -86,9 +86,11 @@ const jsonLd = {
             ['--repo <path>', 'Register a local repo for scanning. Repeatable.'],
             ['--profile <name>', 'Regulatory profile: medical, aerospace, automotive, generic.'],
             ['--inbox-dir <path>', 'Custom path for the test-results file-drop inbox.'],
-            ['--activate <key>', 'Activate with a license key and exit.'],
-            ['--deactivate', 'Release the current activation and exit.'],
+            ['license info [--json] [--license <path>]', 'Show the current license status and, optionally, payload details.'],
+            ['license install <path>', 'Verify and install a signed license file.'],
+            ['license clear', 'Remove the installed license file.'],
             ['--license-status-json', 'Print license status as JSON and exit.'],
+            ['--license <path>', 'Use a specific signed license file for this run.'],
             ['--version', 'Print the runtime version and exit.'],
             ['--help', 'Print usage and exit.'],
           ].map(([flag, desc]) => (
@@ -102,13 +104,30 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- License install flow -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">License install flow</h2>
+    <p class="text-[#555555] text-sm mb-4">Live no longer uses activation keys. It looks for a signed <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license.json</code> file and, if one is not installed, starts in a gated state.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">From the app</h3>
+        <p class="text-[#555555] text-sm m-0">Use <strong>Select License File</strong> in the license gate. The native shell or dashboard imports the signed file and unlocks Live immediately if it is valid for the Live product.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">Manual placement</h3>
+        <p class="text-[#555555] text-sm m-0">Place the signed file at <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">~/.rtmify/license.json</code>, or point a single run at a specific file with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--license &lt;path&gt;</code>.</p>
+      </div>
+    </div>
+    <p class="text-[#555555] text-sm mb-0">If the file is expired, tampered, or issued for Trace instead of Live, the gate stays in place and the app shows the reason. Use <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license clear</code> or the in-app clear action to remove an installed file.</p>
+  </section>
+
   <!-- Startup sequence -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What happens at startup</h2>
     <p class="text-[#555555] text-sm mb-5">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live</code> starts, it does the following in order:</p>
     <ol class="space-y-2 text-sm text-[#555555] list-decimal list-inside">
       <li>Initialize the license service</li>
-      <li>Handle fast-path commands (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--activate</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--version</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--help</code>) and exit if matched</li>
+      <li>Handle fast-path commands (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license info</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license install</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license clear</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--version</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--help</code>) and exit if matched</li>
       <li>Open the SQLite database and store metadata (version, paths)</li>
       <li>Initialize secure credential storage</li>
       <li>Initialize test-results bearer-token authentication</li>

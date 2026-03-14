@@ -242,8 +242,8 @@ const jsonLd = {
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]">Traceability gaps</td>
             <td class="px-4 py-3 font-medium text-[#B45309]">Warning</td>
-            <td class="px-4 py-3 text-[#555555]">0 (or N in --strict)</td>
-            <td class="px-4 py-3 text-[#555555]">Gap count shown; report generated</td>
+            <td class="px-4 py-3 text-[#555555]">0 (or N hard gaps in --strict)</td>
+            <td class="px-4 py-3 text-[#555555]">Hard and advisory gaps shown; report generated unless strict mode returns the hard-gap count</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]">Semantic warnings</td>
@@ -258,19 +258,26 @@ const jsonLd = {
             <td class="px-4 py-3 text-[#555555]">Generation failure; no done state</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
-            <td class="px-4 py-3 text-[#1A1A2E]">License not activated</td>
+            <td class="px-4 py-3 text-[#1A1A2E]">License required / free run exhausted</td>
             <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
             <td class="px-4 py-3 text-[#555555]">2</td>
             <td class="px-4 py-3 text-[#555555]">Remains on license gate</td>
           </tr>
-          <tr>
-            <td class="px-4 py-3 text-[#1A1A2E]">License expired / mismatch</td>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">License expired</td>
             <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
-            <td class="px-4 py-3 text-[#555555]">2</td>
+            <td class="px-4 py-3 text-[#555555]">3</td>
+            <td class="px-4 py-3 text-[#555555]">Remains on license gate</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">License invalid / tampered / wrong product</td>
+            <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
+            <td class="px-4 py-3 text-[#555555]">4</td>
             <td class="px-4 py-3 text-[#555555]">Remains on license gate</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <p class="text-[#555555] text-sm mt-4 mb-0">Trace treats diagnostics and gaps separately. Diagnostics describe workbook/container/header/reference problems. Gaps describe traceability structure and audit readiness. In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, only hard gaps affect the exit code.</p>
   </section>
 </DocsLayout>

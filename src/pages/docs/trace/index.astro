@@ -110,7 +110,7 @@ const jsonLd = {
         <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full border-2 border-[#1565C0] text-[#1565C0] font-bold text-xs">6</span>
         <div>
           <strong class="text-[#1A1A2E] block text-sm mb-0.5">Compute gaps</strong>
-          <p class="text-[#555555] text-sm m-0">Detects untested requirements, orphan requirements with no user need, and risk mitigations pointing to non-existent requirements. Gaps are always surfaced, even when they don't block output generation.</p>
+          <p class="text-[#555555] text-sm m-0">Detects workbook traceability gaps such as requirements with no user-need link, requirements with no usable test-group coverage, risks with missing or unresolved mitigation requirements, and advisory findings like empty test groups or user needs with no derived requirements. Hard gaps are always surfaced and can fail <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>; advisory gaps stay visible without blocking output.</p>
         </div>
       </li>
       <li class="flex gap-4 items-start">
@@ -138,6 +138,6 @@ const jsonLd = {
   <!-- Privacy callout -->
   <section class="border border-[#1565C0] border-opacity-30 bg-[#EFF3FB] rounded-lg p-6">
     <h2 class="text-base font-bold text-[#1565C0] mb-2 m-0">Runs entirely on your machine</h2>
-    <p class="text-[#555555] text-sm m-0">Report generation has no network dependencies. Trace reads your <code style="font-family: var(--font-family-mono); font-size: 0.8125rem;">.xlsx</code>, writes output files, and exits. No telemetry, no cloud sync. The only network activity is license activation and periodic refresh.</p>
+    <p class="text-[#555555] text-sm m-0">Report generation has no network dependencies. Trace reads your <code style="font-family: var(--font-family-mono); font-size: 0.8125rem;">.xlsx</code>, writes output files, and exits. No telemetry, no cloud sync. Signed license files are verified locally on your machine; no runtime activation or periodic license refresh is required.</p>
   </section>
 </DocsLayout>
