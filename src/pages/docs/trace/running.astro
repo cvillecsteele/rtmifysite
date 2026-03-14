@@ -90,12 +90,20 @@ const jsonLd = {
             <td class="px-4 py-3 text-[#555555]">Write a machine-readable gap and diagnostics file at the given path.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
-            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--activate &lt;key&gt;</td>
-            <td class="px-4 py-3 text-[#555555]">Activate with a license key. Does not generate a report.</td>
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">license info [--json] [--license &lt;path&gt;]</td>
+            <td class="px-4 py-3 text-[#555555]">Show signed-license status and, optionally, payload details. Does not generate a report.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
-            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--deactivate</td>
-            <td class="px-4 py-3 text-[#555555]">Release the current activation. Does not generate a report.</td>
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">license install &lt;path&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Verify and install a signed license file. Does not generate a report.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">license clear</td>
+            <td class="px-4 py-3 text-[#555555]">Remove the installed license file. Does not reset the one-free-run marker.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--license &lt;path&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Use a specific signed license file for this run.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--version</td>
@@ -124,8 +132,8 @@ const jsonLd = {
         <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --format md --strict --gaps-json gaps.json</pre>
       </div>
       <div>
-        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Activate a license</p>
-        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace --activate RTMIFY-XXXX-XXXX-XXXX</pre>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Install a signed license file</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace license install /path/to/license.json</pre>
       </div>
     </div>
 
@@ -149,15 +157,19 @@ const jsonLd = {
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">2</td>
-            <td class="px-4 py-3 text-[#555555]">License error. Not activated, expired, fingerprint mismatch, or provider unavailable outside grace period.</td>
+            <td class="px-4 py-3 text-[#555555]">License required or Trace free run exhausted.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">3</td>
-            <td class="px-4 py-3 text-[#555555]">Output error. Output path not writable or renderer write failure.</td>
+            <td class="px-4 py-3 text-[#555555]">License expired.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">4</td>
+            <td class="px-4 py-3 text-[#555555]">Invalid, tampered, or wrong-product license.</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">N</td>
-            <td class="px-4 py-3 text-[#555555]">In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, the gap count may be returned as the exit code.</td>
+            <td class="px-4 py-3 text-[#555555]">In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, the hard-gap count may be returned as the exit code.</td>
           </tr>
         </tbody>
       </table>
@@ -168,7 +180,7 @@ const jsonLd = {
     <ol class="text-sm text-[#555555] space-y-1.5 list-decimal list-inside">
       <li>Initialize licensing</li>
       <li>Parse arguments</li>
-      <li>Handle fast-path flags (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--activate</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--deactivate</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--version</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--help</code>) and exit if matched</li>
+      <li>Handle fast-path commands (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license info</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license install</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license clear</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--version</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--help</code>) and exit if matched</li>
       <li>Load and validate the workbook</li>
       <li>Ingest workbook rows into the traceability graph</li>
       <li>Compute warnings and gaps</li>
@@ -214,7 +226,7 @@ const jsonLd = {
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">App state flow</h3>
     <ol class="text-sm text-[#555555] space-y-2 list-none mb-6">
-      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">licenseGate</span><span>Launch checks license. Unlicensed users see the license key entry screen.</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">licenseGate</span><span>Launch checks for an installed signed license or the one-free-run state. If neither permits use, the app shows the license import gate.</span></li>
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">dropZone</span><span>Licensed users land here. Drag a workbook or click Browse.</span></li>
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">fileLoaded</span><span>Valid file loaded. Shows filename, gap count, warning count, and format picker (PDF / Word / Markdown / All).</span></li>
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">generating</span><span>Report is being written. Progress indicator shown.</span></li>
@@ -236,7 +248,7 @@ const jsonLd = {
     <p class="text-[#555555] text-sm mb-4">The Windows app follows the same five-state model as macOS — <strong>license_gate → drop_zone → file_loaded → generating → done</strong> — with the done state offering open, show in Explorer, and reset actions.</p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Async execution</h3>
-    <p class="text-[#555555] text-sm mb-4">Load, generate, and activate operations run on background worker threads. Completion is signaled back to the UI thread via Windows messages (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LOAD_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_GENERATE_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_ACTIVATE_COMPLETE</code>), keeping the UI responsive during library work.</p>
+    <p class="text-[#555555] text-sm mb-4">Load, generate, and license-import operations run on background worker threads. Completion is signaled back to the UI thread via Windows messages (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LOAD_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_GENERATE_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LICENSE_COMPLETE</code>), keeping the UI responsive during library work.</p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Output naming</h3>
     <p class="text-[#555555] text-sm">Names are derived from the input stem (e.g. <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">requirements-rtm.pdf</code>). Collisions are resolved first with a numbered suffix (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-2</code> through <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-99</code>), then with a timestamp suffix as a last resort.</p>

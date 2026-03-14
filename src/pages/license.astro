@@ -164,11 +164,11 @@ import Footer from '../components/Footer.astro';
                 <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">07 —</p>
                 <div class="prose prose-slate max-w-none">
                   <h2 class="mt-0">Data Transmission and License Verification</h2>
-                  <p>The Software may periodically contact license verification servers operated by Licensor solely for the purpose of validating the Licensee's software license. This verification may occur approximately once every thirty (30) days.</p>
-                  <p>During license verification, the Software transmits only the information necessary to validate the license, such as a license key or installation identifier.</p>
+                  <p>The Software verifies signed license files locally on the Licensee's machine. No periodic license verification calls to Licensor servers are required for normal operation.</p>
+                  <p>During license verification, the Software reads the locally installed license file and validates its signature. It does not transmit license keys, installation identifiers, or project data to Licensor for runtime validation.</p>
                   <p>The Software does not transmit Licensee project data, requirements, test artifacts, source code, or other engineering content to Licensor.</p>
-                  <p>The Software does not perform telemetry, analytics, or usage monitoring beyond license verification.</p>
-                  <p>The Software remains fully functional between license verification intervals and does not require continuous internet connectivity.</p>
+                  <p>The Software does not perform telemetry, analytics, or usage monitoring beyond optional website/payment-processing systems outside the runtime itself.</p>
+                  <p>The Software does not require continuous internet connectivity for license verification.</p>
                   <p>When configured by the Licensee, the Software may perform bidirectional data transfer with third-party services (such as spreadsheet or collaboration systems) for the purpose of importing spreadsheet data and writing updates to those systems. Licensor is not responsible for the operation, availability, or security of third-party services used in conjunction with the Software.</p>
                 </div>
               </div>

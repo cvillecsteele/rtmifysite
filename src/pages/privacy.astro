@@ -101,8 +101,8 @@ import Footer from '../components/Footer.astro';
                 <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">02 —</p>
                 <div class="prose prose-slate max-w-none">
                   <h2 class="mt-0">License purchases</h2>
-                  <p>License purchases are processed by LemonSqueezy, our payment processor. When you buy a license, LemonSqueezy collects your name, email address, and payment information. We receive your email address and order details to issue and verify your license key. We do not store payment card information.</p>
-                  <p>We use your email address to deliver your license key and, if you have active maintenance, to notify you of updates. We do not send marketing email. We do not sell or share your email address with third parties.</p>
+                  <p>License purchases are processed by our payment processor. When you buy a license, the processor collects your name, email address, and payment information. We receive your email address and order details so we can issue your signed RTMify license file. We do not store payment card information.</p>
+                  <p>We use your email address to deliver your signed license file and, if you have active maintenance, to notify you of updates. We do not send marketing email. We do not sell or share your email address with third parties.</p>
                 </div>
               </div>
 
@@ -111,7 +111,7 @@ import Footer from '../components/Footer.astro';
                 <div class="prose prose-slate max-w-none">
                   <h2 class="mt-0">RTMify Trace</h2>
                   <p>RTMify Trace is a local binary. It reads your .xlsx file, processes it in memory, and writes output to your local filesystem. No data is transmitted to any server. No telemetry is collected. No analytics are reported. The binary operates entirely offline.</p>
-                  <p>License key activation makes a single HTTPS request to LemonSqueezy to validate your key. After activation, the key is stored locally in <code>~/.rtmify/license.json</code> and re-validated periodically. No requirements data is included in these requests.</p>
+                  <p>License verification is fully local. RTMify Trace reads a signed <code>~/.rtmify/license.json</code> file and verifies its HMAC signature on your machine. No license validation requests are sent to RTMify servers.</p>
                 </div>
               </div>
 
@@ -123,7 +123,7 @@ import Footer from '../components/Footer.astro';
                   <p>Your requirements data — the contents of your Google Sheet — is fetched to your local machine, processed locally, and stored in a local SQLite database (<code>graph.db</code>) on your machine. It is never transmitted to RTMify servers. We have no access to your requirements, tests, risks, or any content of your sheet.</p>
                   <p>The MCP server runs locally on your machine and responds to requests from local clients only (e.g., Claude Desktop, Cursor). MCP traffic does not pass through RTMify servers.</p>
                   <p>Git repository scanning operates entirely locally. No source code, commit history, or annotation data leaves your machine.</p>
-                  <p>License activation works the same as for RTMify Trace — a validation request to LemonSqueezy containing only the license key and a machine fingerprint.</p>
+                  <p>License verification works the same as for RTMify Trace: the signed <code>~/.rtmify/license.json</code> file is checked locally on your machine. RTMify Live does not phone home for license validation.</p>
                 </div>
               </div>
 
@@ -139,7 +139,7 @@ import Footer from '../components/Footer.astro';
                 <p class="text-xs font-semibold tracking-widest text-[#555555] mb-2" style="font-family: var(--font-family-mono);">06 —</p>
                 <div class="prose prose-slate max-w-none">
                   <h2 class="mt-0">Data retention</h2>
-                  <p>We retain license purchase records (email, order ID, license key) for as long as the license may be active — which, given our perpetual license model, means indefinitely. You may request deletion of your email address from our records by contacting us; note that deletion will void your license key.</p>
+                  <p>We retain license purchase records (email and order details) for as long as the license may be active — which, given our perpetual license model, means indefinitely. You may request deletion of your email address from our records by contacting us; note that deletion will void our ability to reissue your signed license file.</p>
                 </div>
               </div>
 

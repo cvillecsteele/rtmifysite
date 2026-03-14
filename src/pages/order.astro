@@ -14,7 +14,7 @@ const valid = license_key.length > 0;
 
 <BaseLayout
   title="Order Confirmed — RTMify Trace"
-  description="Your RTMify Trace license key is ready. Follow the instructions below to activate it on your machine."
+  description="Your RTMify Trace order is confirmed. Follow the instructions below to install your signed license file."
 >
   <Nav />
 
@@ -37,18 +37,11 @@ const valid = license_key.length > 0;
             </p>
           )}
 
-          <!-- License key -->
+          <!-- License delivery -->
           <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded-xl p-6 mb-8">
-            <p class="text-xs font-semibold text-[#555555] uppercase tracking-widest mb-2">Your license key</p>
-            <div class="flex items-center gap-3">
-              <code id="license-key" class="flex-1 text-[#1A1A2E] font-mono text-lg font-semibold break-all">{license_key}</code>
-              <button
-                id="copy-btn"
-                onclick={`navigator.clipboard.writeText('${license_key}').then(()=>{const b=document.getElementById('copy-btn');b.textContent='Copied';setTimeout(()=>b.textContent='Copy',2000);})`}
-                class="shrink-0 px-3 py-1.5 text-sm font-medium bg-white border border-[#DDDDDD] rounded-lg hover:bg-[#F5F5F5] transition-colors"
-              >Copy</button>
-            </div>
-            <p class="text-xs text-[#555555] mt-3">Save this key. You'll need it to activate RTMify Trace on each machine.</p>
+            <p class="text-xs font-semibold text-[#555555] uppercase tracking-widest mb-2">Signed license file</p>
+            <p class="text-sm text-[#555555] mb-3">Your RTMify Trace license is delivered as a signed <code>license.json</code> file, not a machine-activation key.</p>
+            <p class="text-xs text-[#555555] m-0">If you do not see the license file attached to your purchase confirmation email, contact <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">hello@rtmify.io</a> with your order details.</p>
           </div>
 
           <!-- Activation instructions -->
@@ -67,15 +60,15 @@ const valid = license_key.length > 0;
               <li class="flex gap-4 items-start">
                 <span class="shrink-0 w-6 h-6 rounded-full bg-[#1A1A2E] text-white text-xs font-bold flex items-center justify-center">2</span>
                 <div>
-                  <p class="text-[#1A1A2E] font-medium">Run the activate command</p>
-                  <pre class="mt-2 bg-[#1A1A2E] text-green-400 font-mono text-sm rounded-lg px-4 py-3 overflow-x-auto"><code>rtmify-trace --activate {license_key}</code></pre>
+                  <p class="text-[#1A1A2E] font-medium">Install the signed license file</p>
+                  <pre class="mt-2 bg-[#1A1A2E] text-green-400 font-mono text-sm rounded-lg px-4 py-3 overflow-x-auto"><code>rtmify-trace license install /path/to/license.json</code></pre>
                 </div>
               </li>
               <li class="flex gap-4 items-start">
                 <span class="shrink-0 w-6 h-6 rounded-full bg-[#1A1A2E] text-white text-xs font-bold flex items-center justify-center">3</span>
                 <div>
                   <p class="text-[#1A1A2E] font-medium">You're done</p>
-                  <p class="text-sm text-[#555555]">The license is bound to this machine. Run RTMify Trace on any <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-xs">.xlsx</code> file — no internet connection required after activation.</p>
+                  <p class="text-sm text-[#555555]">The signed license file is verified locally. Run RTMify Trace on any <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-xs">.xlsx</code> file — no runtime internet connection is required.</p>
                 </div>
               </li>
             </ol>
@@ -92,16 +85,15 @@ const valid = license_key.length > 0;
           <!-- Moving to another machine -->
           <div class="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-5 text-sm text-[#555555]">
             <p class="font-semibold text-[#1A1A2E] mb-1">Moving to a new machine?</p>
-            <p>Deactivate first on the old machine, then activate on the new one:</p>
-            <pre class="mt-2 bg-white border border-blue-100 font-mono text-xs rounded px-3 py-2 overflow-x-auto"><code>rtmify-trace --deactivate</code></pre>
+            <p>Copy the signed <code>license.json</code> file to the new machine or install it there with <code>rtmify-trace license install /path/to/license.json</code>.</p>
           </div>
         </>
       ) : (
         <!-- No license key in URL -->
         <div class="text-center py-16">
           <h1 class="text-2xl font-bold text-[#1A1A2E] mb-3">No order found</h1>
-          <p class="text-[#555555] mb-6">This page is only valid when reached directly from a LemonSqueezy order confirmation.</p>
-          <p class="text-[#555555]">If you completed a purchase and didn't receive your license key, <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">email us</a> with your order ID.</p>
+          <p class="text-[#555555] mb-6">This page is only valid when reached directly from a purchase confirmation.</p>
+          <p class="text-[#555555]">If you completed a purchase and didn't receive your signed license file, <a href="mailto:hello@rtmify.io" class="underline hover:text-[#1A1A2E]">email us</a> with your order ID.</p>
         </div>
       )}
 
