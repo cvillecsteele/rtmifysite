@@ -151,6 +151,9 @@ const jsonLd = {
       The standard mandates a V-model development cycle: Hazard Analysis and Risk Assessment (HARA, Part 3 §7) identifies safety goals; Functional Safety Requirements (FSRs, Part 4 §6) and Technical Safety Requirements (TSRs, Part 6 §6) implement those goals; and Verification/Validation per Part 6 §9–§11 confirms correctness. ASIL inheritance and decomposition rules (Part 2 §5) govern how ASILs propagate through the architecture.
     </p>
     <p class="body-text">
+      For ISO 26262 workbooks, run RTMify Trace with the <code>automotive</code> profile. That enables automotive-specific chain checks for ASIL inheritance, decomposition, and configuration-item continuity instead of limiting validation to the generic requirement/test matrix.
+    </p>
+    <p class="body-text">
       By the end of this guide, you'll have a complete RTM linking safety goals through functional and technical requirements, test plans, and risk controls. This RTM is a key artifact in your design documentation and demonstrates compliance with ISO 26262 Part 6 traceability requirements.
     </p>
   </section>
@@ -408,6 +411,9 @@ const jsonLd = {
       <h3 class="step-title">Validate Traceability and ASIL Consistency (Part 6 Compliance)</h3>
       <p class="body-text">
         Run <strong>RTMify Trace</strong> to validate bidirectional traceability and ASIL consistency. Every requirement should trace to a safety goal (UN), have linked tests, and respect ASIL inheritance/decomposition rules (Part 2 §5). The trace checks:
+      </p>
+      <p class="body-text">
+        Use <code>rtmify-trace --profile automotive your-workbook.xlsx</code> for ISO 26262 reviews. The automotive profile is what surfaces ASIL-chain and decomposition gaps before a functional safety assessment.
       </p>
       <ul class="bullet-list">
         <li><code>MISSING_USER_NEED</code> — Requirement with no parent safety goal (traceability upward broken)</li>

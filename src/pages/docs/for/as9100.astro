@@ -168,6 +168,9 @@ const faqItems = [
       <p class="mb-4">
         Clause 8.3 (Design and Development) governs how you capture, verify, and manage design requirements. This template covers the traceability artifacts that clause requires: design inputs, design outputs, verification and validation, and configuration management.
       </p>
+      <p class="mb-4">
+        For aerospace programs, run RTMify Trace with the <code class="bg-[#F5F5F5] px-1 py-0.5 rounded text-[#1565C0] text-sm">aerospace</code> profile. That enables the extra decomposition and configuration-item checks used in regulated aerospace workflows while preserving the generic requirement, test, and risk checks described below.
+      </p>
       <p>
         By the end of this guide, you'll have a complete requirements traceability matrix (RTM) that demonstrates compliance with §8.3.3–8.3.6 and links design decisions to risk mitigation per §6.1.
       </p>
@@ -389,6 +392,9 @@ const faqItems = [
       </div>
       <p class="text-[#555555] mb-4">
         Run <strong>RTMify Trace</strong> to validate the matrix. Every row should show <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">OK</code> status. The trace checks for:
+      </p>
+      <p class="text-[#555555] mb-4">
+        Use <code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">rtmify-trace --profile aerospace your-workbook.xlsx</code> when validating an AS9100 workbook. The aerospace profile keeps the standard coverage checks and adds the workbook decomposition/configuration-item checks expected in aerospace audit packages.
       </p>
       <ul class="list-disc list-inside text-[#555555] mb-4 space-y-2">
         <li><code class="bg-white px-1 py-0.5 rounded text-[#1565C0] text-sm">MISSING_USER_NEED</code> — Requirement with no User Need link (§8.3.3–8.3.4 traceability broken)</li>

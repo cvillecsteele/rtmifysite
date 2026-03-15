@@ -154,6 +154,9 @@ const jsonLd = {
         IEC 62304 classifies software into three safety classes (A, B, C) based on potential harm severity. Your software's class determines which lifecycle activities are mandatory. This template covers the core software lifecycle phases: requirements (§5.2), architectural design (§5.3), integration testing (§5.5), and system testing/release (§5.7).
       </p>
       <p>
+        For IEC 62304 workbooks, run RTMify Trace with the <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">medical</code> profile. That enables the medical design-input, design-output, and configuration-item checks that sit on top of the generic requirement, test, and risk matrix.
+      </p>
+      <p>
         By the end of this guide, you'll have a complete traceability matrix linking User Needs through software requirements, tests, and risk controls. This RTM is a key artifact in your Design History File (DHF) and demonstrates regulatory compliance with IEC 62304 §5.5 bidirectional traceability.
       </p>
     </div>
@@ -441,6 +444,9 @@ const jsonLd = {
         </h3>
         <p class="text-[#555555] mb-4">
           Run <strong>RTMify Trace</strong> to validate bidirectional traceability per <strong>§5.5.5</strong>. Every row should show <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">OK</code> status. The trace checks:
+        </p>
+        <p class="text-[#555555] mb-4">
+          Use <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">rtmify-trace --profile medical your-workbook.xlsx</code> for IEC 62304 validation. The medical profile adds Design Input → Requirement → Design Output / Configuration Item continuity checks that are expected in software lifecycle and DHF reviews.
         </p>
         <ul class="space-y-2 ml-6 text-[#555555] mb-4">
           <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#BF360C] font-mono">MISSING_USER_NEED</code> — Software requirement with no parent User Need link (traceability upward broken)</li>

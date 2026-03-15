@@ -127,6 +127,9 @@ const jsonLd = {
         through design outputs, verification, and validation. This guide shows how RTMify maps directly to §7.3
         design control requirements and accelerates Design History File (DHF) documentation.
       </p>
+      <p class="text-[#555555] mb-6 leading-relaxed">
+        For ISO 13485 workbooks, run RTMify Trace with the <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#2E7D32] font-mono">medical</code> profile. That turns on the medical-specific checks for design inputs, design outputs, verification/validation continuity, and configuration items while preserving the generic matrix behavior.
+      </p>
       <div class="flex flex-wrap gap-3 text-sm">
         <span class="px-3 py-1 bg-[#F5F5F5] border border-[#DDDDDD] rounded text-[#2E7D32] font-semibold">ISO 13485:2016</span>
         <span class="text-[#555555]">§7.3 Design and Development</span>
@@ -676,6 +679,9 @@ Risk Mitigations:
           <p class="text-[#555555] mb-4">
             Regulators and auditors expect this documentation in your DHF. RTMify's export function provides auditable
             evidence that you have met all requirements of ISO 13485:2016 §7.3.
+          </p>
+          <p class="text-[#555555] mb-4">
+            When you validate the workbook itself, use <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#2E7D32] font-mono">rtmify-trace --profile medical your-workbook.xlsx</code>. The medical profile is the mode that surfaces missing design-input/design-output chains and other medical traceability gaps before DHF review.
           </p>
         </article>
       </div>

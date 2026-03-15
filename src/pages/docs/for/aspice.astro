@@ -167,6 +167,9 @@ const jsonLd = {
         ASPICE assesses how well your organization performs specific process elements: SYS.1 (stakeholder requirements elicitation), SYS.2 (system requirements definition), SWE.1 (software requirements derivation), SWE.2–3 (architecture and detailed design), SWE.4–6 (unit/integration/qualification verification), and generic practices like GP 2.1.7 (bidirectional traceability) and GP 2.1.1 (work product management and approval). The template demonstrates base practices (BP) and generic practices (GP) through structured documentation of requirements, tests, and traceability.
       </p>
       <p>
+        For ASPICE workbooks, run RTMify Trace with the <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">automotive</code> profile. That turns on the automotive-specific chain checks behind SYS.1 → SYS.2 → SWE.1 allocation, configuration-item coverage, and other automotive workflow gaps while keeping the generic traceability checks intact.
+      </p>
+      <p>
         By the end of this guide, you'll have a complete requirements traceability matrix (RTM) linking stakeholder requirements (SYS.1) through system requirements (SYS.2), software requirements (SWE.1), verification activities (SWE.4–6), and risk mitigations. This RTM is key evidence in your ASPICE assessment and demonstrates compliance with capability level requirements for OEM audit readiness.
       </p>
     </div>
@@ -528,6 +531,9 @@ const jsonLd = {
             <h3 class="text-xl font-semibold text-[#1A1A2E] mb-4">Validate Bidirectional Traceability (GP 2.1.7)</h3>
             <p class="text-[#555555] mb-4">
               Run <strong>RTMify Trace</strong> to validate bidirectional traceability and identify gaps. Generic Practice 2.1.7 (traceability) is mandatory for CL2+ assessment: every requirement must have a parent User Need and linked tests; every test must link to a requirement; no orphaned items. Trace also validates that all stakeholder needs are addressed by at least one requirement (coverage).
+            </p>
+            <p class="text-[#555555] mb-4">
+              Use <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">rtmify-trace --profile automotive your-workbook.xlsx</code> for ASPICE assessments. The automotive profile keeps the baseline matrix checks and adds the allocation and automotive-chain checks that matter when an assessor drills into SYS/SWE trace continuity.
             </p>
             <ul class="space-y-2 text-[#555555] ml-6 list-disc mb-4">
               <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#004D40]">MISSING_USER_NEED</code> — SYS/SWE requirement with no parent UN (traceability broken upward)</li>

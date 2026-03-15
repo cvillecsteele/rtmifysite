@@ -159,6 +159,9 @@ const jsonLd = {
           This template covers the <strong>requirements-to-test traceability portion</strong> (§5.5 Software Requirements Process and §6.3–6.4 Verification), the core of every DO-178C software development plan (SDP). You will not find source code or structural coverage metrics here; those are addressed in separate tools and reports (Software Accomplishment Summary, SAS).
         </p>
         <p>
+          When you validate a DO-178C workbook in RTMify Trace, use the <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">aerospace</code> profile. That enables aerospace-specific chain checks for HLR, LLR, decomposition, and related verification evidence instead of stopping at the generic requirement-to-test matrix.
+        </p>
+        <p>
           By the end of this guide, you'll have a complete requirements traceability matrix (RTM) that demonstrates bidirectional traceability per §5.5.e and links design decisions to verification methods and risk mitigation. This RTM is evidence for your certification authority (FAA, EASA, or national equivalent).
         </p>
       </div>
@@ -432,6 +435,9 @@ const jsonLd = {
           <div class="space-y-4 text-[#555555]">
             <p>
               Run <strong>RTMify Trace</strong> to validate the complete matrix. Every row should show <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">OK</code> status. The trace checks bidirectional traceability per §5.5.e:
+            </p>
+            <p>
+              Use <code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">rtmify-trace --profile aerospace your-workbook.xlsx</code> so Trace evaluates the aerospace requirement chain, not just the generic gaps. This is the mode that surfaces missing HLR→LLR or decomposition continuity before certification review.
             </p>
             <ul class="list-disc list-inside space-y-2 ml-4">
               <li><code class="bg-[#F5F5F5] px-2 py-1 rounded text-[#6A1B9A] font-mono">MISSING_USER_NEED</code> — HLR/LLR with no parent requirement link (traceability upward broken)</li>
