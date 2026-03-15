@@ -42,13 +42,13 @@ const jsonLd = {
       Gap Summary
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      A gap is a workbook-level traceability finding that auditors will flag. Trace always detects and surfaces gaps, but only hard gaps fail strict mode.
+      A gap is a workbook-level traceability finding that auditors will flag. Trace now merges generic graph gaps and profile-generated chain gaps into one result set; only hard/error findings count toward <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.
     </p>
   </div>
 
   <!-- Key principle -->
   <div class="border border-[#1565C0] border-opacity-30 bg-[#EFF3FB] rounded-lg p-5 mb-10">
-    <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Gaps don't block output by default.</strong> Trace still generates reports when gaps are present. The report's Gap Summary section lists them, grouped into hard and advisory findings. Only hard gaps block CI when you pass <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.</p>
+    <p class="text-[#555555] text-sm m-0"><strong class="text-[#1A1A2E]">Gaps don't block output by default.</strong> Trace still generates reports when gaps are present. Generic reports group findings into hard and advisory sections; profile-aware reports render one merged list with profile clause references where available. Only hard gaps and profile <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">err</code> findings affect <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #EFF3FB; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code>.</p>
   </div>
 
   <!-- Gap classes -->
@@ -138,6 +138,19 @@ const jsonLd = {
         </div>
       </div>
 
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="flex items-center gap-3 bg-[#E8F5E9] px-5 py-3 border-b border-[#DDDDDD]">
+          <span class="text-base">↔</span>
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Profile-specific chain gaps</h3>
+        </div>
+        <div class="px-5 py-4 space-y-2">
+          <p class="text-[#555555] text-sm m-0"><strong>Class:</strong> Profile-dependent <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">err</code> or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">warn</code></p>
+          <p class="text-[#555555] text-sm m-0"><strong>Condition:</strong> A non-generic profile activates additional chain checks such as Design Input → Design Output continuity, HLR → LLR decomposition, source/configuration-item evidence, or ASIL inheritance.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Examples:</strong> <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">iso13485_di_do_chain</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">do178c_hlr_llr_decomposition</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">iso26262_asil_inheritance</code>.</p>
+          <p class="text-[#555555] text-sm m-0"><strong>Fix:</strong> Repair the missing chain under the chosen profile or rerun with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile generic</code> if you intentionally want the baseline generic graph checks only.</p>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -172,7 +185,7 @@ const jsonLd = {
 
     <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-4" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict</pre>
 
-    <p class="text-[#555555] text-sm mb-4">In strict mode the exit code reflects the hard-gap count only. A CI step configured to check for a non-zero exit code will catch regressions in required traceability completeness without failing on advisory-only findings.</p>
+    <p class="text-[#555555] text-sm mb-4">In strict mode the exit code reflects the merged hard-gap count: generic <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">hard</code> gaps plus profile <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">err</code> findings for the selected profile. Advisory generic gaps and profile <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">warn</code> findings do not fail CI.</p>
 
     <p class="text-[#555555] text-sm">Combine with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json</code> to get a machine-readable artifact alongside the exit code:</p>
     <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mt-3" style="font-family: var(--font-family-mono);">rtmify-trace requirements.xlsx --format md --strict --gaps-json gaps.json</pre>
@@ -183,10 +196,32 @@ const jsonLd = {
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Gaps JSON</h2>
     <p class="text-[#555555] text-sm mb-4">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--gaps-json &lt;path&gt;</code> is passed, Trace writes a structured JSON file at that path. It captures:</p>
     <ul class="space-y-1.5 text-sm text-[#555555] mb-6">
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>The active top-level <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">profile</code></span></li>
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Parser and ingest diagnostics (warnings, errors, and their codes)</span></li>
-      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Each gap finding, including severity, kind, primary ID, and related ID when applicable</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Each gap finding, including <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">severity</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">kind</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">primary_id</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">node_id</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">related_id</code> when applicable</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>For profile gaps, additional <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">code</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">profile_rule</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">clause</code> fields</span></li>
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Hard gap count plus warning and error totals</span></li>
     </ul>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-6" style="font-family: var(--font-family-mono);">{`{
+  "profile": "medical",
+  "diagnostics": [...],
+  "gaps": [
+    {
+      "severity": "err",
+      "code": 1202,
+      "kind": "design_input_without_design_output",
+      "primary_id": "DI-001",
+      "node_id": "DI-001",
+      "related_id": null,
+      "profile_rule": "iso13485_di_do_chain",
+      "clause": "ISO 13485 §7.3.4",
+      "message": "..."
+    }
+  ],
+  "gap_count": 4,
+  "warning_count": 2,
+  "error_count": 0
+}`}</pre>
     <p class="text-[#555555] text-sm">This file is intended for downstream tooling — build dashboards, custom reporters, or RTMify Live ingestion. It does not need to be read by humans to understand gaps; the report's Gap Summary section is the human-readable version.</p>
   </section>
 </DocsLayout>

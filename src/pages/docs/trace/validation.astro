@@ -42,7 +42,7 @@ const jsonLd = {
       Validation &amp; Errors
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Before any output is generated, Trace runs every workbook through a two-stage validation pipeline. This page explains what each stage checks, what constitutes a fatal error, and how issues are reported.
+      Before any output is generated, Trace runs every workbook through XLSX parsing, schema ingest, semantic validation, and optionally profile-aware chain checks. This page explains what blocks output, what only warns, and how profile-aware validation changes the result.
     </p>
   </div>
 
@@ -199,6 +199,42 @@ const jsonLd = {
     <p class="text-[#555555] text-sm mt-3">These are warnings, not errors. They appear in the warning count and the gaps JSON, but they don't block report generation.</p>
   </section>
 
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Profile-aware validation</h2>
+    <p class="text-[#555555] text-sm mb-4">When you run the CLI with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile medical</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">aerospace</code>, or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">automotive</code>, Trace enables additional tabs during ingest and then runs profile-specific chain checks over the graph.</p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Profile</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Additional ingest surface</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Examples of added checks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">medical</td>
+            <td class="px-4 py-3 text-[#555555]">Product, Design Inputs, Design Outputs, Configuration Items</td>
+            <td class="px-4 py-3 text-[#555555]">Design input/output continuity, implementation evidence, configuration control</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]">aerospace</td>
+            <td class="px-4 py-3 text-[#555555]">Product, Decomposition, Configuration Items</td>
+            <td class="px-4 py-3 text-[#555555]">HLR → LLR decomposition, source/configuration-item continuity</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 text-[#1A1A2E]">automotive</td>
+            <td class="px-4 py-3 text-[#555555]">Product, Configuration Items</td>
+            <td class="px-4 py-3 text-[#555555]">ASIL inheritance, hazard/safety-goal requirement chains, automotive evidence checks</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-[#555555] text-sm mb-0">Missing expected profile tabs do <strong>not</strong> block output. Trace emits a warning diagnostic and continues, allowing the downstream profile gap analysis to show what chain evidence is missing.</p>
+  </section>
+
   <!-- Failure reference -->
   <section class="border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Failure reference</h2>
@@ -254,7 +290,7 @@ const jsonLd = {
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]">Output path not writable</td>
             <td class="px-4 py-3 font-medium text-[#CC0000]">Fatal</td>
-            <td class="px-4 py-3 text-[#555555]">3</td>
+            <td class="px-4 py-3 text-[#555555]">5</td>
             <td class="px-4 py-3 text-[#555555]">Generation failure; no done state</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
@@ -278,6 +314,6 @@ const jsonLd = {
         </tbody>
       </table>
     </div>
-    <p class="text-[#555555] text-sm mt-4 mb-0">Trace treats diagnostics and gaps separately. Diagnostics describe workbook/container/header/reference problems. Gaps describe traceability structure and audit readiness. In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, only hard gaps affect the exit code.</p>
+    <p class="text-[#555555] text-sm mt-4 mb-0">Trace treats diagnostics and gaps separately. Diagnostics describe workbook/container/header/reference problems. Gaps describe traceability structure and audit readiness. In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, generic hard gaps and profile error findings affect the exit code.</p>
   </section>
 </DocsLayout>

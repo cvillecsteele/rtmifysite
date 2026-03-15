@@ -42,7 +42,7 @@ const jsonLd = {
       Running Trace
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Trace can be run from the command line, from the macOS app, or from the Windows app. All three paths use the same engine and produce identical outputs.
+      Trace can be run from the command line, from the macOS app, or from the Windows app. All three paths use the same core workbook loader and report engine, but the CLI currently exposes the full profile-aware surface while the desktop apps still run the generic path.
     </p>
   </div>
 
@@ -53,7 +53,7 @@ const jsonLd = {
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Basic usage</h3>
     <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-6" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx</pre>
 
-    <p class="text-[#555555] text-sm mb-6">This writes <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">my-template-rtm.docx</code> alongside the input file. The default output format is Word.</p>
+    <p class="text-[#555555] text-sm mb-6">This writes <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">my-template.docx</code> alongside the input file. The default output format is Word.</p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">All flags</h3>
     <div class="overflow-x-auto mb-8">
@@ -75,7 +75,7 @@ const jsonLd = {
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--output &lt;path&gt;</td>
-            <td class="px-4 py-3 text-[#555555]">Output path. Directory: writes derived-name files inside it. File: used as exact path when one format is selected. Omitted: writes beside the input file.</td>
+            <td class="px-4 py-3 text-[#555555]">Output path. Directory: writes derived-name files inside it. File: used as the literal output path. Omitted: writes beside the input file.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--project &lt;name&gt;</td>
@@ -88,6 +88,10 @@ const jsonLd = {
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--gaps-json &lt;path&gt;</td>
             <td class="px-4 py-3 text-[#555555]">Write a machine-readable gap and diagnostics file at the given path.</td>
+          </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">--profile &lt;name&gt;</td>
+            <td class="px-4 py-3 text-[#555555]">Validation profile: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">generic</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">medical</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">aerospace</code>, or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">automotive</code>. Default: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">generic</code>.</td>
           </tr>
           <tr class="border-b border-[#EEEEEE]">
             <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono);">license info [--json] [--license &lt;path&gt;]</td>
@@ -132,6 +136,10 @@ const jsonLd = {
         <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --format md --strict --gaps-json gaps.json</pre>
       </div>
       <div>
+        <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Run profile-aware validation</p>
+        <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace my-template.xlsx --profile medical --format pdf</pre>
+      </div>
+      <div>
         <p class="text-xs font-semibold text-[#555555] uppercase tracking-wide mb-1.5">Install a signed license file</p>
         <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-trace license install /path/to/license.json</pre>
       </div>
@@ -167,6 +175,10 @@ const jsonLd = {
             <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">4</td>
             <td class="px-4 py-3 text-[#555555]">Invalid, tampered, or wrong-product license.</td>
           </tr>
+          <tr class="border-b border-[#EEEEEE]">
+            <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">5</td>
+            <td class="px-4 py-3 text-[#555555]">Output error. Trace could not write or render the requested report file.</td>
+          </tr>
           <tr>
             <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono);">N</td>
             <td class="px-4 py-3 text-[#555555]">In <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--strict</code> mode, the hard-gap count may be returned as the exit code.</td>
@@ -192,6 +204,10 @@ const jsonLd = {
   <!-- macOS -->
   <section class="mb-14 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">macOS app</h2>
+
+    <p class="text-[#555555] text-sm mb-6">
+      The macOS app currently drives the generic Trace path only. It does not yet expose the CLI's <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile</code> switch, so use the CLI when you need medical, aerospace, or automotive validation behavior.
+    </p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
     <p class="text-[#555555] text-sm mb-4">The macOS app accepts <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> files by drag-and-drop onto the drop zone, or via <strong>Browse…</strong> (NSOpenPanel). Other file types are rejected with an explanatory message:</p>
@@ -234,12 +250,16 @@ const jsonLd = {
     </ol>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Output naming</h3>
-    <p class="text-[#555555] text-sm">Output filenames are derived from the input stem. If a collision exists, a numeric suffix is added. The files appear in the same directory as the input workbook.</p>
+    <p class="text-[#555555] text-sm">Output filenames are derived from the input stem with an <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-rtm</code> suffix. If a collision exists, a numeric suffix is added. The files appear in the same directory as the input workbook.</p>
   </section>
 
   <!-- Windows -->
   <section class="border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Windows app</h2>
+
+    <p class="text-[#555555] text-sm mb-6">
+      The Windows app currently runs the generic Trace path only. It shares the workbook loader and renderer bridge, but it does not yet expose the CLI's profile-aware validation modes.
+    </p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
     <p class="text-[#555555] text-sm mb-4">The Windows app accepts <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> files by drag-and-drop (WM_DROPFILES) or via a browse dialog. Rejection messages mirror the macOS app, adapted for Windows context (e.g. "open in Excel and re-save as .xlsx" for <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xls</code> files).</p>

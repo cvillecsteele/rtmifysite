@@ -42,7 +42,7 @@ const jsonLd = {
       Output Formats
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Trace generates three output formats from the same traceability graph. All three contain identical logical content — only the presentation layer differs.
+      Trace generates three output formats from the same traceability graph. Within a given run, PDF, DOCX, and Markdown carry the same logical report content; the exact section set depends on whether you run the generic path or a profile-aware CLI run.
     </p>
   </div>
 
@@ -93,7 +93,10 @@ const jsonLd = {
   <!-- Report sections -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Report sections</h2>
-    <p class="text-[#555555] text-sm mb-6">Every output file — regardless of format — is organized into five sections in this order:</p>
+    <p class="text-[#555555] text-sm mb-6">Generic runs and profile-aware runs share the same renderer family, but they do not emit the same section list.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Generic output</h3>
+    <p class="text-[#555555] text-sm mb-6">When you omit <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile</code> or use <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile generic</code>, every output file is organized into these five sections:</p>
 
     <div class="space-y-6">
 
@@ -167,6 +170,22 @@ const jsonLd = {
       </div>
 
     </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mt-10 mb-3">Profile-aware CLI output</h3>
+    <p class="text-[#555555] text-sm mb-4">When you run the CLI with a non-generic profile, the report expands to include profile-specific sections. The current profile-aware section order is:</p>
+    <ol class="text-sm text-[#555555] space-y-1.5 list-decimal list-inside">
+      <li>Summary</li>
+      <li>User Needs</li>
+      <li>Design Inputs</li>
+      <li>Design Outputs</li>
+      <li>Requirements Traceability</li>
+      <li>Tests</li>
+      <li>Risk Register</li>
+      <li>Configuration Items</li>
+      <li>Gap Summary</li>
+      <li>Profile Compliance Summary</li>
+    </ol>
+    <p class="text-[#555555] text-sm mt-4">This profile-aware surface is currently CLI-only. The macOS and Windows apps still generate the generic report shape.</p>
   </section>
 
   <!-- Output naming -->
@@ -176,12 +195,13 @@ const jsonLd = {
 
     <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm mb-6" style="font-family: var(--font-family-mono);">
       my-template.xlsx<br/>
-      my-template-rtm.pdf<br/>
-      my-template-rtm.docx<br/>
-      my-template-rtm.md
+      my-template.pdf<br/>
+      my-template.docx<br/>
+      my-template.md
     </div>
 
-    <p class="text-[#555555] text-sm mb-2">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--output</code> is a directory, derived-name files are written inside that directory. When it is a file path and only one format is being generated, that exact path is used.</p>
-    <p class="text-[#555555] text-sm">Collision handling differs slightly by platform wrapper. The macOS app adds numeric suffixes. The Windows app tries <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-2</code> through <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-99</code>, then falls back to a timestamp suffix.</p>
+    <p class="text-[#555555] text-sm mb-2">When <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--output</code> is a directory, derived-name files are written inside that directory. When it is a file path, the CLI uses that path literally.</p>
+    <p class="text-[#555555] text-sm mb-2">For <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--format all</code>, the CLI expects <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--output</code> to be a directory path if you override it. A literal file path is not expanded into three sibling filenames.</p>
+    <p class="text-[#555555] text-sm">Collision handling differs by entrypoint. The CLI writes the literal derived name shown above. The macOS app uses an <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-rtm</code> suffix and adds numeric suffixes. The Windows app uses an <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-rtm</code> suffix, tries <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-2</code> through <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">-99</code>, then falls back to a timestamp suffix.</p>
   </section>
 </DocsLayout>
