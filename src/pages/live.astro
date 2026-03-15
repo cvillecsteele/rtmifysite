@@ -7,8 +7,8 @@ import ConversationDemo from '../components/ConversationDemo.astro';
 ---
 
 <BaseLayout
-  title="RTMify Live — Continuous Requirements Traceability with Git Integration and MCP"
-  description="RTMify Live keeps your RTM current automatically. 30-second sync to Google Sheets, git blame traceability, industry profiles, and a native MCP server so you can talk to your requirements with AI."
+  title="RTMify Live: Product Realization Graph for Regulated Industries"
+  description="RTMify Live builds a connected graph from your requirements, source code, BOMs, SBOMs, and test execution records. One binary. Local. Queryable by AI. From user need to shipped serial number."
 >
   <Nav />
 
@@ -18,10 +18,10 @@ import ConversationDemo from '../components/ConversationDemo.astro';
       <div class="max-w-3xl mx-auto">
         <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">RTMify Live</p>
         <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
-          Your RTM. Always current.
+          Know your product.
         </h1>
         <p class="text-lg text-gray-300 mb-8 max-w-2xl">
-          Live sync to your Google Sheet. Git blame traceability from requirement to commit. A native MCP server so your AI assistant can answer questions about your requirements in real time.
+          Live builds a connected graph from your requirements spreadsheet, your source code, your BOM, your SBOM, and your test execution records. One binary on your laptop. From user need to shipped serial number, queryable by AI.
         </p>
         <a href="/pricing#live" class="inline-block px-6 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
           See pricing →
@@ -32,18 +32,18 @@ import ConversationDemo from '../components/ConversationDemo.astro';
     <!-- MCP Conversation Demo -->
     <section class="py-20 px-4 bg-[#0F0F0F]">
       <div class="max-w-4xl mx-auto">
-        <p class="text-xs font-semibold text-gray-600 uppercase tracking-widest mb-4 text-center" style="font-family: var(--font-family-mono);">RTMify Live · MCP Demo</p>
+        <p class="text-xs font-semibold text-gray-600 uppercase tracking-widest mb-4 text-center" style="font-family: var(--font-family-mono);">RTMify Live · MCP</p>
         <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-3 tracking-tight" style="font-family: var(--font-family-display);">
-          Ask your requirements anything.
+          Ask your product anything.
         </h2>
         <p class="text-gray-500 text-center mb-12 max-w-lg mx-auto">
-          No form. No export. No pivot table. Connect your AI assistant once and your entire requirements database becomes <em>conversational</em>.
+          Connect your AI assistant once and your entire product realization history becomes conversational.
         </p>
         <ConversationDemo />
       </div>
     </section>
 
-    <!-- What it does — 4 feature blocks -->
+    <!-- What it does -->
     <section class="py-16 px-4 bg-white">
       <div class="max-w-3xl mx-auto">
         <h2 class="text-2xl font-bold text-[#1A1A2E] mb-10">What Live does</h2>
@@ -52,9 +52,9 @@ import ConversationDemo from '../components/ConversationDemo.astro';
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">1</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Keeps your sheet current — automatically</h3>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Keeps your design controls current</h3>
               <p class="text-[#555555]">
-                Connect Live to your Google Sheet and it polls every 30 seconds. When anyone edits a requirement, test, or risk, Live re-evaluates the full traceability chain and writes the result back: a color-coded status column on every row. Green for covered. Yellow for gaps. Red for errors. No manual updates. No stale RTMs. Your team keeps working in the spreadsheet they already use — Live runs in the background.
+                Connect Live to your Google Sheet and it polls every 30 seconds. When anyone edits a requirement, test, or risk, Live re-evaluates the full traceability chain and writes the result back: a color-coded status column on every row. Green means covered, yellow means gaps, and red means errors. Your team keeps working in the spreadsheet they already use. Live runs in the background.
               </p>
             </div>
           </div>
@@ -62,9 +62,9 @@ import ConversationDemo from '../components/ConversationDemo.astro';
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">2</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Reads your git repo</h3>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Reads your source code</h3>
               <p class="text-[#555555]">
-                Point Live at your working tree and it scans your source files for inline requirement tags — a simple annotation like <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">// REQ-047</code>, no tooling change required. Every poll cycle, Live re-reads your code as it exists on disk right now and maps each tag back to its requirement. The result is a live view of which requirements have implementation claims in your codebase, which files carry them, and which requirements have no code reference at all. Git attribution (author, commit, date) is available as metadata on each tag, but the signal is the current state of your source tree — not a commit from three months ago.
+                Point Live at your working tree and it scans for inline requirement tags: a <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">// REQ-047</code> comment in your C file, an annotation in your Python module, or a tag in your VHDL. No tooling changes are required. Every sync cycle, Live re-reads your source as it exists on disk right now and maps each tag back to its requirement. Git attribution (author, commit, and date) is available as metadata. The engineers already did the work. Live captures the proof.
               </p>
             </div>
           </div>
@@ -72,46 +72,74 @@ import ConversationDemo from '../components/ConversationDemo.astro';
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">3</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Talk to your requirements with AI</h3>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Ingests your test evidence</h3>
               <p class="text-[#555555]">
-                Live runs a native MCP server (Model Context Protocol — the standard used by Claude, Cursor, and other AI clients). Connect your AI assistant once and your entire requirements database becomes conversational. Ask things like:
+                Live accepts CI output, ATE logs, ATP results, and design verification records. Drop a JSON file in the inbox or POST to the API and Live matches each test case ID back to your requirements and each serial number to your product. The verification status on every requirement updates automatically. No spreadsheet maintenance is required and no manual cross-referencing is needed. The test ran, the evidence exists, and the graph knows.
               </p>
-              <ul class="mt-3 space-y-1 text-[#555555] list-none pl-0">
-                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Which requirements have no test coverage?"</em></li>
-                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"What breaks if I change REQ-047?"</em></li>
-                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Show me the full traceability chain for this user need."</em></li>
-                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Who implemented this requirement and which commit?"</em></li>
-                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"List every unimplemented requirement in the safety-critical subsystem."</em></li>
-              </ul>
-              <p class="text-[#555555] mt-3">
-                Your RTM goes from a document you update before audits to a knowledge base you can query any time.
-              </p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">CI / unit tests</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">ATE / ATP</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">design verification</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">environmental qual</code>
+              </div>
             </div>
           </div>
 
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">4</div>
             <div>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Consumes your BOM and SBOM</h3>
+              <p class="text-[#555555]">
+                Export your hardware BOM from your PLM, ERP, or CAD tool as a CSV. Export your software BOM from your CI pipeline as CycloneDX or SPDX JSON. Drop them in the inbox. Live builds the product structure tree and connects it to the design controls graph. You can see what's inside your product and which requirements each component traces to, covering hardware and software in one graph.
+              </p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DBEAFE; color: #1E40AF; font-family: var(--font-family-mono);">Hardware BOM (CSV)</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #F3E8FF; color: #6B21A8; font-family: var(--font-family-mono);">CycloneDX</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #F3E8FF; color: #6B21A8; font-family: var(--font-family-mono);">SPDX</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-5 items-start">
+            <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">5</div>
+            <div>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Queryable by AI</h3>
+              <p class="text-[#555555]">
+                Live runs a native MCP server. Connect Claude, Cursor, or any MCP-compatible client and the entire graph becomes conversational:
+              </p>
+              <ul class="mt-3 space-y-1 text-[#555555] list-none pl-0">
+                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Which requirements have no test coverage?"</em></li>
+                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Show me every serial number verified against REQ-047."</em></li>
+                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"What's the blast radius if supplier X has a quality notification on lot 2024-0847?"</em></li>
+                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"Which software dependencies are in ASM-1000 Rev C?"</em></li>
+                <li class="flex gap-2"><span class="text-[#1A1A2E] font-semibold shrink-0">→</span> <em>"REQ-047 changed last week. Which test executions used the old version?"</em></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex gap-5 items-start">
+            <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">6</div>
+            <div>
               <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Knows your standard</h3>
               <p class="text-[#555555]">
-                Pick a profile and Live enforces the right traceability chain for your regulatory context. Each profile checks the gaps that actually matter for your standard — not a generic list.
+                Pick a profile and Live enforces the right traceability chain for your regulatory context.
               </p>
               <div class="mt-4 grid sm:grid-cols-2 gap-3">
                 <div class="border border-[#DDDDDD] rounded-lg p-4">
                   <p class="font-semibold text-[#1A1A2E] text-sm mb-1">Medical</p>
-                  <p class="text-xs text-[#555555]">ISO 13485 / IEC 62304 / FDA. Full Design Input → Output → Source chain. Risk mitigation linkage.</p>
+                  <p class="text-xs text-[#555555]">ISO 13485 / IEC 62304 / FDA. Live enforces the Design Input to Design Output to source code chain. Risk mitigation linkage is required.</p>
                 </div>
                 <div class="border border-[#DDDDDD] rounded-lg p-4">
                   <p class="font-semibold text-[#1A1A2E] text-sm mb-1">Aerospace</p>
-                  <p class="text-xs text-[#555555]">AS9100 / DO-178C. HLR/LLR decomposition. Structural coverage evidence. DAL annotation.</p>
+                  <p class="text-xs text-[#555555]">AS9100 / DO-178C. Live requires HLR/LLR decomposition and structural coverage evidence. DAL annotation is tracked.</p>
                 </div>
                 <div class="border border-[#DDDDDD] rounded-lg p-4">
                   <p class="font-semibold text-[#1A1A2E] text-sm mb-1">Automotive</p>
-                  <p class="text-xs text-[#555555]">ISO 26262 / ASPICE. ASIL assignment and inheritance checks. HARA linkage.</p>
+                  <p class="text-xs text-[#555555]">ISO 26262 / ASPICE. Live checks ASIL assignment and inheritance. HARA linkage is enforced.</p>
                 </div>
                 <div class="border border-[#DDDDDD] rounded-lg p-4">
                   <p class="font-semibold text-[#1A1A2E] text-sm mb-1">Generic</p>
-                  <p class="text-xs text-[#555555]">No required chain. User Needs, Requirements, Tests, Risks. Start here and tighten later.</p>
+                  <p class="text-xs text-[#555555]">No required chain is enforced. Live tracks User Needs, Requirements, Tests, and Risks. Start here and add constraints as your process matures.</p>
                 </div>
               </div>
             </div>
@@ -121,48 +149,119 @@ import ConversationDemo from '../components/ConversationDemo.astro';
       </div>
     </section>
 
-    <!-- The problem it solves -->
+    <!-- The graph -->
     <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Why not just use Jama?</h2>
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">The product realization graph</h2>
         <p class="text-[#555555] mb-4">
-          Most teams that buy Jama or Polarion end up with two systems: the ALM tool the program manager uses for reports, and the spreadsheet everyone actually trusts. You've paid for enterprise software and still have engineers maintaining an Excel file on the side. It's so common it has a name: shelfware.
+          Every tool in your stack produces data exhaust. Your engineers write code with requirement annotations. Your CI pipeline produces test results. Your test station logs every serial number it touches. Your PLM exports a BOM. Your build system generates an SBOM. That evidence already exists. Nobody connects it.
         </p>
         <p class="text-[#555555] mb-8">
-          RTMify Live doesn't ask your team to change how they work. The spreadsheet stays. Live runs alongside it — reading it, validating it, connecting it to your source code, and making it queryable by AI. The spreadsheet becomes the source of truth it was always supposed to be.
+          Live connects it. One binary parses what your team already produces (the files on disk, the test logs in a folder, the BOM export from your PLM) and builds a graph. The graph links user needs to requirements, requirements to tests, requirements to source code, products to BOMs, BOMs to components, test executions to serial numbers, and serial numbers to products. The chain from "why we built this" to "did this specific unit pass" is one query.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm border-collapse">
             <thead>
               <tr class="bg-[#1A1A2E] text-white">
-                <th class="text-left px-4 py-3 font-semibold">Feature</th>
-                <th class="text-left px-4 py-3 font-semibold">Legacy ALM (Jama / Polarion)</th>
+                <th class="text-left px-4 py-3 font-semibold">Evidence type</th>
+                <th class="text-left px-4 py-3 font-semibold">Source</th>
+                <th class="text-left px-4 py-3 font-semibold">How it enters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#DDDDDD]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Design controls</td>
+                <td class="px-4 py-3 text-[#555555]">Your spreadsheet</td>
+                <td class="px-4 py-3 text-[#555555]">Google Sheets sync / local .xlsx</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Implementation claims</td>
+                <td class="px-4 py-3 text-[#555555]">Source code annotations</td>
+                <td class="px-4 py-3 text-[#555555]">Git repo scan</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Test evidence</td>
+                <td class="px-4 py-3 text-[#555555]">CI, ATE, ATP, design verification</td>
+                <td class="px-4 py-3 text-[#555555]">JSON inbox or HTTP API</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Hardware BOM</td>
+                <td class="px-4 py-3 text-[#555555]">PLM / ERP / CAD export</td>
+                <td class="px-4 py-3 text-[#555555]">CSV inbox or HTTP API</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Software BOM</td>
+                <td class="px-4 py-3 text-[#555555]">CI pipeline</td>
+                <td class="px-4 py-3 text-[#555555]">CycloneDX / SPDX JSON</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Product configuration</td>
+                <td class="px-4 py-3 text-[#555555]">Product tab in spreadsheet</td>
+                <td class="px-4 py-3 text-[#555555]">Google Sheets sync</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why not Jama -->
+    <section class="py-16 px-4 bg-white border-t border-[#DDDDDD]">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Why not just use Jama?</h2>
+        <p class="text-[#555555] mb-4">
+          Jama does requirements. MasterControl does manufacturing records. Arena does BOMs. Nobody does all three. Nobody connects all three. You pay for enterprise software and your engineers still maintain a spreadsheet on the side because the ALM tool doesn't know about their test station output or their BOM.
+        </p>
+        <p class="text-[#555555] mb-8">
+          RTMify Live reads the artifacts your team already produces and builds the connected graph that no single tool provides. The spreadsheet stays. The PLM stays. The CI pipeline stays. Live runs alongside all of them, on your laptop, connecting the evidence that's already there.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#1A1A2E] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Capability</th>
+                <th class="text-left px-4 py-3 font-semibold">Legacy ALM</th>
                 <th class="text-left px-4 py-3 font-semibold">RTMify Live</th>
               </tr>
             </thead>
             <tbody>
               <tr class="border-b border-[#DDDDDD]">
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Learning curve</td>
-                <td class="px-4 py-3 text-[#555555]">2-week "certification"</td>
-                <td class="px-4 py-3 text-[#555555]">0 minutes — it's Excel</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Requirements</td>
+                <td class="px-4 py-3 text-[#555555]">Yes (in their tool)</td>
+                <td class="px-4 py-3 text-[#555555]">Yes (in your spreadsheet)</td>
               </tr>
               <tr class="border-b border-[#DDDDDD] bg-white">
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Data privacy</td>
-                <td class="px-4 py-3 text-[#555555]">Cloud, or complex on-prem</td>
-                <td class="px-4 py-3 text-[#555555]">100% local / your repo</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Code traceability</td>
+                <td class="px-4 py-3 text-[#555555]">Plugin, if it exists</td>
+                <td class="px-4 py-3 text-[#555555]">Git repo scan, every cycle</td>
               </tr>
               <tr class="border-b border-[#DDDDDD]">
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Traceability</td>
-                <td class="px-4 py-3 text-[#555555]">Manual linking</td>
-                <td class="px-4 py-3 text-[#555555]">Auto-mapped via git blame</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Test evidence</td>
+                <td class="px-4 py-3 text-[#555555]">Manual entry</td>
+                <td class="px-4 py-3 text-[#555555]">CI/ATE/ATP via API or inbox</td>
               </tr>
               <tr class="border-b border-[#DDDDDD] bg-white">
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">AI-ready?</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">BOM / SBOM</td>
+                <td class="px-4 py-3 text-[#555555]">Separate PLM system</td>
+                <td class="px-4 py-3 text-[#555555]">CSV, CycloneDX, SPDX ingestion</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Connected graph</td>
+                <td class="px-4 py-3 text-[#555555]">No</td>
+                <td class="px-4 py-3 text-[#555555]">User need → requirement → test → serial</td>
+              </tr>
+              <tr class="border-b border-[#DDDDDD] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">AI-queryable</td>
                 <td class="px-4 py-3 text-[#555555]">No / "Beta"</td>
                 <td class="px-4 py-3 text-[#555555]">Native MCP server</td>
               </tr>
+              <tr class="border-b border-[#DDDDDD]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Data privacy</td>
+                <td class="px-4 py-3 text-[#555555]">Cloud or complex on-prem</td>
+                <td class="px-4 py-3 text-[#555555]">100% local, your machine</td>
+              </tr>
               <tr>
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">What engineers actually use</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">What engineers use</td>
                 <td class="px-4 py-3 text-[#555555]">Excel (on the side)</td>
                 <td class="px-4 py-3 text-[#555555]">Excel (that's the whole point)</td>
               </tr>
@@ -172,12 +271,25 @@ import ConversationDemo from '../components/ConversationDemo.astro';
       </div>
     </section>
 
+    <!-- How it works operationally -->
+    <section class="py-16 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">One inbox. One binary.</h2>
+        <p class="text-[#555555] mb-4">
+          Live watches a single directory on your machine. Drop a file in and Live reads it. Test results, hardware BOMs, and software BOMs all go in the same folder. Live detects the file type, routes it to the right parser, and updates the graph. Processed files move to <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">processed/</code>. Failures move to <code class="text-[#1A1A2E] bg-gray-100 px-1.5 py-0.5 rounded text-sm" style="font-family: var(--font-family-mono);">rejected/</code> with a diagnostic. Your CI pipeline can push directly to the HTTP API instead if you prefer.
+        </p>
+        <p class="text-[#555555]">
+          There is no installer to run, no dependencies to manage, no account to create, and no internet connection required. The binary runs on your laptop and the data never leaves your machine. For engineers at defense contractors, medical device companies, and regulated financial firms, this is the difference between "let me check with IT" and "it's already running."
+        </p>
+      </div>
+    </section>
+
     <!-- Bottom CTA -->
     <section class="py-16 px-4 bg-[#1A1A2E] text-white">
       <div class="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <p class="text-lg font-semibold mb-1">Ready to buy?</p>
-          <p class="text-gray-400 text-sm">Perpetual license. From $599. 30-day money-back guarantee.</p>
+          <p class="text-gray-400 text-sm">Perpetual license starting at $599, with a 30-day money-back guarantee.</p>
         </div>
         <a href="/pricing#live" class="shrink-0 px-6 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
           See Live pricing →
