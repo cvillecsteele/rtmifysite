@@ -23,6 +23,9 @@ import DownloadButton from '../components/DownloadButton.astro';
         <p class="text-lg text-gray-300 mb-8 max-w-2xl">
           Drop your <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">.xlsx</code> on RTMify Trace. Get a complete requirements traceability matrix — with gap analysis, risk register, and full chain resolution — as a PDF, Word Doc, or Markdown file. Runs on your machine. Nothing uploaded.
         </p>
+        <p class="text-sm text-gray-400 mb-8 max-w-2xl">
+          Industry profiles are built in. Run <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">--profile medical</code>, <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">aerospace</code>, <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">automotive</code>, or <code class="text-white bg-white/10 px-1.5 py-0.5 rounded" style="font-family: var(--font-family-mono);">generic</code> to validate against the bar your auditor will actually use.
+        </p>
         <div class="flex items-center gap-4 flex-wrap">
           <DownloadButton href="/download" label="Download RTMify Trace" size="lg" variant="light" />
           <a href="/pricing#trace" class="text-sm text-gray-300 hover:text-white underline underline-offset-4 transition-colors">See pricing →</a>
@@ -55,6 +58,9 @@ import DownloadButton from '../components/DownloadButton.astro';
               </p>
               <p class="text-[#555555]">
                 It also does semantic quality checks: requirements without a "shall" clause, compound requirements that should be split, high-risk items with no mitigation, residual risk that exceeds initial risk. These are the things auditors actually look for — and the things that slip through a manual review.
+              </p>
+              <p class="text-[#555555] mt-3">
+                For regulated teams, the graph walk is profile-aware. Medical mode checks Design Input → Design Output → Configuration Item chains. Aerospace mode checks HLR → LLR decomposition. Automotive mode checks ASIL-linked safety traceability. Generic mode preserves the current baseline behavior exactly.
               </p>
             </div>
           </div>
