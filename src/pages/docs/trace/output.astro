@@ -42,7 +42,7 @@ const jsonLd = {
       Output Formats
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Trace generates three output formats from the same traceability graph. Within a given run, PDF, DOCX, and Markdown carry the same logical report content; the exact section set depends on whether you run the generic path or a profile-aware CLI run.
+      Trace generates three output formats from the same traceability graph. Within a given run, PDF, DOCX, and Markdown carry the same logical report content; the exact section set depends on whether you run the generic profile or one of the non-generic profiles.
     </p>
   </div>
 
@@ -171,8 +171,8 @@ const jsonLd = {
 
     </div>
 
-    <h3 class="text-base font-bold text-[#1A1A2E] mt-10 mb-3">Profile-aware CLI output</h3>
-    <p class="text-[#555555] text-sm mb-4">When you run the CLI with a non-generic profile, the report expands to include profile-specific sections. The current profile-aware section order is:</p>
+    <h3 class="text-base font-bold text-[#1A1A2E] mt-10 mb-3">Profile-aware output</h3>
+    <p class="text-[#555555] text-sm mb-4">When you run Trace with a non-generic profile, the report expands to include profile-specific sections. The current profile-aware section order is:</p>
     <ol class="text-sm text-[#555555] space-y-1.5 list-decimal list-inside">
       <li>Summary</li>
       <li>User Needs</li>
@@ -185,7 +185,7 @@ const jsonLd = {
       <li>Gap Summary</li>
       <li>Profile Compliance Summary</li>
     </ol>
-    <p class="text-[#555555] text-sm mt-4">This profile-aware surface is currently CLI-only. The macOS and Windows apps still generate the generic report shape.</p>
+    <p class="text-[#555555] text-sm mt-4">The CLI, macOS app, and Windows app all generate this same profile-aware report shape for the selected profile.</p>
   </section>
 
   <!-- Output naming -->

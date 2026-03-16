@@ -42,7 +42,7 @@ const jsonLd = {
       Running Trace
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Trace can be run from the command line, from the macOS app, or from the Windows app. All three paths use the same core workbook loader and report engine, but the CLI currently exposes the full profile-aware surface while the desktop apps still run the generic path.
+      Trace can be run from the command line, from the macOS app, or from the Windows app. All three paths use the same core workbook loader and report engine, and all three now support the same explicit validation profiles: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">generic</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">medical</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">aerospace</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">automotive</code>.
     </p>
   </div>
 
@@ -206,7 +206,7 @@ const jsonLd = {
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">macOS app</h2>
 
     <p class="text-[#555555] text-sm mb-6">
-      The macOS app currently drives the generic Trace path only. It does not yet expose the CLI's <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--profile</code> switch, so use the CLI when you need medical, aerospace, or automotive validation behavior.
+      The macOS app now exposes the same four profiles as the CLI. The selected profile is explicit in the drop-zone UI and changing it reloads the workbook under the new profile before generation.
     </p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
@@ -243,8 +243,8 @@ const jsonLd = {
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">App state flow</h3>
     <ol class="text-sm text-[#555555] space-y-2 list-none mb-6">
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">licenseGate</span><span>Launch checks for an installed signed license or the one-free-run state. If neither permits use, the app shows the license import gate.</span></li>
-      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">dropZone</span><span>Licensed users land here. Drag a workbook or click Browse.</span></li>
-      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">fileLoaded</span><span>Valid file loaded. Shows filename, gap count, warning count, and format picker (PDF / Word / Markdown / All).</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">dropZone</span><span>Licensed users land here. Choose a profile, then drag a workbook or click Browse.</span></li>
+      <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">fileLoaded</span><span>Valid file loaded. Shows filename, selected profile, standards, warning count, total gaps, and the generic/profile-specific breakdown when applicable.</span></li>
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">generating</span><span>Report is being written. Progress indicator shown.</span></li>
       <li class="flex gap-3"><span class="text-[#1565C0] font-bold shrink-0">done</span><span>Output complete. Options to open the generated file, reveal it in Finder, or generate another.</span></li>
     </ol>
@@ -258,14 +258,14 @@ const jsonLd = {
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Windows app</h2>
 
     <p class="text-[#555555] text-sm mb-6">
-      The Windows app currently runs the generic Trace path only. It shares the workbook loader and renderer bridge, but it does not yet expose the CLI's profile-aware validation modes.
+      The Windows app now runs the same profile-aware Trace path as the CLI. Profile selection is explicit in the UI, and changing the profile reloads the current workbook under the new analysis context.
     </p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Loading a workbook</h3>
     <p class="text-[#555555] text-sm mb-4">The Windows app accepts <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> files by drag-and-drop (WM_DROPFILES) or via a browse dialog. Rejection messages mirror the macOS app, adapted for Windows context (e.g. "open in Excel and re-save as .xlsx" for <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xls</code> files).</p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">App state flow</h3>
-    <p class="text-[#555555] text-sm mb-4">The Windows app follows the same five-state model as macOS — <strong>license_gate → drop_zone → file_loaded → generating → done</strong> — with the done state offering open, show in Explorer, and reset actions.</p>
+    <p class="text-[#555555] text-sm mb-4">The Windows app follows the same five-state model as macOS — <strong>license_gate → drop_zone → file_loaded → generating → done</strong> — with explicit profile selection in the drop zone and the done state offering open, show in Explorer, and reset actions.</p>
 
     <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Async execution</h3>
     <p class="text-[#555555] text-sm mb-4">Load, generate, and license-import operations run on background worker threads. Completion is signaled back to the UI thread via Windows messages (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LOAD_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_GENERATE_COMPLETE</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">WM_LICENSE_COMPLETE</code>), keeping the UI responsive during library work.</p>
