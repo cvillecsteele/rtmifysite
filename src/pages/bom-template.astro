@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+import ProductLadder from '../components/ProductLadder.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify Design BOM Template',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any (spreadsheet)',
+      description: 'Free Design BOM spreadsheet template for regulated engineering. Product tab plus Design BOM tab for DesignBOM ingestion, grouped workbook upload, and Design BOM sync in RTMify Live.',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      downloadUrl: 'https://rtmify.io/RTMify_Design_BOM_Template.xlsx',
+      url: 'https://rtmify.io/bom-template',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+        { '@type': 'ListItem', position: 2, name: 'Templates', item: 'https://rtmify.io/download' },
+        { '@type': 'ListItem', position: 3, name: 'Design BOM Template', item: 'https://rtmify.io/bom-template' },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between the Design BOM template and an as-built BOM?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The Design BOM template captures intended product structure: product, assemblies, components, and explicit requirement or test references. It is not an as-built manufacturing record for one serial number or lot.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do I need RTMify Live to use the template?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. The workbook is a usable spreadsheet on its own. RTMify Live adds grouped XLSX ingest, continuous Design BOM sync, gap detection, impact analysis, BOM reports, and MCP querying.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What standards does the template target?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The page maps the template to BOM and design-output expectations commonly encountered in AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE workflows.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="RTMify Design BOM Template"
+  description="Free Design BOM spreadsheet template for regulated engineering. Product tab, Design BOM tab, requirement/test trace columns, and direct RTMify Live integration."
+  canonical="https://rtmify.io/bom-template"
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+    <section class="bg-[#163A2A] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
+        <div>
+          <p class="text-sm font-semibold text-[#9AD1AE] uppercase tracking-[0.22em] mb-4">Free Design BOM Template</p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            Your BOM is already a spreadsheet.
+            <br />
+            Give it a schema.
+          </h1>
+          <p class="text-lg text-[#D8E7DD] mb-6 max-w-2xl">
+            The RTMify Design BOM Template gives product structure a consistent shape: one Product tab, one Design BOM tab, and direct columns for requirement and test references. Use it as a standalone workbook, export it as CSV, or connect it to RTMify Live for grouped workbook ingest, BOM gaps, impact analysis, and MCP queries.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <DownloadButton href="/RTMify_Design_BOM_Template.xlsx" label="Download Design BOM Template (.xlsx)" size="lg" variant="light" />
+            <a href="/pricing#live" class="inline-flex items-center px-6 py-3 border border-white/25 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+              Connect It To Live
+            </a>
+          </div>
+        </div>
+        <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+          <div class="text-sm font-semibold text-[#9AD1AE] uppercase tracking-[0.18em] mb-3">What’s inside</div>
+          <div class="space-y-4 text-sm text-[#E6F0EA]">
+            <div>
+              <div class="font-semibold text-white mb-1">README</div>
+              <div>Column reference, ingest paths, lifecycle/status notes, and standards mapping.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">Product</div>
+              <div>`assembly`, `revision`, `full_identifier`, `description`, `Product Status`, `RTMify Status`.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">Design BOM</div>
+              <div>Hierarchy, quantity, supplier/category, plus `requirement_ids` and `test_ids` for typed graph links.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">The problem this solves</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">The BOM lives in Excel</h3>
+            <p class="text-sm text-[#555555] m-0">Most teams still manage design intent in spreadsheets or delayed PLM exports. The data exists, but the structure is inconsistent.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Auditors ask product questions</h3>
+            <p class="text-sm text-[#555555] m-0">“Which products use this part?” and “What requirement does this assembly satisfy?” are graph questions, not flat-sheet questions.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Trace links need a home</h3>
+            <p class="text-sm text-[#555555] m-0">Requirement IDs and test IDs on BOM rows are explicit evidence. The template gives those references stable columns instead of burying them in comments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What this template is</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">
+          It is an opinionated Design BOM workbook. The Product tab anchors the graph. The Design BOM tab carries hierarchy, quantities, part revisions, and direct requirement/test references. The same column names work for spreadsheet sync, grouped XLSX ingest, CSV export, and BOM API payloads.
+        </p>
+        <div class="grid lg:grid-cols-2 gap-5">
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#1A1A2E] mb-3">Standalone spreadsheet</h3>
+            <ul class="space-y-2 text-sm text-[#555555]">
+              <li>Document products with lifecycle state on the Product tab.</li>
+              <li>Capture design-intent hierarchy on the Design BOM tab.</li>
+              <li>Export a single BOM group as CSV when you need a one-shot hardware BOM submission.</li>
+            </ul>
+          </div>
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#1A1A2E] mb-3">Connected to RTMify Live</h3>
+            <ul class="space-y-2 text-sm text-[#555555]">
+              <li>Upload the workbook directly through <code class="bg-[#F5F5F5] px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">POST /api/v1/bom/xlsx</code>.</li>
+              <li>Attach it as a read-only Design BOM Sync source from the dashboard.</li>
+              <li>Query Components, Coverage, Part Usage, BOM Gaps, Impact, and a Design BOM report from the live graph.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Standards coverage</h2>
+        <p class="text-sm text-[#555555] mb-6">This is not a standards parser. It is a structured engineering artifact that supports the product-structure and design-output evidence expected in common regulated workflows.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#1A1A2E] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Standard</th>
+                <th class="text-left px-4 py-3 font-semibold">Relevant clause</th>
+                <th class="text-left px-4 py-3 font-semibold">Why the template helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">AS9100</td>
+                <td class="px-4 py-3 text-[#555555]">8.3.4 Design and development controls</td>
+                <td class="px-4 py-3 text-[#555555]">Product and assembly structure can be tied directly to requirements, tests, and released revisions.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485</td>
+                <td class="px-4 py-3 text-[#555555]">7.3.4 Design and development review / outputs</td>
+                <td class="px-4 py-3 text-[#555555]">Product-level anchor plus component-level trace inputs support device design-output evidence.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">DO-178C</td>
+                <td class="px-4 py-3 text-[#555555]">5.1.1 planning and configuration context</td>
+                <td class="px-4 py-3 text-[#555555]">The workbook gives hardware assemblies and configuration items a stable identifier surface that can link into requirements and tests.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">IEC 62304</td>
+                <td class="px-4 py-3 text-[#555555]">5.3 software architectural design</td>
+                <td class="px-4 py-3 text-[#555555]">The same product scaffold can hold embedded hardware/software product structure alongside the RTM workbook.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 26262</td>
+                <td class="px-4 py-3 text-[#555555]">Part 5 product development at hardware level</td>
+                <td class="px-4 py-3 text-[#555555]">BOM items can carry exact requirement and test references rather than generic comments.</td>
+              </tr>
+              <tr class="bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ASPICE</td>
+                <td class="px-4 py-3 text-[#555555]">SYS.3 system architectural design</td>
+                <td class="px-4 py-3 text-[#555555]">Product, assembly, and component relationships become queryable, reviewable design artifacts instead of static exports.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-[#101321] text-white border-t border-black/10">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-family-display);">How it connects</h2>
+        <div class="grid lg:grid-cols-3 gap-4 text-sm">
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#9FB0FF] font-semibold mb-2">1. Spreadsheet</div>
+            <p class="text-[#D4DBF7] m-0">Product rows establish the anchor. Design BOM rows establish the hierarchy and carry optional requirement/test IDs.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#9FB0FF] font-semibold mb-2">2. Live graph</div>
+            <p class="text-[#D4DBF7] m-0">Live ingests grouped workbook rows into <code class="bg-white/10 px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">DesignBOM</code> and <code class="bg-white/10 px-1.5 py-0.5 rounded text-xs" style="font-family: var(--font-family-mono);">BOMItem</code> nodes.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#9FB0FF] font-semibold mb-2">3. Traceability queries</div>
+            <p class="text-[#D4DBF7] m-0">Requirements, tests, test groups, code evidence, and serial-number evidence stay on the same graph, so BOM coverage and where-used answers are one traversal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Use it standalone or with Live</h2>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="border border-[#DDDDDD] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#1A1A2E] mb-3">Standalone</h3>
+            <p class="text-sm text-[#555555] mb-3">Download the workbook, fill in Product and Design BOM rows, and use it as your controlled design-output spreadsheet.</p>
+            <p class="text-sm text-[#555555] m-0">If you later need one-shot ingest, export one BOM group as CSV or upload the whole workbook as XLSX.</p>
+          </div>
+          <div class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#2E7D32] mb-3">With RTMify Live</h3>
+            <p class="text-sm text-[#555555] mb-3">Connect the workbook as a secondary Design BOM Sync source or upload it through the dashboard. Live adds:</p>
+            <ul class="space-y-2 text-sm text-[#555555]">
+              <li>Components and Coverage views</li>
+              <li>Part Usage, BOM Gaps, and Impact analysis</li>
+              <li>Design BOM markdown reports</li>
+              <li>MCP tools and resources for BOM-centered questions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-18 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Download the workbook. No gate.</h2>
+        <p class="text-[#555555] text-lg mb-8 max-w-2xl mx-auto">The template is free. RTMify Live is what turns it into a continuously queryable product-structure graph.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <DownloadButton href="/RTMify_Design_BOM_Template.xlsx" label="Download Design BOM Template (.xlsx)" size="lg" />
+          <a href="/pricing#live" class="inline-flex items-center px-8 py-4 border border-[#1A1A2E] rounded-lg text-[#1A1A2E] font-semibold hover:bg-white transition-colors">
+            See Live Pricing
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <ProductLadder current="template" />
+  </main>
+
+  <Footer />
+</BaseLayout>

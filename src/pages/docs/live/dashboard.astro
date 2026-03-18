@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live: Dashboard';
-const description = 'The RTMify Live browser dashboard: five primary groups (Data, Analysis, Guide, Code, Reports), workbook write-back, and verification status.';
+const description = 'The RTMify Live dashboard now includes Design BOM views, Design BOM Sync settings, and drag-and-drop BOM uploads alongside the core traceability graph views.';
 const canonical = 'https://rtmify.io/docs/live/dashboard/';
 
 const breadcrumbs = [
@@ -13,14 +13,14 @@ const breadcrumbs = [
 ];
 
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
-    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
-    { "@type": "ListItem", "position": 3, "name": "Live", "item": "https://rtmify.io/docs/live/" },
-    { "@type": "ListItem", "position": 4, "name": "Dashboard", "item": "https://rtmify.io/docs/live/dashboard/" },
-  ]
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://rtmify.io/docs/' },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: 'https://rtmify.io/docs/live/' },
+    { '@type': 'ListItem', position: 4, name: 'Dashboard', item: 'https://rtmify.io/docs/live/dashboard/' },
+  ],
 };
 ---
 
@@ -42,29 +42,20 @@ const jsonLd = {
       Dashboard
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      The browser dashboard is the main operator surface for RTMify Live. It is served locally at <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">http://127.0.0.1:8000</code> and driven entirely by the local SQLite graph — not by live spreadsheet reads.
+      The browser dashboard is the main operator surface for RTMify Live. It is served locally at <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">http://127.0.0.1:8000</code> and queries the local SQLite graph, not the source spreadsheets directly.
     </p>
   </div>
 
-  <!-- Primary groups -->
   <section class="mb-12">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Primary groups</h2>
     <div class="space-y-5">
-
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Data</h3>
           <span class="text-xs text-[#888888]">Requirements · User Needs · Tests · Risks · RTM</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm mb-3">Tabular views over every node type in the graph. Each sub-tab lets you browse, search, and drill into individual items.</p>
-          <ul class="space-y-1.5 text-sm text-[#555555]">
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Requirements</strong> — each requirement with its linked test groups aggregated; drill in to see full traceability, verification state, and repo annotations</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">User Needs</strong> — top of the chain; shows downstream requirement count</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Tests</strong> — test groups and cases; plural-aware links to all requirements a group verifies</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Risks</strong> — risk register with severity scores and mitigation requirement links</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">RTM</strong> — row-per-trace-tuple view; the closest view to a traditional requirements traceability matrix</li>
-          </ul>
+          <p class="text-[#555555] text-sm m-0">Core tabular traceability views over requirements, user needs, tests, risks, and the RTM row-per-chain view.</p>
         </div>
       </div>
 
@@ -74,11 +65,24 @@ const jsonLd = {
           <span class="text-xs text-[#888888]">Impact · Review · Gaps</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm mb-3">Graph-level analysis views that answer questions about change impact, suspect propagation, and open gaps.</p>
+          <p class="text-[#555555] text-sm m-0">Graph-level impact analysis, suspect/review surfaces, and chain-gap reporting.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">BOM</h3>
+          <span class="text-xs text-[#888888]">Design BOMs · Components · Coverage · Part Usage · Gaps · Impact</span>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm mb-3">The new Design BOM workspace. These views are backed by the same graph objects exposed over the REST API and MCP.</p>
           <ul class="space-y-1.5 text-sm text-[#555555]">
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Impact analysis</strong> — given a node, what is affected upstream and downstream? Used before making a change to understand the blast radius.</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Review / suspect</strong> — surfaces items flagged as suspect after upstream changes; shows what needs review</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Gap analysis</strong> — chain-gap view; untested, orphan, and unresolved-mitigation items in one place</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Design BOMs</strong> — grouped list of ingested Design BOMs by product and bom_name, including source format, item count, ingest time, and warning count</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Components</strong> — searchable flattened BOMItem view across products and Design BOMs, with resolved trace-link counts and warnings</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Coverage</strong> — per-BOM and aggregate requirement/test linkage counts, no-trace counts, and unresolved-ref warnings</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Part Usage</strong> — where-used lookup for one part across products and parent assemblies</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">BOM Gaps</strong> — unresolved requirement/test refs and other no-link conditions at BOM-item level</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Impact</strong> — BOM-centered impact and coverage analysis for one product BOM</li>
           </ul>
         </div>
       </div>
@@ -89,11 +93,7 @@ const jsonLd = {
           <span class="text-xs text-[#888888]">Error Codes · MCP &amp; AI</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm mb-3">In-app reference content and operator tooling.</p>
-          <ul class="space-y-1.5 text-sm text-[#555555]">
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Error Codes Explained</strong> — look up any diagnostic or gap code to see what it means and how to fix it. Gap links in other views deep-link here.</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">MCP & AI</strong> — shows the MCP endpoint URL, your current API token, the inbox directory path, and token regeneration. Copy these to configure your AI assistant.</li>
-          </ul>
+          <p class="text-[#555555] text-sm m-0">In-app reference content, MCP connection info, the current API token, inbox path, and token regeneration.</p>
         </div>
       </div>
 
@@ -103,108 +103,77 @@ const jsonLd = {
           <span class="text-xs text-[#888888]">Repos · Annotations · Commits</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm mb-3">Code traceability over the local repositories you've registered. See <a href="/docs/live/repo/" class="text-[#2E7D32] underline hover:no-underline">Repo Scanning</a> for how to add repos.</p>
-          <ul class="space-y-1.5 text-sm text-[#555555]">
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span>Registered repo list and scan status</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span>Source and test file traceability summaries — which files implement or test which requirements</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span>Unimplemented requirements — requirements that have no <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">@req</code> annotation in any source file</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span>Untested source files — source files with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">@req</code> annotations but no corresponding test file annotations</li>
-            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span>Recent commits that reference traced requirement IDs</li>
-          </ul>
+          <p class="text-[#555555] text-sm m-0">Repo registration, traceability annotations, implementation/test coverage, and recent commit evidence.</p>
         </div>
       </div>
 
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Reports</h3>
-          <span class="text-xs text-[#888888]">RTM · DHR · Coverage</span>
+          <span class="text-xs text-[#888888]">RTM · DHR · Coverage · Design BOM</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm mb-3">Reports are generated from the live graph on demand — not pre-rendered static documents. They always reflect the current state of the graph at the moment you generate them.</p>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-[#EEEEEE]">
-                  <th class="text-left px-3 py-2 font-semibold text-[#1A1A2E]">Report</th>
-                  <th class="text-left px-3 py-2 font-semibold text-[#1A1A2E]">Formats</th>
-                  <th class="text-left px-3 py-2 font-semibold text-[#1A1A2E]">Contents</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-[#EEEEEE]">
-                  <td class="px-3 py-2 font-medium text-[#1A1A2E]">RTM</td>
-                  <td class="px-3 py-2 text-[#555555]">PDF, Word, Markdown</td>
-                  <td class="px-3 py-2 text-[#555555]">Requirements traceability, user needs, tests, risks, status, verification</td>
-                </tr>
-                <tr class="border-b border-[#EEEEEE]">
-                  <td class="px-3 py-2 font-medium text-[#1A1A2E]">DHR</td>
-                  <td class="px-3 py-2 text-[#555555]">PDF, Markdown</td>
-                  <td class="px-3 py-2 text-[#555555]">Design history: user needs, requirements, design inputs/outputs, config items, source/test evidence, annotations, commits, chain gaps</td>
-                </tr>
-                <tr>
-                  <td class="px-3 py-2 font-medium text-[#1A1A2E]">Code Coverage</td>
-                  <td class="px-3 py-2 text-[#555555]">Markdown</td>
-                  <td class="px-3 py-2 text-[#555555]">Implementation coverage summary, code-linked gaps</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <p class="text-[#555555] text-sm m-0">On-demand reports generated from the live graph rather than static document snapshots. The Design BOM report is scoped to one product plus bom_name and is available as PDF, Markdown, and DOCX.</p>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- Write-back -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Workbook write-back</h2>
-    <p class="text-[#555555] text-sm mb-6">Live is not read-only. After each sync cycle it writes operational results back into the connected spreadsheet. Operators see current traceability status in their workbook without having to open the dashboard.</p>
-
-    <div class="space-y-4 mb-8">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Design BOM surfaces</h2>
+    <div class="space-y-4">
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Status columns</h3>
-        <p class="text-[#555555] text-sm m-0">RTMify Status values (e.g. <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">OK</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">NO_TEST_LINKED</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">UNRESOLVED</code>) are written into the RTMify Status column on each affected tab after every successful sync.</p>
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Design BOM detail</h3>
+        <p class="text-[#555555] text-sm m-0">The detail view renders the server-provided Design BOM tree: hierarchy, quantity, ref designator, supplier, category, linked requirements, linked tests or test groups, and unresolved references.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Row formatting</h3>
-        <p class="text-[#555555] text-sm m-0">Rows are color-coded to reflect their status. OK rows, gap rows, and error rows receive different background colors, making the status visible at a glance without reading the status cell text.</p>
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Part usage drill-down</h3>
+        <p class="text-[#555555] text-sm m-0">Operators can search for one part number and see the products, Design BOMs, and parent assemblies that currently use it.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">RTMify Verification column</h3>
-        <p class="text-[#555555] text-sm m-0">Written after test results are ingested. If the column doesn't exist Live adds it automatically. Updated on every sync cycle that follows new test-result ingestion.</p>
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Gap review</h3>
+        <p class="text-[#555555] text-sm m-0">Unresolved requirement and test references appear without leaving the dashboard. The same underlying data also powers the <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_gaps</code> MCP tool.</p>
       </div>
-    </div>
-
-    <h3 class="text-base font-bold text-[#1A1A2E] mb-4">Verification states</h3>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm border-collapse">
-        <thead>
-          <tr class="bg-[#1A1A2E] text-white">
-            <th class="text-left px-4 py-3 font-semibold text-white">Value</th>
-            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            ['VERIFIED', 'Every linked test has a latest result and all latest results pass.'],
-            ['VERIFY_FAILED', 'At least one linked test has a latest result that is failed, error, or blocked.'],
-            ['VERIFY_PARTIAL', 'At least one passing result exists, but some linked tests are missing results or show skipped.'],
-            ['VERIFY_NONE', 'Linked tests exist but none have produced a concrete pass or fail result yet.'],
-            ['(blank)', 'The requirement has no linked tests. Ordinary missing-test gap logic applies.'],
-          ].map(([val, desc]) => (
-            <tr class="border-b border-[#EEEEEE]">
-              <td class="px-4 py-3 text-[#1A1A2E] font-medium" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{val}</td>
-              <td class="px-4 py-3 text-[#555555]">{desc}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Components and coverage</h3>
+        <p class="text-[#555555] text-sm m-0">The <strong>Components</strong> tab flattens BOM items across products and Design BOMs. The <strong>Coverage</strong> tab rolls those items up into per-BOM counts for requirement coverage, test coverage, no-trace items, and unresolved warnings.</p>
+      </div>
     </div>
   </section>
 
-  <!-- Graph-driven note -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Settings and uploads</h2>
+    <div class="space-y-4">
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Design BOM Sync</h3>
+        <p class="text-[#555555] text-sm m-0">The settings menu now includes a dedicated <strong>Design BOM Sync</strong> tab. It manages the optional secondary read-only Design BOM source and supports Google Sheets, Excel Online, or a local XLSX file.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Drag-and-drop BOM upload</h3>
+        <p class="text-[#555555] text-sm m-0">The dashboard upload surface accepts <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.csv</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.json</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.xlsx</code> Design BOM artifacts. XLSX uploads go through <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/bom/xlsx</code>.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Template download and BOM report</h3>
+        <p class="text-[#555555] text-sm m-0">The Design BOM workspace includes a direct template download link, and the Reports group now includes a product-scoped Design BOM report backed by the live graph in PDF, Markdown, and DOCX formats.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Guide → MCP &amp; AI</h3>
+        <p class="text-[#555555] text-sm m-0">This tab still shows the MCP endpoint URL, current API token, inbox directory path, and token regeneration. That is also where most operators confirm the inbox path before setting up BOM drops.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Workbook write-back boundary</h2>
+    <p class="text-[#555555] text-sm mb-4">Live still writes operational status back to the primary RTM workbook. The Design BOM source is intentionally different:</p>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The primary RTM workbook continues to receive RTMify Status and verification write-back.</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The secondary Design BOM sync source is read-only. Live ingests it, but never writes status back into that workbook.</li>
+    </ul>
+  </section>
+
   <section class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-6">
-    <h2 class="text-base font-bold text-[#2E7D32] mb-2 m-0">The dashboard answers graph questions</h2>
-    <p class="text-[#555555] text-sm m-0">The dashboard is not a mirror of your spreadsheet. It queries the SQLite graph, which means it can traverse upstream and downstream relationships, compute impact chains, and surface connections that are invisible in a flat table. Drill-down views show you how nodes are related, not just what row they came from.</p>
+    <h2 class="text-base font-bold text-[#2E7D32] mb-2 m-0">The dashboard is graph-native</h2>
+    <p class="text-[#555555] text-sm m-0">BOM views are not a spreadsheet mirror. They query the graph that connects Products, DesignBOMs, BOMItems, requirements, tests, test groups, code evidence, and serial-number evidence, so where-used and impact answers come from traversable relationships rather than flat rows.</p>
   </section>
 </DocsLayout>

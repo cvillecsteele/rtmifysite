@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live: MCP Integration';
-const description = 'RTMify Live exposes a local Model Context Protocol server. Connect Claude, Cursor, or any MCP-compatible AI assistant to query your traceability graph directly.';
+const description = 'RTMify Live exposes a local MCP server for requirements, tests, risks, code evidence, Design BOMs, and BOM traceability drill-down.';
 const canonical = 'https://rtmify.io/docs/live/mcp/';
 
 const breadcrumbs = [
@@ -13,14 +13,14 @@ const breadcrumbs = [
 ];
 
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
-    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
-    { "@type": "ListItem", "position": 3, "name": "Live", "item": "https://rtmify.io/docs/live/" },
-    { "@type": "ListItem", "position": 4, "name": "MCP Integration", "item": "https://rtmify.io/docs/live/mcp/" },
-  ]
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://rtmify.io/docs/' },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: 'https://rtmify.io/docs/live/' },
+    { '@type': 'ListItem', position: 4, name: 'MCP Integration', item: 'https://rtmify.io/docs/live/mcp/' },
+  ],
 };
 ---
 
@@ -42,35 +42,31 @@ const jsonLd = {
       MCP Integration
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      RTMify Live exposes a Model Context Protocol server over local HTTP. Connect your AI assistant and it can query your requirements, tests, risks, gaps, code traceability, and verification state directly — no screen-scraping, no manual export.
+      RTMify Live exposes a local Model Context Protocol server over HTTP. An MCP-connected assistant can query requirements, tests, risks, code evidence, verification state, and the new Design BOM graph without scraping the dashboard or reading the source spreadsheets directly.
     </p>
   </div>
 
-  <!-- What MCP gives you -->
   <section class="mb-12">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What this means in practice</h2>
-    <p class="text-[#555555] text-sm mb-5">With an MCP-connected AI assistant you can ask questions like:</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
       {[
-        '"What requirements are linked to TG-007?"',
         '"Which requirements have no test coverage?"',
-        '"What would be affected if I change REQ-042?"',
-        '"Are there any unmitigated high-risk items?"',
+        '"List the Design BOMs for ASM-1000-REV-C."',
+        '"Where is FBRFET-3300 used?"',
+        '"Show the linked requirements and tests for BOM item C0805-10UF/B."',
+        '"What BOM refs are unresolved in the power-supply BOM?"',
+        '"Assess the end-of-life impact of LM5166DRCR."',
         '"What source files implement REQ-010?"',
-        '"Show me the design history for REQ-055."',
-        '"What is the current verification status of the safety requirements?"',
         '"Summarize audit readiness."',
       ].map(q => (
         <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded px-4 py-3 text-sm text-[#555555] italic">{q}</div>
       ))}
     </div>
-    <p class="text-[#555555] text-sm">The assistant queries the live graph rather than reading your spreadsheet directly, so answers reflect the fully resolved traceability state including repo annotations, test results, and verification rollups.</p>
+    <p class="text-[#555555] text-sm">The assistant is querying the Live graph, so BOM answers can traverse Products, DesignBOMs, BOMItems, requirements, tests, test groups, source-code annotations, and execution evidence in one model.</p>
   </section>
 
-  <!-- Endpoint -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Endpoint</h2>
-    <p class="text-[#555555] text-sm mb-4">Live implements Streamable HTTP transport — the current MCP standard:</p>
     <div class="space-y-3 mb-6">
       <div class="flex gap-3 items-start">
         <code class="text-xs bg-[#1A1A2E] text-white px-2 py-0.5 rounded shrink-0" style="font-family: var(--font-family-mono);">POST</code>
@@ -79,29 +75,95 @@ const jsonLd = {
       <div class="flex gap-3 items-start">
         <code class="text-xs bg-[#555555] text-white px-2 py-0.5 rounded shrink-0" style="font-family: var(--font-family-mono);">GET</code>
         <code class="text-sm text-[#1A1A2E]" style="font-family: var(--font-family-mono);">http://127.0.0.1:&lt;port&gt;/mcp</code>
-        <span class="text-[#888888] text-xs mt-0.5">(SSE discovery, for legacy clients)</span>
+        <span class="text-[#888888] text-xs mt-0.5">(SSE discovery for legacy clients)</span>
       </div>
     </div>
-    <p class="text-[#555555] text-sm">The default port is 8000. The dashboard <strong>Guide → MCP & AI</strong> tab shows the exact URL and port for your running instance.</p>
+    <p class="text-[#555555] text-sm">The dashboard <strong>Guide → MCP &amp; AI</strong> tab shows the exact endpoint, current port, API token, and inbox directory for your running instance.</p>
+  </section>
 
-    <div class="mt-6 border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-5">
-      <h3 class="text-sm font-bold text-[#2E7D32] mb-2">Local-only</h3>
-      <p class="text-[#555555] text-sm m-0">The MCP endpoint is bound to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F1F8F2; padding: 0 0.3rem; border-radius: 0.2rem;">127.0.0.1</code> — same-machine only. It is not accessible from other machines on your network and is not a public internet MCP server. CORS is disabled. Foreign-origin requests are rejected.</p>
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Resources</h2>
+    <p class="text-[#555555] text-sm mb-4">Resources are named graph objects an assistant can fetch directly.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {[
+        ['requirement://<id>', 'Full requirement detail with links, status, and annotations'],
+        ['gap://<code>/<node_id>', 'A specific gap condition and the affected node'],
+        ['design-history://<id>', 'Design-history narrative for a requirement'],
+        ['impact://<id>', 'Upstream and downstream impact chain for a node'],
+        ['design-bom://<full_product_identifier>/<bom_name>', 'Design BOM markdown summary, coverage, and unresolved refs'],
+        ['bom-item://<full_product_identifier>/<bom_type>/<bom_name>/<part>@<revision>', 'One BOM item drill-down with resolved and unresolved trace refs'],
+      ].map(([uri, desc]) => (
+        <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
+          <code class="text-xs text-[#1A1A2E] block mb-1" style="font-family: var(--font-family-mono);">{uri}</code>
+          <p class="text-xs text-[#555555] m-0">{desc}</p>
+        </div>
+      ))}
     </div>
   </section>
 
-  <!-- Connecting -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Connecting your AI assistant</h2>
-    <p class="text-[#555555] text-sm mb-5">Point your MCP client at the Live endpoint. The exact configuration format depends on your client:</p>
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Design BOM tools</h2>
+    <p class="text-[#555555] text-sm mb-4">These tools are the main MCP affordances for product-structure and BOM traceability work.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Tool</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">What it returns</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['get_bom', 'One hierarchical Design BOM tree for a product and bom_name'],
+            ['get_bom_item', 'One BOMItem with parent chains, linked requirements, linked tests, and unresolved declared refs'],
+            ['list_design_boms', 'BOM inventory with product, type, source format, ingest timestamp, item count, and warnings'],
+            ['find_part_usage', 'Where-used lookup for a part across products, Design BOMs, and parent assemblies'],
+            ['bom_gaps', 'BOM items with unresolved requirement/test refs or other no-link conditions'],
+            ['bom_impact_analysis', 'Coverage and linked-node context for one Design BOM'],
+          ].map(([tool, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{tool}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-[#555555] text-sm mt-4">The general RTM, gap, status, review, code-traceability, and design-history tools remain available alongside these BOM-specific surfaces.</p>
+  </section>
 
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Prompts</h2>
+    <p class="text-[#555555] text-sm mb-4">Prompts guide an assistant toward the right combination of tools and resources.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {[
+        ['trace_requirement', 'Trace one requirement through the graph'],
+        ['impact_of_change', 'Change-impact workflow for one node'],
+        ['explain_gap', 'Human-readable explanation of a gap code'],
+        ['audit_readiness_summary', 'Overall readiness summary'],
+        ['design_history_summary', 'Requirement design-history narrative'],
+        ['inspect_bom_item_traceability', 'Guided entrypoint for one BOM item’s linked and unresolved refs'],
+        ['eol_impact', 'End-of-life impact workflow for a part'],
+        ['bom_coverage', 'Design BOM coverage and unresolved-ref summary'],
+        ['component_substitute', 'Traceability and verification exposure for a substitute part'],
+      ].map(([name, desc]) => (
+        <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
+          <code class="text-xs text-[#1A1A2E] block mb-1" style="font-family: var(--font-family-mono);">{name}</code>
+          <p class="text-xs text-[#555555] m-0">{desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Connection info</h2>
+    <p class="text-[#555555] text-sm mb-4">The dashboard <strong>Guide → MCP &amp; AI</strong> tab shows the current endpoint URL, API token, inbox directory path, and token regeneration controls.</p>
     <div class="space-y-4">
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="bg-[#F5F5F5] px-4 py-2.5 border-b border-[#DDDDDD]">
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Claude Desktop / Claude Code</h3>
         </div>
         <div class="px-4 py-4">
-          <p class="text-[#555555] text-xs mb-2">Add to your MCP server configuration:</p>
           <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-xs overflow-x-auto" style="font-family: var(--font-family-mono);">{'{'}
   "mcpServers": {'{'}
     "rtmify": {'{'}
@@ -116,91 +178,14 @@ const jsonLd = {
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Cursor</h3>
         </div>
         <div class="px-4 py-4">
-          <p class="text-[#555555] text-xs mb-2">In Cursor settings → MCP, add a new server with the URL:</p>
           <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-xs overflow-x-auto" style="font-family: var(--font-family-mono);">http://127.0.0.1:8000/mcp</pre>
         </div>
       </div>
     </div>
-    <p class="text-[#555555] text-sm mt-4">If Live is running on a non-default port, replace <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">8000</code> with the actual port shown in the dashboard or tray icon.</p>
   </section>
 
-  <!-- What Live exposes -->
-  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What Live exposes over MCP</h2>
-
-    <div class="space-y-6">
-
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Resources</h3>
-        <p class="text-[#555555] text-sm mb-3">Resources are named graph objects an assistant can fetch directly:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {[
-            ['requirement://<id>', 'Full requirement detail including links, status, and annotations'],
-            ['gap://<code>/<node_id>', 'A specific gap condition and the node it affects'],
-            ['design-history://<id>', 'Design history record for a requirement'],
-            ['impact://<id>', 'Upstream and downstream impact chain for a node'],
-            ['report://status', 'Current traceability report status summary'],
-          ].map(([uri, desc]) => (
-            <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
-              <code class="text-xs text-[#1A1A2E] block mb-1" style="font-family: var(--font-family-mono);">{uri}</code>
-              <p class="text-xs text-[#555555] m-0">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Prompts</h3>
-        <p class="text-[#555555] text-sm mb-3">Built-in prompts that combine graph data with contextual guidance:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {[
-            ['trace_requirement', 'Full traceability chain for a requirement'],
-            ['impact_of_change', 'Impact analysis for a proposed change'],
-            ['explain_gap', 'Human-readable explanation of a gap condition'],
-            ['audit_readiness_summary', 'Overall readiness across the traceability graph'],
-            ['repo_coverage_summary', 'Code coverage and annotation density summary'],
-            ['design_history_summary', 'Design history narrative for a requirement'],
-          ].map(([name, desc]) => (
-            <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
-              <code class="text-xs text-[#1A1A2E] block mb-1" style="font-family: var(--font-family-mono);">{name}</code>
-              <p class="text-xs text-[#555555] m-0">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Tools</h3>
-        <p class="text-[#555555] text-sm mb-3">Callable tools for structured queries across the full graph:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1.5">
-          {[
-            'RTM queries (requirements, user needs, tests, risks)',
-            'Node detail and impact chain queries',
-            'Gap and chain-gap queries',
-            'Status and review queries',
-            'Code traceability queries (files, annotations, commits)',
-            'Design history queries',
-            'Test execution and verification queries',
-          ].map(tool => (
-            <div class="flex gap-2 text-sm text-[#555555]">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>
-              <span>{tool}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Finding your connection info -->
-  <section class="border-t border-[#DDDDDD] pt-10">
-    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Finding your connection info</h2>
-    <p class="text-[#555555] text-sm mb-4">The dashboard <strong>Guide → MCP & AI</strong> tab shows everything you need to configure your client:</p>
-    <ul class="space-y-2 text-sm text-[#555555]">
-      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The MCP endpoint URL (with current port)</li>
-      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>Your current API token for test-results ingestion</li>
-      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The inbox directory path</li>
-      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>Token regeneration</li>
-    </ul>
+  <section class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-6">
+    <h2 class="text-base font-bold text-[#2E7D32] mb-2 m-0">Local-only by design</h2>
+    <p class="text-[#555555] text-sm m-0">The Live MCP endpoint binds to <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">127.0.0.1</code>. It is same-machine only and is not exposed as a public internet MCP server.</p>
   </section>
 </DocsLayout>

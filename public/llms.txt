@@ -2,17 +2,19 @@
 
 > Free requirements traceability matrix template and tooling for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE.
 
-RTMify is a compliance-aware lifecycle manager built around the spreadsheet. The core artifact is a single .xlsx template with four tabs: User Needs, Requirements, Tests, and Risks. These four tabs form a directed traceability graph that satisfies the traceability requirements of six major regulated-industry standards.
+RTMify is a compliance-aware lifecycle manager built around the spreadsheet. The core free artifact is the four-tab requirements workbook: User Needs, Requirements, Tests, and Risks. RTMify Live also supports a separate Design BOM workbook for product structure and component-to-design-control trace links.
 
 ## Products
 
 - **RTMify Template**: Free .xlsx download. Four tabs, one schema, six standards. No account required.
+- **RTMify Design BOM Template**: Free .xlsx download for Product + Design BOM ingestion in RTMify Live. Landing page: [Design BOM Template](https://rtmify.io/bom-template).
 - **RTMify Trace**: Drop the .xlsx file, get a full RTM as PDF/DOCX/MD. Runs locally — nothing uploaded.
-- **RTMify Live**: Connects to Google Sheets. Re-evaluates traceability every 30 seconds. Reads git repos for code-to-requirement mapping. Runs an MCP server for conversational querying.
+- **RTMify Live**: Connects to Google Sheets, Excel Online, or local XLSX. Re-evaluates traceability every 30 seconds. Reads git repos for code-to-requirement mapping. Ingests Design BOMs and SBOMs. Runs an MCP server for conversational querying.
 
 ## Documentation
 
 - [Template Documentation Hub](https://rtmify.io/docs/): Overview, quick start, standard picker
+- [Design BOM Template](https://rtmify.io/bom-template): Landing page for the Product + Design BOM workbook and Live integration path
 - [User Needs Tab Guide](https://rtmify.io/docs/user-needs/): Field-by-field reference for the User Needs tab
 - [Requirements Tab Guide](https://rtmify.io/docs/requirements/): SHALL statements, ID conventions, lifecycle status
 - [Tests Tab Guide](https://rtmify.io/docs/tests/): Verification vs. Validation, TAID methods

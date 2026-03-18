@@ -9,7 +9,7 @@ const softwareSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'RTMify Requirements Tracking Template',
-  description: 'Free requirements traceability matrix template for regulated industries. Four-tab schema covering User Needs, Requirements, Tests, and Risks.',
+  description: 'Free requirements traceability and Design BOM templates for regulated industries.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Windows, macOS, Linux',
   offers: {
@@ -22,8 +22,8 @@ const softwareSchema = {
 ---
 
 <BaseLayout
-  title="Free RTM Template Download — RTMify Requirements Tracking Spreadsheet"
-  description="Download the free RTMify Requirements Tracking Template (.xlsx). Covers AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and Automotive SPICE."
+  title="Free RTMify Downloads — Requirements and Design BOM Templates"
+  description="Download the free RTMify Requirements Tracking Template and Design BOM Template (.xlsx)."
   jsonLd={softwareSchema}
 >
   <Nav />
@@ -58,6 +58,33 @@ const softwareSchema = {
                 Works in Microsoft Excel and Google Sheets. The README tab explains the schema.
               </p>
               <DownloadButton size="md" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Design BOM Template -->
+        <div class="bg-white border border-[#DDDDDD] rounded-xl p-8 mb-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-[#2E7D32] rounded-lg flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M8 13h8"/>
+                <path d="M8 17h8"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-[#1A1A2E] mb-1">RTMify Design BOM Template</h2>
+              <p class="text-[#555555] mb-1">Version 1.0 &middot; .xlsx format</p>
+              <p class="text-sm text-[#555555] mb-5">
+                Product and Design BOM tabs for Live DesignBOM ingestion, grouped workbook uploads, and secondary Design BOM sync. Includes the README reference tab and example BOM rows with requirement and test trace fields.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <DownloadButton href="/RTMify_Design_BOM_Template.xlsx" label="Download Design BOM Template (.xlsx)" size="md" />
+                <a href="/bom-template" class="inline-flex items-center px-6 py-3 rounded-lg border border-[#2E7D32] text-[#2E7D32] font-semibold hover:bg-[#F1F8F2] transition-colors">
+                  View BOM Template Guide
+                </a>
+              </div>
             </div>
           </div>
         </div>

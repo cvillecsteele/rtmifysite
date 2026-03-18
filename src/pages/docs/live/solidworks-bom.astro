@@ -1,0 +1,266 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Live: SolidWorks and Design BOM Ingestion';
+const description = 'Export a Bill of Materials from SolidWorks, upload a Design BOM workbook, or connect a secondary Design BOM sync source. RTMify Live builds a DesignBOM graph with item-level requirement and test links.';
+const canonical = 'https://rtmify.io/docs/live/solidworks-bom/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Live', url: '/docs/live/' },
+  { name: 'SolidWorks BOM', url: '/docs/live/solidworks-bom/' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://rtmify.io/docs/' },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: 'https://rtmify.io/docs/live/' },
+    { '@type': 'ListItem', position: 4, name: 'SolidWorks BOM', item: 'https://rtmify.io/docs/live/solidworks-bom/' },
+  ],
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="live-solidworks-bom"
+  lane="live"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#2E7D32] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      SolidWorks and Design BOM Ingestion
+    </h1>
+    <p class="text-lg text-[#555555] max-w-3xl leading-relaxed">
+      RTMify Live ingests hardware BOMs from SolidWorks-style CSV exports, grouped Design BOM workbooks, and optional read-only Design BOM sync sources. The resulting graph anchors each product to a <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DesignBOM</code>, its <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">BOMItem</code> tree, and any explicit requirement or test references declared on those BOM rows.
+    </p>
+  </div>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What Live supports now</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Source</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Path</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['SolidWorks or PLM CSV', 'Inbox drop or POST /api/v1/bom', 'Best fit for one BOM per submission. Same path also accepts hardware JSON, CycloneDX JSON, and SPDX JSON.'],
+            ['Design BOM workbook (.xlsx)', 'Inbox drop or POST /api/v1/bom/xlsx', 'Workbook must contain an exact Design BOM tab. Groups are split by full_product_identifier + bom_name and processed independently.'],
+            ['Secondary Design BOM sync', 'Dashboard Settings → Design BOM Sync', 'Optional read-only secondary source. Supports Google Sheets, Excel Online, or a local XLSX file.'],
+          ].map(([source, path, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]">{source}</td>
+              <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{path}</td>
+              <td class="px-4 py-3 text-[#555555]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Product prerequisite</h2>
+    <p class="text-[#555555] text-sm mb-5">
+      Every hardware Design BOM is anchored to a Product by exact identifier. In the primary RTM workbook, the programmatically provisioned Product tab is:
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">assembly</code>,
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">revision</code>,
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">full_identifier</code>,
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">description</code>,
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">Product Status</code>,
+      <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem; margin-left: 0.35rem;">RTMify Status</code>.
+    </p>
+    <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
+      <p class="text-sm text-[#E65100] font-semibold mb-1">Exact match still matters</p>
+      <p class="text-[#555555] text-sm m-0">For single-file CSV and JSON ingest, a missing product still fails with <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #FFF8F5; padding: 0 0.25rem; border-radius: 0.2rem;">BOM_NO_PRODUCT_MATCH</code>. Grouped workbook/XLSX ingest is softer: missing-product groups are reported as warnings and do not abort the whole workbook.</p>
+    </div>
+    <div class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-4 mt-4">
+      <p class="text-sm text-[#2E7D32] font-semibold mb-1">Lifecycle semantics now apply</p>
+      <p class="text-[#555555] text-sm m-0"><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">Obsolete</code> products are hidden from default Design BOM list, tree, item, usage, and impact views. <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">Superseded</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">EOL</code> remain queryable, but BOM gap views exclude them by default. Unknown nonblank values now write back as <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">PRODUCT_UNKNOWN_STATUS</code> on the Product tab.</p>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Column mapping</h2>
+    <p class="text-[#555555] text-sm mb-5">These are the hardware Design BOM columns Live understands today.</p>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#F5F5F5]">
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Column</th>
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Required</th>
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['bom_name', 'Yes', 'One named Design BOM within a product. CSV/JSON expect one bom_name per submission. Workbook/XLSX ingest can contain multiple groups.'],
+            ['full_identifier or full_product_identifier', 'Yes', 'Exact Product.full_identifier anchor. Workbook/XLSX ingest groups by this field plus bom_name.'],
+            ['parent_part', 'Yes', 'Parent item part number.'],
+            ['parent_revision', 'Optional', 'Blank or absent values default to "-".'],
+            ['child_part', 'Yes', 'Current row part number.'],
+            ['child_revision', 'Optional', 'Blank or absent values default to "-".'],
+            ['quantity', 'Yes', 'Occurrence quantity on the CONTAINS edge.'],
+            ['ref_designator', 'No', 'Preserved on the containment edge.'],
+            ['description', 'No', 'Stored on the BOMItem.'],
+            ['supplier', 'No', 'Stored on the CONTAINS edge.'],
+            ['category', 'No', 'Stored on the BOMItem.'],
+            ['requirement_ids / requirement_id', 'No', 'Comma-, semicolon-, or pipe-separated requirement IDs.'],
+            ['test_ids / test_id', 'No', 'Comma-, semicolon-, or pipe-separated test or test-group IDs.'],
+            ['Notes / RTMify Status', 'Ignored for ingest', 'Accepted on workbook/XLSX input and ignored by Design BOM parsing.'],
+          ].map(([col, req, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-2.5 font-medium text-[#1A1A2E] border border-[#EEEEEE]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{col}</td>
+              <td class="px-4 py-2.5 text-[#555555] border border-[#EEEEEE]">{req}</td>
+              <td class="px-4 py-2.5 text-[#555555] border border-[#EEEEEE]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-[#555555] text-sm">For SolidWorks exports, you still need to derive <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">parent_part</code> from the item-number hierarchy if you want a nested Design BOM tree. For grouped workbook ingestion, the downloadable Design BOM template already uses the target column names.</p>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Requirement and test trace fields</h2>
+    <p class="text-[#555555] text-sm mb-5">SolidWorks custom properties are now first-class Design BOM trace input. Put requirement or test identifiers in CAD properties, export them as BOM columns, and map them to the dedicated trace columns below.</p>
+    <div class="space-y-4">
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Requirement IDs</h3>
+        <p class="text-[#555555] text-sm m-0">Map your SolidWorks custom property to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">requirement_ids</code> or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">requirement_id</code>. Live stores the declared values on the BOMItem and creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">REFERENCES_REQUIREMENT</code> edges for exact matches to Requirement nodes.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Test IDs</h3>
+        <p class="text-[#555555] text-sm m-0">Map your SolidWorks custom property to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">test_ids</code> or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">test_id</code>. Live resolves exact IDs to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">Test</code> first, then <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestGroup</code>, and creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">REFERENCES_TEST</code> edges for resolved matches.</p>
+      </div>
+      <div class="p-4 border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg">
+        <h3 class="text-sm font-bold text-[#2E7D32] mb-1">Unresolved refs stay visible</h3>
+        <p class="text-[#555555] text-sm m-0">If an ID does not resolve, the Design BOM still ingests. The raw IDs remain on the BOMItem, and the ingest response includes <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">BOM_UNRESOLVED_REQUIREMENT_REF</code> or <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F1F8F2; padding: 0 0.25rem; border-radius: 0.2rem;">BOM_UNRESOLVED_TEST_REF</code> warnings instead of failing the ingest.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Ingest paths</h2>
+    <div class="space-y-6">
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F1F8F2] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Inbox drop</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">Drop <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.csv</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.json</code>, or <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code> into the Live inbox. Successful BOM ingests move to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">processed/</code>; failures move to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rejected/</code>.</p>
+          <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">cp design_bom.xlsx ~/.rtmify/inbox/</pre>
+          <p class="text-[#555555] text-xs mt-2">Warning-only BOM ingests still land in <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">processed/</code>; Live mirrors those warnings into runtime diagnostics.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">HTTP API</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">Use <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/bom</code> for hardware CSV, hardware JSON, CycloneDX JSON, or SPDX JSON. Use <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/bom/xlsx</code> for grouped Design BOM workbooks. Lifecycle-aware GET routes accept <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">include_obsolete=true</code> or <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">include_inactive=true</code> when you explicitly want non-current products.</p>
+          <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-xs overflow-x-auto" style="font-family: var(--font-family-mono);">curl -X POST http://127.0.0.1:8000/api/v1/bom/xlsx \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -F "file=@RTMify_Design_BOM_Template.xlsx"</pre>
+          <p class="text-[#555555] text-xs mt-2">The workbook route returns per-group status, warnings, and row counts instead of one all-or-nothing result.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Design BOM Sync</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">The dashboard settings now expose an optional read-only secondary source named <strong>Design BOM Sync</strong>. That source is separate from the primary RTM workbook and supports Google Sheets, Excel Online, or a local XLSX file.</p>
+          <ul class="space-y-1.5 text-sm text-[#555555]">
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">GET /api/design-bom-sync</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/design-bom-sync/validate</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/design-bom-sync</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">DELETE /api/design-bom-sync</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Graph shape</h2>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">Product (full_identifier = "ASM-1000-REV-C")
+  └─[HAS_DESIGN_BOM]→ DesignBOM (bom_name = "pcba", bom_type = "hardware", bom_class = "design")
+       ├─[CONTAINS qty=1]→ BOMItem (part = "PCB-SUB-001", revision = "A")
+       │    ├─[CONTAINS qty=4]→ BOMItem (part = "C0805-10UF", revision = "B")
+       │    │    ├─[REFERENCES_REQUIREMENT]→ Requirement (REQ-010)
+       │    │    └─[REFERENCES_TEST]→ Test or TestGroup (TG-007)
+       │    └─[CONTAINS qty=12]→ BOMItem (part = "R0402-10K", revision = "-")
+       └─[CONTAINS qty=2]→ BOMItem (part = "CONN-DF12-6P", revision = "A")</pre>
+    <p class="text-[#555555] text-sm mt-4">The Design BOM hangs off the same Product node as requirements, risks, tests, serial numbers, and code evidence, so BOM-centered impact and coverage questions stay on the same graph.</p>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How to query it</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+      {[
+        '"List the Design BOMs for ASM-1000-REV-C."',
+        '"Where is FBRFET-3300 used?"',
+        '"Show unresolved requirement or test refs in the power-supply BOM."',
+        '"Explain the BOM impact if supplier X EOLs part LM5166DRCR."',
+        '"List Design BOMs including obsolete products."',
+        '"Show BOM gaps including superseded and EOL products."',
+        '"Show the linked requirements and tests for BOM item C0805-10UF/B."',
+        '"Read design-bom://ASM-1000-REV-C/pcba and summarize trace coverage."',
+      ].map(q => (
+        <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded px-4 py-3 text-sm text-[#555555] italic">{q}</div>
+      ))}
+    </div>
+    <p class="text-[#555555] text-sm mb-3">The key MCP affordances now include:</p>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_bom</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_bom_item</code> for tree and item drill-down, with <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">include_obsolete</code> on <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_bom</code></li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">list_design_boms</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">find_part_usage</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_gaps</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_impact_analysis</code>, each with lifecycle override flags where relevant</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>the <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">design-bom://&lt;full_product_identifier&gt;/&lt;bom_name&gt;</code> resource</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>prompts such as <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">inspect_bom_item_traceability</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">eol_impact</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_coverage</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">component_substitute</code></li>
+    </ul>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Known limits</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#F5F5F5]">
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Limit</th>
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Current behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['SolidWorks configuration semantics', 'Live ingests the exported BOM rows, not the full SolidWorks model. Suppressed components or alternate configurations only appear if they are present in the exported BOM or workbook.'],
+            ['Unmapped CAD properties', 'Only mapped Design BOM columns are preserved. Other custom properties do not enter the graph.'],
+            ['Grouped workbook product missing', 'Workbook/XLSX ingest warns per group and continues. Single-file CSV/JSON ingest still hard-fails if the Product anchor is missing.'],
+            ['Design-history / chain semantics', 'BOM trace links are visible and queryable, but they do not yet change profile-chain gap logic or design-history semantics.'],
+          ].map(([limit, behavior]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E] border border-[#EEEEEE]">{limit}</td>
+              <td class="px-4 py-3 text-[#555555] border border-[#EEEEEE]">{behavior}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DocsLayout>

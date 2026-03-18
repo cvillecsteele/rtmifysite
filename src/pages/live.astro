@@ -8,7 +8,7 @@ import ConversationDemo from '../components/ConversationDemo.astro';
 
 <BaseLayout
   title="RTMify Live: Product Realization Graph for Regulated Industries"
-  description="RTMify Live builds a connected graph from your requirements, source code, BOMs, SBOMs, and test execution records. One binary. Local. Queryable by AI. From user need to shipped serial number."
+  description="RTMify Live builds a connected graph from your requirements, source code, Design BOMs, SBOMs, and test execution records. One binary. Local. Queryable by AI. From user need to shipped serial number."
 >
   <Nav />
 
@@ -21,7 +21,7 @@ import ConversationDemo from '../components/ConversationDemo.astro';
           Know your product.
         </h1>
         <p class="text-lg text-gray-300 mb-8 max-w-2xl">
-          Live builds a connected graph from your requirements spreadsheet, your source code, your BOM, your SBOM, and your test execution records. One binary on your laptop. From user need to shipped serial number, queryable by AI.
+          Live builds a connected graph from your requirements spreadsheet, your source code, your Design BOM, your SBOM, and your test execution records. One binary on your laptop. From user need to shipped serial number, queryable by AI.
         </p>
         <a href="/pricing#live" class="inline-block px-6 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
           See pricing →
@@ -88,14 +88,19 @@ import ConversationDemo from '../components/ConversationDemo.astro';
           <div class="flex gap-5 items-start">
             <div class="w-9 h-9 rounded-full bg-[#1A1A2E] text-white font-bold flex items-center justify-center shrink-0 text-sm">4</div>
             <div>
-              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Consumes your BOM and SBOM</h3>
+              <h3 class="font-semibold text-[#1A1A2E] text-lg mb-2">Consumes your Design BOM and SBOM</h3>
               <p class="text-[#555555]">
-                Export your hardware BOM from your PLM, ERP, or CAD tool as a CSV. Export your software BOM from your CI pipeline as CycloneDX or SPDX JSON. Drop them in the inbox. Live builds the product structure tree and connects it to the design controls graph. You can see what's inside your product and which requirements each component traces to, covering hardware and software in one graph.
+                Export your hardware BOM from your PLM, ERP, or CAD tool as CSV, connect a secondary Design BOM workbook, or upload a grouped .xlsx Design BOM workbook. Export your software BOM from your CI pipeline as CycloneDX or SPDX JSON. Live builds the product structure tree and connects it to the design controls graph, including explicit requirement and test references carried on BOM rows.
               </p>
               <div class="mt-4 flex flex-wrap gap-2">
                 <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DBEAFE; color: #1E40AF; font-family: var(--font-family-mono);">Hardware BOM (CSV)</code>
+                <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #DCFCE7; color: #166534; font-family: var(--font-family-mono);">Design BOM (.xlsx)</code>
                 <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #F3E8FF; color: #6B21A8; font-family: var(--font-family-mono);">CycloneDX</code>
                 <code class="font-mono text-xs font-semibold px-2 py-0.5 rounded" style="background-color: #F3E8FF; color: #6B21A8; font-family: var(--font-family-mono);">SPDX</code>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                <a href="/bom-template" class="text-[#1565C0] underline hover:no-underline">Download the Design BOM template</a>
+                <a href="/docs/live/solidworks-bom/" class="text-[#1565C0] underline hover:no-underline">Read the Design BOM ingestion guide</a>
               </div>
             </div>
           </div>
@@ -154,10 +159,10 @@ import ConversationDemo from '../components/ConversationDemo.astro';
       <div class="max-w-3xl mx-auto">
         <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">The product realization graph</h2>
         <p class="text-[#555555] mb-4">
-          Every tool in your stack produces data exhaust. Your engineers write code with requirement annotations. Your CI pipeline produces test results. Your test station logs every serial number it touches. Your PLM exports a BOM. Your build system generates an SBOM. That evidence already exists. Nobody connects it.
+          Every tool in your stack produces data exhaust. Your engineers write code with requirement annotations. Your CI pipeline produces test results. Your test station logs every serial number it touches. Your PLM exports a BOM. Your mechanical team exports a workbook. Your build system generates an SBOM. That evidence already exists. Nobody connects it.
         </p>
         <p class="text-[#555555] mb-8">
-          Live connects it. One binary parses what your team already produces (the files on disk, the test logs in a folder, the BOM export from your PLM) and builds a graph. The graph links user needs to requirements, requirements to tests, requirements to source code, products to BOMs, BOMs to components, test executions to serial numbers, and serial numbers to products. The chain from "why we built this" to "did this specific unit pass" is one query.
+          Live connects it. One binary parses what your team already produces and builds a graph. The graph links user needs to requirements, requirements to tests, requirements to source code, products to Design BOMs, Design BOMs to components, test executions to serial numbers, and serial numbers to products. The chain from "why we built this" to "did this specific unit pass" is one query.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm border-collapse">
@@ -185,9 +190,9 @@ import ConversationDemo from '../components/ConversationDemo.astro';
                 <td class="px-4 py-3 text-[#555555]">JSON inbox or HTTP API</td>
               </tr>
               <tr class="border-b border-[#DDDDDD] bg-white">
-                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Hardware BOM</td>
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">Hardware Design BOM</td>
                 <td class="px-4 py-3 text-[#555555]">PLM / ERP / CAD export</td>
-                <td class="px-4 py-3 text-[#555555]">CSV inbox or HTTP API</td>
+                <td class="px-4 py-3 text-[#555555]">CSV inbox or API, grouped XLSX upload, or secondary Design BOM sync</td>
               </tr>
               <tr class="border-b border-[#DDDDDD]">
                 <td class="px-4 py-3 font-medium text-[#1A1A2E]">Software BOM</td>
@@ -210,7 +215,7 @@ import ConversationDemo from '../components/ConversationDemo.astro';
       <div class="max-w-3xl mx-auto">
         <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6">Why not just use Jama?</h2>
         <p class="text-[#555555] mb-4">
-          Jama does requirements. MasterControl does manufacturing records. Arena does BOMs. Nobody does all three. Nobody connects all three. You pay for enterprise software and your engineers still maintain a spreadsheet on the side because the ALM tool doesn't know about their test station output or their BOM.
+          Jama does requirements. MasterControl does manufacturing records. Arena does BOMs. Nobody does all three. Nobody connects all three. You pay for enterprise software and your engineers still maintain a spreadsheet on the side because the ALM tool doesn't know about their test station output or their Design BOM trace links.
         </p>
         <p class="text-[#555555] mb-8">
           RTMify Live reads the artifacts your team already produces and builds the connected graph that no single tool provides. The spreadsheet stays. The PLM stays. The CI pipeline stays. Live runs alongside all of them, on your laptop, connecting the evidence that's already there.
