@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live: MCP Integration';
-const description = 'RTMify Live exposes a local MCP server for requirements, tests, risks, code evidence, Design BOMs, and BOM traceability drill-down.';
+const description = 'RTMify Live exposes a local MCP server for requirements, tests, risks, code evidence, Design BOMs, SOUP registers, and BOM traceability drill-down.';
 const canonical = 'https://rtmify.io/docs/live/mcp/';
 
 const breadcrumbs = [
@@ -42,7 +42,7 @@ const jsonLd = {
       MCP Integration
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      RTMify Live exposes a local Model Context Protocol server over HTTP. An MCP-connected assistant can query requirements, tests, risks, code evidence, verification state, and the new Design BOM graph without scraping the dashboard or reading the source spreadsheets directly.
+      RTMify Live exposes a local Model Context Protocol server over HTTP. An MCP-connected assistant can query requirements, tests, risks, code evidence, verification state, Design BOMs, and SOUP/software inventory without scraping the dashboard or reading the source spreadsheets directly.
     </p>
   </div>
 
@@ -56,6 +56,8 @@ const jsonLd = {
         '"Show the linked requirements and tests for BOM item C0805-10UF/B."',
         '"What BOM refs are unresolved in the power-supply BOM?"',
         '"Assess the end-of-life impact of LM5166DRCR."',
+        '"Summarize SOUP gaps for ASM-1000-REV-C."',
+        '"List software BOMs and filter them by license."',
         '"What source files implement REQ-010?"',
         '"Summarize audit readiness."',
       ].map(q => (
@@ -91,6 +93,8 @@ const jsonLd = {
         ['design-history://<id>', 'Design-history narrative for a requirement'],
         ['impact://<id>', 'Upstream and downstream impact chain for a node'],
         ['design-bom://<full_product_identifier>/<bom_name>', 'Design BOM markdown summary, coverage, and unresolved refs'],
+        ['software-boms://', 'Software BOM and SOUP register inventory across the active workbook'],
+        ['soup-components://<full_product_identifier>/<bom_name>', 'SOUP register markdown view with anomaly text, safety class, and trace coverage'],
         ['bom-item://<full_product_identifier>/<bom_type>/<bom_name>/<part>@<revision>', 'One BOM item drill-down with resolved and unresolved trace refs'],
       ].map(([uri, desc]) => (
         <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
@@ -133,6 +137,34 @@ const jsonLd = {
   </section>
 
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">SOUP tools</h2>
+    <p class="text-[#555555] text-sm mb-4">These tools expose software DesignBOMs and manual SOUP registers without forcing the assistant to infer them from generic BOM queries alone.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Tool</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">What it returns</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['list_software_boms', 'Software Design BOM and SOUP register inventory with source format, ingest timestamp, item count, and warnings'],
+            ['get_soup_components', 'Flattened SOUP component rows with safety class, anomaly text, unresolved refs, and SOUP statuses'],
+            ['soup_by_safety_class', 'Software components for one product filtered by safety_class'],
+            ['soup_by_license', 'Software components filtered by product and/or license substring'],
+          ].map(([tool, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{tool}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Prompts</h2>
     <p class="text-[#555555] text-sm mb-4">Prompts guide an assistant toward the right combination of tools and resources.</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -146,6 +178,8 @@ const jsonLd = {
         ['eol_impact', 'End-of-life impact workflow for a part'],
         ['bom_coverage', 'Design BOM coverage and unresolved-ref summary'],
         ['component_substitute', 'Traceability and verification exposure for a substitute part'],
+        ['soup_audit_prep', 'SOUP anomaly, linkage, and audit-readiness summary'],
+        ['soup_coverage', 'SOUP traceability, safety-class, and license coverage summary'],
       ].map(([name, desc]) => (
         <div class="p-3 bg-[#F5F5F5] border border-[#DDDDDD] rounded">
           <code class="text-xs text-[#1A1A2E] block mb-1" style="font-family: var(--font-family-mono);">{name}</code>

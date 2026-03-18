@@ -47,7 +47,7 @@ const faqItems = [
   },
   {
     question: 'How do I handle Software of Unknown Provenance (SOUP) components?',
-    answer: 'SOUP items are pre-developed software (COTS, open-source, vendor libraries) used in your device without modification. Per §5.1.3, you must: (1) identify all SOUP items with part number and version, (2) assess their use and potential failure modes, (3) document risk mitigation (testing, redundancy, or acceptance). In RTMify, create a Risks table entry for each SOUP component documenting its known limitations and how your design mitigates them. For example, if you use an open-source ECG library, assess the risk of calculation errors and specify independent verification tests (TG-001) that prove correctness even if the library contains bugs. Include a SOUP version/source record in your Risk Notes for traceability during post-market surveillance.'
+    answer: 'SOUP items are pre-developed software (COTS, open-source, vendor libraries) used in your device without modification. Per §5.1.3, you must identify them, assess their use and potential failure modes, document known anomalies, and record your anomaly evaluation and verification strategy. In RTMify Live, use the dedicated SOUP workbook or SOUP API so each component has a version, safety class, known anomalies, anomaly evaluation, and direct requirement/test links. Risks still document the system-level hazard and mitigation story; the SOUP register becomes the controlled software inventory.'
   },
   {
     question: 'Do I need a separate RTMify template if I am already using one for ISO 13485?',
@@ -521,7 +521,7 @@ const jsonLd = {
           </li>
           <li class="flex gap-3">
             <span class="text-[#555555] font-bold mt-1">◦</span>
-            <span><strong>SOUP Anomaly Tracking (§5.1.3)</strong> — SOUP defect logs and anomaly resolution are tracked in your defect system. Reference SOUP version and known issues in RTMify Risk Notes.</span>
+            <span><strong>SOUP Anomaly Tracking (§5.1.3)</strong> — SOUP defect logs still live in your defect system, but RTMify Live now supports a dedicated SOUP register with version, known anomalies, anomaly evaluation, and trace links rather than burying that evidence in Risk Notes.</span>
           </li>
           <li class="flex gap-3">
             <span class="text-[#555555] font-bold mt-1">◦</span>

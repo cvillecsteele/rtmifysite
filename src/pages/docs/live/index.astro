@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live Overview';
-const description = 'RTMify Live is a local-first traceability runtime that continuously syncs your spreadsheet, scans your codebase, ingests test results, and answers coverage questions through an MCP integration.';
+const description = 'RTMify Live is a local-first traceability runtime that continuously syncs your spreadsheet, scans your codebase, ingests test results, and answers coverage questions through MCP, Design BOM, and SOUP surfaces.';
 const canonical = 'https://rtmify.io/docs/live/';
 
 const breadcrumbs = [
@@ -84,8 +84,8 @@ const jsonLd = {
         ['Status write-back', 'After each sync, writes RTMify status codes and row formatting back into the connected workbook. Writes the RTMify Verification column after test results are ingested.'],
         ['Repo scanning', 'Scans local git repositories for requirement annotations in source and test files, commit references, and blame data.'],
         ['Test results ingestion', 'Accepts test execution evidence via HTTP POST or inbox file-drop. Computes verification rollups per requirement.'],
-        ['Report generation', 'Generates RTM (PDF, Word, Markdown), DHR (PDF, Markdown), code coverage (Markdown), and product-scoped Design BOM (PDF, Word, Markdown) reports from the live graph on demand.'],
-        ['MCP', 'Exposes a Model Context Protocol server on the same loopback address. AI assistants can query requirements, tests, risks, gaps, code, and verification state without screen-scraping.'],
+        ['Report generation', 'Generates RTM (PDF, Word, Markdown), DHR (PDF, Markdown), code coverage (Markdown), product-scoped Design BOM (PDF, Word, Markdown), and SOUP Register (PDF, Word, Markdown) reports from the live graph on demand.'],
+        ['MCP', 'Exposes a Model Context Protocol server on the same loopback address. AI assistants can query requirements, tests, risks, gaps, code, Design BOMs, and SOUP/software inventory without screen-scraping.'],
         ['Dashboard', 'The browser UI providing tabular graph views, impact analysis, gap review, code traceability, and report launch — all driven by the SQLite graph.'],
       ].map(([title, desc]) => (
         <div class="p-4 border border-[#DDDDDD] rounded-lg">

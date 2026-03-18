@@ -2,7 +2,7 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live: Dashboard';
-const description = 'The RTMify Live dashboard now includes Design BOM views, Design BOM Sync settings, and drag-and-drop BOM uploads alongside the core traceability graph views.';
+const description = 'The RTMify Live dashboard now includes Design BOM views, top-level SOUP views, Design BOM Sync and SOUP Sync settings, and drag-and-drop BOM/SOUP uploads alongside the core traceability graph views.';
 const canonical = 'https://rtmify.io/docs/live/dashboard/';
 
 const breadcrumbs = [
@@ -89,6 +89,22 @@ const jsonLd = {
 
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Software / SOUP</h3>
+          <span class="text-xs text-[#888888]">SOUP Registers · Components · Gaps · Licenses · Safety Classes</span>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-[#555555] text-sm mb-3">A top-level software inventory workspace for manual SOUP registers and other software DesignBOMs.</p>
+          <ul class="space-y-1.5 text-sm text-[#555555]">
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">SOUP Registers</strong> — product-scoped software BOM list with source format, warning count, and selected register detail</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Components</strong> — flattened software component view with supplier, license, purl, safety class, anomaly notes, and SOUP statuses</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Gaps</strong> — components missing anomaly evaluation, requirement links, test links, or carrying unresolved refs</li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><strong class="text-[#1A1A2E]">Licenses / Safety Classes</strong> — filtered operational views over software inventory metadata</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Guide</h3>
           <span class="text-xs text-[#888888]">Error Codes · MCP &amp; AI</span>
         </div>
@@ -110,10 +126,10 @@ const jsonLd = {
       <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
         <div class="bg-[#F5F5F5] px-5 py-3 border-b border-[#DDDDDD] flex items-center justify-between">
           <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Reports</h3>
-          <span class="text-xs text-[#888888]">RTM · DHR · Coverage · Design BOM</span>
+          <span class="text-xs text-[#888888]">RTM · DHR · Coverage · Design BOM · SOUP</span>
         </div>
         <div class="px-5 py-4">
-          <p class="text-[#555555] text-sm m-0">On-demand reports generated from the live graph rather than static document snapshots. The Design BOM report is scoped to one product plus bom_name and is available as PDF, Markdown, and DOCX.</p>
+          <p class="text-[#555555] text-sm m-0">On-demand reports generated from the live graph rather than static document snapshots. Both the Design BOM report and the SOUP Register report are product-scoped, accept an optional bom_name, and are available as PDF, Markdown, and DOCX.</p>
         </div>
       </div>
     </div>
@@ -149,12 +165,16 @@ const jsonLd = {
         <p class="text-[#555555] text-sm m-0">The settings menu now includes a dedicated <strong>Design BOM Sync</strong> tab. It manages the optional secondary read-only Design BOM source and supports Google Sheets, Excel Online, or a local XLSX file.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">SOUP Sync</h3>
+        <p class="text-[#555555] text-sm m-0">The settings menu also includes <strong>SOUP Sync</strong>. It is a second concrete read-only source, anchored to one Product via <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">full_product_identifier</code>, and supports Google Sheets, Excel Online, or a local XLSX workbook exposing <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">SOUP Components</code>.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Drag-and-drop BOM upload</h3>
         <p class="text-[#555555] text-sm m-0">The dashboard upload surface accepts <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.csv</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.json</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.xlsx</code> Design BOM artifacts. XLSX uploads go through <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/bom/xlsx</code>.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
-        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Template download and BOM report</h3>
-        <p class="text-[#555555] text-sm m-0">The Design BOM workspace includes a direct template download link, and the Reports group now includes a product-scoped Design BOM report backed by the live graph in PDF, Markdown, and DOCX formats.</p>
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">SOUP upload and reports</h3>
+        <p class="text-[#555555] text-sm m-0">The SOUP workspace accepts <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.json</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">.xlsx</code> uploads, links to the downloadable SOUP template, and the Reports group includes a product-scoped SOUP Register report in PDF, Markdown, and DOCX formats.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Guide → MCP &amp; AI</h3>
@@ -169,6 +189,7 @@ const jsonLd = {
     <ul class="space-y-2 text-sm text-[#555555]">
       <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The primary RTM workbook continues to receive RTMify Status and verification write-back.</li>
       <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The secondary Design BOM sync source is read-only. Live ingests it, but never writes status back into that workbook.</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>The secondary SOUP sync source is also read-only and is anchored to one Product in config rather than per-row spreadsheet data.</li>
     </ul>
   </section>
 

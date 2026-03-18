@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+import ProductLadder from '../components/ProductLadder.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify SOUP Template',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any (spreadsheet)',
+      description: 'Free SOUP spreadsheet template for regulated software teams. Tracks software components, versions, licenses, safety class, anomalies, anomaly evaluation, and trace links in RTMify Live.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      downloadUrl: 'https://rtmify.io/RTMify_SOUP_Template.xlsx',
+      url: 'https://rtmify.io/soup-template',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+        { '@type': 'ListItem', position: 2, name: 'Templates', item: 'https://rtmify.io/download' },
+        { '@type': 'ListItem', position: 3, name: 'SOUP Template', item: 'https://rtmify.io/soup-template' },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'When should I use the SOUP template instead of CycloneDX or SPDX?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Use the SOUP template when your team does not have automated SBOM generation or when you need richer manual fields such as known anomalies, anomaly evaluation, and safety class. Automated SBOM teams can still use CycloneDX or SPDX.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I use both the SOUP template and CycloneDX/SPDX?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, but if they target the same product plus bom_name key, the last writer wins. Use distinct bom_name values if you want both inventories to coexist.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="RTMify SOUP Template"
+  description="Free SOUP spreadsheet template for IEC 62304 and regulated software teams. Track software components, versions, licenses, anomalies, anomaly evaluation, and trace links, then connect it to RTMify Live."
+  canonical="https://rtmify.io/soup-template"
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+    <section class="bg-[#142033] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-[1.25fr_0.75fr] gap-10 items-start">
+        <div>
+          <p class="text-sm font-semibold text-[#A7C8FF] uppercase tracking-[0.22em] mb-4">Free SOUP Template</p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            Your software inventory needs more than a package list.
+          </h1>
+          <p class="text-lg text-[#D7E3F9] mb-6 max-w-2xl">
+            The RTMify SOUP Template gives software of unknown provenance a controlled shape: component name, version, supplier, license, safety class, known anomalies, anomaly evaluation, and direct requirement/test references. Use it as a standalone register or connect it to RTMify Live as a read-only SOUP source.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <DownloadButton href="/RTMify_SOUP_Template.xlsx" label="Download SOUP Template (.xlsx)" size="lg" variant="light" />
+            <a href="/pricing#live" class="inline-flex items-center px-6 py-3 border border-white/25 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+              Connect It To Live
+            </a>
+          </div>
+        </div>
+        <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+          <div class="text-sm font-semibold text-[#A7C8FF] uppercase tracking-[0.18em] mb-3">Workbook shape</div>
+          <div class="space-y-4 text-sm text-[#E6EEF9]">
+            <div>
+              <div class="font-semibold text-white mb-1">README</div>
+              <div>Column reference, ingest path, standards mapping, and canonical-source rules.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">SOUP Components</div>
+              <div><code>component_name</code>, <code>version</code>, <code>license</code>, <code>safety_class</code>, <code>known_anomalies</code>, <code>anomaly_evaluation</code>, <code>requirement_ids</code>, <code>test_ids</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">SOUP vs SBOM</h2>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="border border-[#DDDDDD] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#1A1A2E] mb-3">CycloneDX / SPDX</h3>
+            <p class="text-sm text-[#555555] m-0">Best when your CI pipeline already emits a software BOM. RTMify Live ingests that automatically, but those sources usually do not carry anomaly evaluation or safety classification text.</p>
+          </div>
+          <div class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-xl p-6">
+            <h3 class="text-lg font-bold text-[#2E7D32] mb-3">SOUP Template</h3>
+            <p class="text-sm text-[#555555] m-0">Best when you need a manual, auditable register with software-specific context: known anomalies, anomaly evaluation, safety class, and explicit requirement/test links.</p>
+          </div>
+        </div>
+        <p class="text-sm text-[#555555] mt-5 mb-0">If both target the same <code>(full_product_identifier, "software", bom_name)</code> key, last writer wins. If you want both inventories to coexist, give them distinct <code>bom_name</code> values.</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How RTMify Live uses it</h2>
+        <div class="grid lg:grid-cols-3 gap-4 text-sm">
+          <div class="border border-[#DDDDDD] rounded-xl p-5 bg-white">
+            <div class="font-semibold text-[#1A1A2E] mb-2">1. Product anchor</div>
+            <p class="text-[#555555] m-0">SOUP Sync stores one product anchor in config. Upload APIs also bind the register to one product.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5 bg-white">
+            <div class="font-semibold text-[#1A1A2E] mb-2">2. Shared graph</div>
+            <p class="text-[#555555] m-0">Live writes software <code>DesignBOM</code> nodes and <code>BOMItem</code> component nodes, then links requirement and test IDs into the same trace graph.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5 bg-white">
+            <div class="font-semibold text-[#1A1A2E] mb-2">3. Query and audit</div>
+            <p class="text-[#555555] m-0">The dashboard, MCP, and SOUP Register report surface anomaly documentation, unresolved refs, safety classes, and license views from that graph.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Standards mapping</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#1A1A2E] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Standard</th>
+                <th class="text-left px-4 py-3 font-semibold">Relevant expectation</th>
+                <th class="text-left px-4 py-3 font-semibold">Why the template helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]"><td class="px-4 py-3 font-medium text-[#1A1A2E]">IEC 62304</td><td class="px-4 py-3 text-[#555555]">SOUP identification and anomaly review</td><td class="px-4 py-3 text-[#555555]">The sheet captures version, known anomalies, anomaly evaluation, and trace links in one controlled artifact.</td></tr>
+              <tr class="border-b border-[#EEEEEE] bg-white"><td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485</td><td class="px-4 py-3 text-[#555555]">Design output and verification evidence</td><td class="px-4 py-3 text-[#555555]">Component-level links to requirements and tests give software inventory items direct design-control context.</td></tr>
+              <tr class="border-b border-[#EEEEEE]"><td class="px-4 py-3 font-medium text-[#1A1A2E]">DO-178C / AS9100</td><td class="px-4 py-3 text-[#555555]">Configuration visibility</td><td class="px-4 py-3 text-[#555555]">Software configuration items become queryable and reportable, rather than trapped in ad hoc spreadsheet notes.</td></tr>
+              <tr class="bg-white"><td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 26262 / ASPICE</td><td class="px-4 py-3 text-[#555555]">Software component trace context</td><td class="px-4 py-3 text-[#555555]">Safety class and linkage columns let teams keep software inventory evidence close to requirements and verification artifacts.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-18 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Download the workbook. No gate.</h2>
+        <p class="text-[#555555] text-lg mb-8 max-w-2xl mx-auto">The template is free. RTMify Live is what turns it into a continuously queryable SOUP register with reports, MCP tools, and dashboard views.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <DownloadButton href="/RTMify_SOUP_Template.xlsx" label="Download SOUP Template (.xlsx)" size="lg" />
+          <a href="/docs/live/mcp/" class="inline-flex items-center px-8 py-4 border border-[#1A1A2E] rounded-lg text-[#1A1A2E] font-semibold hover:bg-white transition-colors">
+            Read the Live + MCP docs
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <ProductLadder current="template" />
+  </main>
+
+  <Footer />
+</BaseLayout>
