@@ -54,7 +54,8 @@ const liveLinks = [
   { slug: 'live-repo', href: '/docs/live/repo/', label: 'Repo Scanning' },
   { slug: 'live-test-results', href: '/docs/live/test-results/', label: 'Test Results API' },
   { slug: 'live-mcp', href: '/docs/live/mcp/', label: 'MCP Integration' },
-  { slug: 'live-solidworks-bom', href: '/docs/live/solidworks-bom/', label: 'SolidWorks BOM' },
+  { slug: 'live-design-bom', href: '/docs/live/design-bom/', label: 'Design BOM' },
+  { slug: 'live-soup', href: '/docs/live/soup/', label: 'SOUP Ingestion' },
 ];
 
 const standardLinks = [
@@ -103,7 +104,7 @@ const standardLinks = [
       <div class="lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
 
         {/* Main content */}
-        <article class="max-w-none">
+        <article class="max-w-none min-w-0">
           <slot />
         </article>
 

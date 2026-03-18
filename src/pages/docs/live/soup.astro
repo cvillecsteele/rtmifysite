@@ -1,0 +1,324 @@
+---
+import DownloadButton from '../../../components/DownloadButton.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Live: SOUP Ingestion';
+const description = 'Ingest SOUP registers from JSON uploads, dedicated SOUP workbooks, inbox file-drop, or a read-only SOUP Sync source. RTMify Live builds a software DesignBOM graph with anomaly and trace fields.';
+const canonical = 'https://rtmify.io/docs/live/soup/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Live', url: '/docs/live/' },
+  { name: 'SOUP Ingestion', url: '/docs/live/soup/' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://rtmify.io/docs/' },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: 'https://rtmify.io/docs/live/' },
+    { '@type': 'ListItem', position: 4, name: 'SOUP Ingestion', item: 'https://rtmify.io/docs/live/soup/' },
+  ],
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="live-soup"
+  lane="live"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#2E7D32] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      SOUP Ingestion
+    </h1>
+    <p class="text-lg text-[#555555] max-w-3xl leading-relaxed">
+      RTMify Live ingests software of unknown provenance from dedicated SOUP JSON uploads, single-purpose SOUP workbooks, inbox file-drop, and an optional read-only SOUP Sync source. The resulting graph anchors each product to a software <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DesignBOM</code>, its <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">BOMItem</code> component rows, and any explicit requirement or test references declared on those SOUP rows.
+    </p>
+    <div class="mt-6 border border-[#6A1B9A] border-opacity-20 bg-[#FBF5FF] rounded-lg p-4 max-w-3xl">
+      <p class="text-sm text-[#6A1B9A] font-semibold mb-1">SOUP is not just an SBOM file</p>
+      <p class="text-[#555555] text-sm m-0">CycloneDX and SPDX are excellent automated software BOM formats, but they usually do not carry anomaly evaluation, safety class, or manual trace notes. Live treats SOUP as a software inventory with richer audit fields. Use the SOUP template when you need those software-specific columns and use automated SBOMs when your CI pipeline already emits them.</p>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <DownloadButton href="/RTMify_SOUP_Template.xlsx" label="Download SOUP Template (.xlsx)" size="md" />
+      <a
+        href="/soup-template"
+        class="inline-flex items-center px-5 py-3 rounded-lg border border-[#6A1B9A] text-[#6A1B9A] font-semibold hover:bg-[#FBF5FF] transition-colors"
+      >
+        View SOUP template guide
+      </a>
+    </div>
+  </div>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What Live supports now</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Source</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Path</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['SOUP JSON payload', 'POST /api/v1/soup', 'Dedicated software inventory API with per-row errors, warnings, and one product anchor per submission.'],
+            ['SOUP workbook (.xlsx)', 'POST /api/v1/soup/xlsx or inbox drop', 'Workbook must contain a SOUP Components tab. API binds product by form field; inbox uses the SOUP__{full_product_identifier}.xlsx filename convention.'],
+            ['Secondary SOUP Sync', 'Dashboard Settings → SOUP Sync', 'Optional read-only secondary source. Supports Google Sheets, Excel Online, or a local XLSX file anchored to one product in config.'],
+            ['Automated SBOM', 'POST /api/v1/bom', 'CycloneDX and SPDX still ingest as software DesignBOMs, but they do not carry the richer SOUP-only fields.'],
+          ].map(([source, path, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]">{source}</td>
+              <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{path}</td>
+              <td class="px-4 py-3 text-[#555555]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Product prerequisite</h2>
+    <p class="text-[#555555] text-sm mb-5">
+      Every SOUP register is anchored to exactly one Product by <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">full_product_identifier</code>. That product must already exist in the primary RTM workbook.
+    </p>
+    <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
+      <p class="text-sm text-[#E65100] font-semibold mb-1">SOUP Sync is stricter than grouped Design BOM ingest</p>
+      <p class="text-[#555555] text-sm m-0">The dedicated SOUP Sync source stores one product anchor in config. Save and validate fail if that product does not exist. SOUP does not create Product rows and does not infer the product per row from the workbook itself.</p>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Workbook shape and column reference</h2>
+    <p class="text-[#555555] text-sm mb-5">The downloadable SOUP workbook is single-purpose. Live expects the exact <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">SOUP Components</code> tab and the columns below.</p>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#F5F5F5]">
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Column</th>
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Required</th>
+            <th class="text-left px-4 py-2 font-semibold text-[#1A1A2E] border border-[#DDDDDD]">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['component_name', 'Yes', 'Mapped to BOMItem.part. Blank rows are skipped with SOUP_MISSING_REQUIRED_FIELD.'],
+            ['version', 'Yes', 'Mapped to BOMItem.revision. "unknown" is allowed and surfaces as SOUP_VERSION_UNKNOWN.'],
+            ['supplier', 'No', 'Stored on the BOMItem.'],
+            ['category', 'No', 'Stored on the BOMItem.'],
+            ['license', 'No', 'Stored on the BOMItem.'],
+            ['purl', 'No', 'Stored on the BOMItem.'],
+            ['safety_class', 'No', 'Free-text SOUP field stored on the BOMItem.'],
+            ['known_anomalies', 'No', 'Free-text SOUP field stored on the BOMItem.'],
+            ['anomaly_evaluation', 'No', 'Free-text SOUP field stored on the BOMItem.'],
+            ['requirement_ids', 'No', 'Comma-, semicolon-, or pipe-separated Requirement IDs.'],
+            ['test_ids', 'No', 'Comma-, semicolon-, or pipe-separated Test or TestGroup IDs.'],
+            ['Notes', 'Ignored for ingest', 'Accepted in the workbook and ignored by Live.'],
+          ].map(([col, req, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-2.5 font-medium text-[#1A1A2E] border border-[#EEEEEE]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{col}</td>
+              <td class="px-4 py-2.5 text-[#555555] border border-[#EEEEEE]">{req}</td>
+              <td class="px-4 py-2.5 text-[#555555] border border-[#EEEEEE]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="border border-[#6A1B9A] border-opacity-20 bg-[#FBF5FF] rounded-lg p-4">
+      <p class="text-sm text-[#6A1B9A] font-semibold mb-1">Template-first path</p>
+      <p class="text-[#555555] text-sm m-0">The published workbook already uses the supported column names. If your team is not generating CycloneDX or SPDX automatically, start with the template and keep it as the canonical software inventory for that product.</p>
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-3">
+      <DownloadButton href="/RTMify_SOUP_Template.xlsx" label="Download the workbook" size="sm" />
+      <a href="/soup-template" class="text-[#1565C0] font-semibold underline hover:no-underline">See the full SOUP template guide</a>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Requirement and test trace fields</h2>
+    <p class="text-[#555555] text-sm mb-5">SOUP rows can declare direct trace links, just like hardware Design BOM rows.</p>
+    <div class="space-y-4">
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Requirement IDs</h3>
+        <p class="text-[#555555] text-sm m-0">Live stores declared <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">requirement_ids</code> on each SOUP component and creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">REFERENCES_REQUIREMENT</code> edges for exact Requirement matches.</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Test IDs</h3>
+        <p class="text-[#555555] text-sm m-0">Live resolves exact IDs to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">Test</code> first, then <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestGroup</code>, and creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">REFERENCES_TEST</code> edges for resolved matches.</p>
+      </div>
+      <div class="p-4 border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg">
+        <h3 class="text-sm font-bold text-[#2E7D32] mb-1">Unresolved refs stay visible</h3>
+        <p class="text-[#555555] text-sm m-0">If a declared ID does not resolve, the SOUP row still ingests. The raw IDs remain on the BOMItem and the component surfaces unresolved-ref statuses instead of failing the entire submission.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Ingest paths</h2>
+    <div class="space-y-6">
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F1F8F2] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">Inbox drop</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">Drop a single-purpose SOUP workbook into the Live inbox. Successful ingests move to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">processed/</code>; failures move to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rejected/</code>.</p>
+          <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">cp SOUP__ASM-1000-REV-C.xlsx ~/.rtmify/inbox/</pre>
+          <p class="text-[#555555] text-xs mt-2">Inbox SOUP workbooks use the <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">SOUP__&#123;full_product_identifier&#125;.xlsx</code> filename convention so Live can anchor the register to one product.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">HTTP API</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">Use <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/soup</code> for dedicated SOUP JSON and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/soup/xlsx</code> for the SOUP workbook path.</p>
+          <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-xs overflow-x-auto" style="font-family: var(--font-family-mono);">curl -X POST http://127.0.0.1:8000/api/v1/soup/xlsx \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -F "full_product_identifier=ASM-1000-REV-C" \
+  -F "file=@RTMify_SOUP_Template.xlsx"</pre>
+          <p class="text-[#555555] text-xs mt-2">The dedicated SOUP routes return rows received, rows ingested, row-level errors, and warnings instead of a single opaque result.</p>
+        </div>
+      </div>
+
+      <div class="border border-[#DDDDDD] rounded-lg overflow-hidden">
+        <div class="bg-[#F5F5F5] px-4 py-3 border-b border-[#DDDDDD]">
+          <h3 class="text-sm font-bold text-[#1A1A2E] m-0">SOUP Sync</h3>
+        </div>
+        <div class="px-4 py-4">
+          <p class="text-[#555555] text-sm mb-3">The dashboard settings expose an optional read-only secondary source named <strong>SOUP Sync</strong>. That source is separate from the primary RTM workbook and is anchored to one Product in config.</p>
+          <ul class="space-y-1.5 text-sm text-[#555555]">
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">GET /api/soup-sync</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/soup-sync/validate</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/soup-sync</code></li>
+            <li class="flex gap-2"><span class="text-[#AAAAAA]">—</span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">DELETE /api/soup-sync</code></li>
+          </ul>
+          <p class="text-[#555555] text-xs mt-2">This source is read-only. Live ingests it but never writes status back into the workbook.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Replacement semantics</h2>
+    <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
+      <p class="text-sm text-[#E65100] font-semibold mb-1">Same product + BOM name replaces the prior software inventory</p>
+      <p class="text-[#555555] text-sm m-0">SOUP replacement is keyed by <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #FFF8F5; padding: 0 0.25rem; border-radius: 0.2rem;">(full_product_identifier, bom_type, bom_name)</code>. If a SOUP register and a CycloneDX/SPDX ingest target the same software key, last writer wins. If you want both inventories to coexist, give them distinct <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #FFF8F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_name</code> values.</p>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Graph shape</h2>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">Product (full_identifier = "ASM-1000-REV-C")
+  └─[HAS_DESIGN_BOM]→ DesignBOM (bom_name = "SOUP Components", bom_type = "software", bom_class = "design")
+       ├─[CONTAINS qty=1]→ BOMItem (part = "FreeRTOS", revision = "10.5.1")
+       │    ├─ known_anomalies = "None known"
+       │    ├─ anomaly_evaluation = "No anomalies to evaluate"
+       │    ├─ safety_class = "C"
+       │    ├─[REFERENCES_REQUIREMENT]→ Requirement (REQ-001)
+       │    └─[REFERENCES_TEST]→ Test or TestGroup (TG-001)
+       └─[CONTAINS qty=1]→ BOMItem (part = "lwIP", revision = "unknown")</pre>
+    <p class="text-[#555555] text-sm mt-4">SOUP components live on the same product graph as requirements, tests, risks, code evidence, and hardware Design BOMs, so software inventory questions stay on the same graph rather than in a separate spreadsheet silo.</p>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How to query it</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+      {[
+        '"List the software BOMs for ASM-1000-REV-C."',
+        '"Show SOUP components with missing anomaly evaluation."',
+        '"List SOUP components by safety class for ASM-1000-REV-C."',
+        '"Show unresolved requirement or test refs in the SOUP register."',
+        '"Group software components by license."',
+        '"Explain the impact if component lwIP is superseded or removed."',
+        '"Read soup-components://ASM-1000-REV-C/SOUP Components and summarize gap status."',
+        '"Show the linked requirements and tests for SOUP component FreeRTOS@10.5.1."',
+      ].map(q => (
+        <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded px-4 py-3 text-sm text-[#555555] italic">{q}</div>
+      ))}
+    </div>
+    <p class="text-[#555555] text-sm mb-3">The key MCP affordances include:</p>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">list_software_boms</code> for product-scoped software inventory across both manual SOUP and automated CycloneDX/SPDX ingests</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_soup_components</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup_by_safety_class</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup_by_license</code>, plus unified <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_gaps</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">bom_impact_analysis</code></li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>the <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">software-boms://</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup-components://&lt;full_product_identifier&gt;/&lt;bom_name&gt;</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup-component://...</code> resources</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span>prompts such as <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup_audit_prep</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">soup_coverage</code></li>
+    </ul>
+    <div class="border border-[#2E7D32] border-opacity-30 bg-[#F1F8F2] rounded-lg p-4 mt-5">
+      <p class="text-sm text-[#2E7D32] font-semibold mb-1">Dashboard report availability</p>
+      <p class="text-[#555555] text-sm m-0">The Reports group in the dashboard includes a product-scoped SOUP Register report in PDF, Markdown, and DOCX. The Software / SOUP workspace also exposes components, gaps, licenses, and safety-class views from the same graph.</p>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">SOUP vs automated SBOM</h2>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="border border-[#DDDDDD] rounded-xl p-6">
+        <h3 class="text-lg font-bold text-[#1A1A2E] mb-3">CycloneDX / SPDX</h3>
+        <p class="text-sm text-[#555555] m-0">Best when your CI or build pipeline already emits a software BOM. Live ingests those formats through the generic BOM API and stores them as software DesignBOM nodes.</p>
+      </div>
+      <div class="border border-[#6A1B9A] border-opacity-20 bg-[#FBF5FF] rounded-xl p-6">
+        <h3 class="text-lg font-bold text-[#6A1B9A] mb-3">SOUP workbook or JSON</h3>
+        <p class="text-sm text-[#555555] m-0">Best when you need richer, manual software evidence: known anomalies, anomaly evaluation, safety class, and explicit trace links. This is the better audit surface when those fields matter.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Known limits</h2>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>SOUP Sync is a second concrete source, not a generalized multi-workbook attachment system.</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>The workbook is single-purpose. Live expects a <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">SOUP Components</code> tab, not a mixed Design BOM + SOUP workbook.</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>Free-text SOUP fields are not vocabulary-validated. Live distinguishes blank vs nonblank and detects <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">unknown</code> version values, but it does not enforce controlled terminology for anomaly text or safety class.</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>If SOUP and CycloneDX/SPDX target the same software key, last writer wins. Live does not merge them field-by-field.</span></li>
+    </ul>
+  </section>
+
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Error and warning reference</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Code</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['SOUP_PRODUCT_NOT_FOUND', 'The target Product does not exist for the current full_product_identifier.'],
+            ['SOUP_NO_PRODUCT_IDENTIFIER', 'Inbox workbook filename did not include the expected SOUP__{full_product_identifier}.xlsx anchor.'],
+            ['NO_SOUP_TAB', 'Workbook/XLSX ingest did not find the required SOUP Components tab.'],
+            ['invalid_json', 'The JSON payload shape was invalid for the dedicated SOUP API.'],
+            ['invalid_xlsx', 'The uploaded workbook could not be parsed as a valid XLSX file.'],
+            ['SOUP_MISSING_REQUIRED_FIELD', 'A row was skipped because component_name or version was blank.'],
+            ['SOUP_VERSION_UNKNOWN', 'The component version was explicitly set to unknown.'],
+            ['SOUP_NO_ANOMALY_EVALUATION', 'known_anomalies was nonblank while anomaly_evaluation was blank.'],
+            ['SOUP_NO_ANOMALIES_DOCUMENTED', 'Both known_anomalies and anomaly_evaluation were blank.'],
+            ['SOUP_NO_REQUIREMENT_LINKAGE', 'No requirement_ids were declared on the component row.'],
+            ['SOUP_NO_TEST_LINKAGE', 'No test_ids were declared on the component row.'],
+            ['SOUP_UNRESOLVED_REQUIREMENT_REF', 'One or more declared requirement IDs did not resolve.'],
+            ['SOUP_UNRESOLVED_TEST_REF', 'One or more declared test or test-group IDs did not resolve.'],
+          ].map(([code, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{code}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DocsLayout>
