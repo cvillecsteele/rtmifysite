@@ -1,0 +1,197 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Live: ATE / ATP Results';
+const description = 'Use RTMify Live test-results JSON to ingest per-unit as-built evidence from ATE stations and ATP workflows, including serial numbers and product-scoped unit history.';
+const canonical = 'https://rtmify.io/docs/live/ate-atp/';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs/' },
+  { name: 'Live', url: '/docs/live/' },
+  { name: 'ATE / ATP Results', url: '/docs/live/ate-atp/' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://rtmify.io/docs/' },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: 'https://rtmify.io/docs/live/' },
+    { '@type': 'ListItem', position: 4, name: 'ATE / ATP Results', item: 'https://rtmify.io/docs/live/ate-atp/' },
+  ],
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="live-ate-atp"
+  lane="live"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#2E7D32] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      ATE / ATP Results
+    </h1>
+    <p class="text-lg text-[#555555] max-w-3xl leading-relaxed">
+      RTMify Live can ingest per-unit as-built evidence from automated test equipment and acceptance test procedures through the same JSON test-results API used for generic execution evidence. This is the clamp-the-board-into-the-rig path: one physical unit, one serial number, one executed station run or ATP packet, and one set of pass/fail plus measured output. If your station software or ATP workflow can emit JSON, Live can store that execution, tie it to the unit serial number, scope it to a product, and roll the linked test results back into requirement verification.
+    </p>
+    <div class="mt-6 border border-[#1565C0] border-opacity-30 bg-[#F5FAFF] rounded-lg p-4 max-w-3xl">
+      <p class="text-sm text-[#1565C0] font-semibold mb-1">What Live actually supports today</p>
+      <p class="text-[#555555] text-sm m-0">Live does not have a separate native ATE or ATP file format. The supported path is the existing <code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5FAFF; padding: 0 0.25rem; border-radius: 0.2rem;">POST /api/v1/test-results</code> contract or an equivalent JSON file dropped into the inbox. In practice, that means you export or transform station output into RTMify’s execution schema, preserving the per-unit serial number and station-run identity.</p>
+    </div>
+  </div>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">When to use this path</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">ATE station output</h3>
+        <p class="text-[#555555] text-sm m-0">Use this path when a physical unit is clamped into a fixture or rig and the station already knows the serial number, product identifier, pass/fail result, and underlying test step IDs.</p>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">ATP execution records</h3>
+        <p class="text-[#555555] text-sm m-0">Use it when an executed acceptance test procedure produces structured per-unit results and you want those results tied back to the existing Test and Requirement graph instead of left in an external worksheet or PDF packet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Two ingestion paths</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">HTTP POST</h3>
+        <p class="text-[#555555] text-sm mb-2">Best for station controllers, ATP runners, or post-processing scripts running on the same machine as Live.</p>
+        <code class="text-xs text-[#1A1A2E] bg-[#F5F5F5] px-2 py-1 rounded block" style="font-family: var(--font-family-mono);">POST http://127.0.0.1:8000/api/v1/test-results</code>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">File-drop inbox</h3>
+        <p class="text-[#555555] text-sm mb-2">Best when the station can write files but should not call the API directly. Live polls the inbox and ingests the same JSON shape automatically.</p>
+        <code class="text-xs text-[#1A1A2E] bg-[#F5F5F5] px-2 py-1 rounded block" style="font-family: var(--font-family-mono);">~/.rtmify/inbox/</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How ATE / ATP concepts map to the JSON schema</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">ATE / ATP concept</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">RTMify field</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['One station run on one individual unit, or one executed ATP packet for that unit', 'execution_id', 'Must be unique per execution for idempotent replacement.'],
+            ['Execution timestamp', 'executed_at', 'ISO-8601 timestamp.'],
+            ['Unit or board serial number', 'serial_number', 'Enables unit history queries.'],
+            ['Known product build or assembly identifier', 'full_product_identifier', 'Creates product-scoped history when the Product exists in Live.'],
+            ['Station or runner metadata', 'executor', 'Opaque JSON object. Use it for station name, software version, fixture ID, operator, or line metadata.'],
+            ['Source system label', 'source', 'Opaque JSON object. Use it for ATE/ATP provenance such as MES, factory cell, or acceptance-run context.'],
+            ['One measured or asserted test step', 'test_cases[]', 'Each test step maps to one existing Test node through test_case_ref.'],
+            ['Station step / ATP case identifier', 'test_cases[].test_case_ref', 'Must point at an existing Test ID if you want resolved traceability.'],
+            ['Pass/fail outcome', 'test_cases[].status', 'Allowed values are passed, failed, blocked, skipped, error.'],
+            ['Numerics or measured values', 'test_cases[].measurements', 'Structured array; preserved on the TestResult node.'],
+            ['Logs, attachments, screenshots', 'test_cases[].attachments', 'Structured array; preserved on the TestResult node.'],
+          ].map(([concept, field, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]">{concept}</td>
+              <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{field}</td>
+              <td class="px-4 py-3 text-[#555555]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Example per-unit as-built payload</h2>
+    <p class="text-[#555555] text-sm mb-5">This is the same schema documented on the generic Test Results page, but populated the way an ATE or ATP workflow would normally think about one specific tested unit.</p>
+    <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm overflow-x-auto mb-6" style="font-family: var(--font-family-mono);">{'{'}
+  "execution_id": "ate-asm1000-revc-unit042-2026-03-18T14:03:11Z",
+  "executed_at": "2026-03-18T14:03:11Z",
+  "serial_number": "UNIT-042",
+  "full_product_identifier": "ASM-1000-REV-C",
+  "executor": {'{'}
+    "station": "ATE-03",
+    "fixture": "FCT-1000-REV-C",
+    "software_version": "2.7.4"
+  {'}'},
+  "source": {'{'}
+    "system": "production-ate",
+    "procedure_id": "ATP-001",
+    "procedure_revision": "C"
+  {'}'},
+  "test_cases": [
+    {'{'}
+      "result_id": "ate-042-power-on",
+      "test_case_ref": "T-ATP-001",
+      "status": "passed",
+      "duration_ms": 820,
+      "measurements": [{'{'} "name": "supply_current_ma", "value": 118.2 {'}'}],
+      "attachments": [{'{'} "kind": "log", "path": "logs/unit-042.txt" {'}'}]
+    {'}'},
+    {'{'}
+      "result_id": "ate-042-radio-selftest",
+      "test_case_ref": "T-ATP-002",
+      "status": "passed"
+    {'}'}
+  ]
+{'}'}</pre>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What happens on ingestion</h2>
+    <ol class="space-y-3 text-sm text-[#555555] list-decimal list-inside mb-6">
+      <li>Validates the JSON payload structure.</li>
+      <li>Creates or updates a <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestExecution</code> node and one <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">TestResult</code> node per test case.</li>
+      <li>Stores <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">serial_number</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">executor</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">source</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">measurements</code>, and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">attachments</code> as evidence properties.</li>
+      <li>If <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">full_product_identifier</code> resolves, creates a <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">FOR_PRODUCT</code> edge from the execution to the Product.</li>
+      <li>Creates <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">HAS_RESULT</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">EXECUTION_OF</code> edges tying those results back to existing Test nodes.</li>
+      <li>On the next workbook sync, updates the requirement-level verification rollups that depend on those tests.</li>
+    </ol>
+    <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
+      <p class="text-sm text-[#E65100] font-semibold mb-1">As-built evidence is product-aware, not manufacturing-history-complete</p>
+      <p class="text-[#555555] text-sm m-0">Live can store serial-bearing as-built execution evidence and tie it back to a Product, but it is not yet a full manufacturing execution system or complete production history record. The current graph models per-unit test execution evidence, not lot genealogy, rework routing, or formal device history packet control.</p>
+    </div>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Queries that matter for production test</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+      {[
+        '"Show unit history for serial UNIT-042."',
+        '"List serial-bearing executions for ASM-1000-REV-C."',
+        '"Show the stored execution ate-asm1000-revc-unit042-2026-03-18T14:03:11Z."',
+        '"Show latest verification status for REQ-047 after ATP execution."',
+        '"List dangling test results that did not resolve to a known Test node."',
+        '"Show every serial number verified against the product ATP tests."',
+      ].map(q => (
+        <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded px-4 py-3 text-sm text-[#555555] italic">{q}</div>
+      ))}
+    </div>
+    <ul class="space-y-2 text-sm text-[#555555]">
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_execution</code> returns the stored execution envelope, including serial number, executor/source metadata, measurements, and attachments.</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_unit_history</code> gives serial-number history for one unit.</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_product_serials</code> gives serial-bearing executions scoped to a Product.</li>
+      <li class="flex gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#2E7D32] mt-1.5 shrink-0"></span><code style="font-family: var(--font-family-mono); font-size: 0.8rem; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">get_verification_status</code> shows how those ingested results affect requirement rollups.</li>
+    </ul>
+  </section>
+
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Cross-check with the generic test-results contract</h2>
+    <p class="text-[#555555] text-sm">This page is an as-built production-test framing of the same ingestion contract documented in <a href="/docs/live/test-results/" class="text-[#1565C0] underline hover:no-underline">Test Results API</a>. Use that page for the canonical field-by-field contract and bearer-token details. Use this page when you need to explain to operators, QA, or manufacturing how per-unit ATE and ATP evidence lands in the Live graph.</p>
+  </section>
+</DocsLayout>
