@@ -21,8 +21,9 @@ const jsonLd = {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'FMEA Template', url: 'https://rtmify.io/free-templates/fmea' },
         { '@type': 'ListItem', position: 2, name: 'Hazard Log Template', url: 'https://rtmify.io/free-templates/hazard-log' },
-        { '@type': 'ListItem', position: 3, name: 'SOUP Template', url: 'https://rtmify.io/soup-template' },
-        { '@type': 'ListItem', position: 4, name: 'Design BOM Template', url: 'https://rtmify.io/bom-template' },
+        { '@type': 'ListItem', position: 3, name: 'V&V Plan Template', url: 'https://rtmify.io/free-templates/vv-plan' },
+        { '@type': 'ListItem', position: 4, name: 'SOUP Template', url: 'https://rtmify.io/soup-template' },
+        { '@type': 'ListItem', position: 5, name: 'Design BOM Template', url: 'https://rtmify.io/bom-template' },
       ],
     },
     {
@@ -41,7 +42,7 @@ const jsonLd = {
           name: 'Do I need any software to use these templates?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'No. Every template is a standalone .xlsx workbook that works in Microsoft Excel or Google Sheets. No account, no subscription, and no email address is required to download.',
+            text: 'No. Spreadsheet templates are standalone .xlsx workbooks that work in Microsoft Excel or Google Sheets. The V&V Plan template is a .docx Word document. No account, no subscription, and no email address is required to download any of them.',
           },
         },
         {
@@ -64,6 +65,7 @@ const templates = [
     desc: 'ISO 14971 risk analysis with Severity × Occurrence × Detection scoring, RPN, recommended actions, mitigation tracking, and cross-references to the RTM requirements and risk register. Covers medical device, aerospace, automotive, and software contexts.',
     standards: ['ISO 14971', 'ISO 13485', 'IEC 62304', 'AS9100', 'ISO 26262'],
     downloadHref: '/RTMify_FMEA_Template.xlsx',
+    downloadLabel: 'Download (.xlsx)',
     guideHref: '/free-templates/fmea',
   },
   {
@@ -72,7 +74,17 @@ const templates = [
     desc: 'Top-level hazard register for ISO 14971 risk management. Tracks hazards, hazardous situations, potential harm, initial and residual risk levels (Severity × Probability), risk control measures with type classification, verification status, and ALARP justification. Includes a 5×5 Risk Matrix tab with Acceptable / ALARP / Unacceptable levels.',
     standards: ['ISO 14971', 'ISO 13485', 'IEC 62304', 'AS9100', 'ISO 26262'],
     downloadHref: '/RTMify_Hazard_Log_Template.xlsx',
+    downloadLabel: 'Download (.xlsx)',
     guideHref: '/free-templates/hazard-log',
+  },
+  {
+    name: 'V&V Plan Template',
+    subtitle: 'Verification and Validation Plan',
+    desc: 'Structured V&V Plan covering verification and validation strategy, activity tables (VER-xxx / VAL-xxx IDs), four verification methods (Test / Analysis / Inspection / Demonstration), risk control verification per ISO 14971 §5.6, RTM traceability summary, and standard-specific guidance for ISO 13485, IEC 62304, DO-178C, ISO 26262, and AS9100.',
+    standards: ['ISO 13485', 'ISO 14971', 'IEC 62304', 'DO-178C', 'ISO 26262', 'AS9100'],
+    downloadHref: '/RTMify_VV_Plan_Template.docx',
+    downloadLabel: 'Download (.docx)',
+    guideHref: '/free-templates/vv-plan',
   },
   {
     name: 'SOUP Template',
@@ -80,6 +92,7 @@ const templates = [
     desc: 'IEC 62304 SOUP register with component name, version, supplier, license, safety class, known anomalies, anomaly evaluation, and direct requirement and test references. Use standalone or connect to RTMify Live as a read-only SOUP source.',
     standards: ['IEC 62304', 'ISO 13485', 'DO-178C', 'AS9100', 'ISO 26262', 'ASPICE'],
     downloadHref: '/RTMify_SOUP_Template.xlsx',
+    downloadLabel: 'Download (.xlsx)',
     guideHref: '/soup-template',
   },
   {
@@ -88,6 +101,7 @@ const templates = [
     desc: 'Structured design-intent BOM with a Product tab and Design BOM tab. Hierarchy, quantity, supplier, part revision, and explicit requirement and test reference columns for typed trace links. Use standalone or connect to RTMify Live for BOM gaps, impact analysis, and MCP queries.',
     standards: ['AS9100', 'ISO 13485', 'DO-178C', 'IEC 62304', 'ISO 26262', 'ASPICE'],
     downloadHref: '/RTMify_Design_BOM_Template.xlsx',
+    downloadLabel: 'Download (.xlsx)',
     guideHref: '/bom-template',
   },
 ];
@@ -133,7 +147,7 @@ const templates = [
                 </div>
               </div>
               <div class="flex flex-col gap-2 shrink-0 sm:pt-1">
-                <DownloadButton href={t.downloadHref} label="Download (.xlsx)" size="sm" />
+                <DownloadButton href={t.downloadHref} label={t.downloadLabel} size="sm" />
                 <a href={t.guideHref} class="text-center text-sm text-[#555555] hover:text-[#1A1A2E] underline underline-offset-4 transition-colors">
                   Field guide →
                 </a>
@@ -142,7 +156,7 @@ const templates = [
           ))}
         </div>
 
-        <p class="text-sm text-[#555555] mt-8">More in development: Verification and Validation Plan, Design History File, Test Case Specification, Configuration Item List, Change Impact Analysis, Requirements Review Checklist.</p>
+        <p class="text-sm text-[#555555] mt-8">More in development: Design History File, Test Case Specification, Configuration Item List, Change Impact Analysis, Requirements Review Checklist.</p>
 
       </div>
     </section>
