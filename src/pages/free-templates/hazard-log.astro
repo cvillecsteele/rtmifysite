@@ -1,0 +1,388 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import DownloadButton from '../../components/DownloadButton.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify Hazard Log Template',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any (spreadsheet)',
+      description: 'Free hazard log spreadsheet template for medical device and regulated product development. Living hazard register with Severity × Probability scoring, auto-calculated risk levels (Acceptable / ALARP / Unacceptable), risk control type classification per ISO 14971 priority order, verification status tracking, and cross-references to the RTMify Requirements Tracking Template and FMEA Template.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      downloadUrl: 'https://rtmify.io/RTMify_Hazard_Log_Template.xlsx',
+      url: 'https://rtmify.io/free-templates/hazard-log',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: 'https://rtmify.io/free-templates' },
+        { '@type': 'ListItem', position: 3, name: 'Hazard Log Template', item: 'https://rtmify.io/free-templates/hazard-log' },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between a hazard log and an FMEA?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A hazard log is a top-level register that tracks all identified hazards through risk evaluation, control implementation, and verification across the product lifecycle. An FMEA is a bottom-up analysis method that identifies failure modes for specific components and analyzes their effects. FMEA findings feed the hazard log: when an FMEA identifies a new hazard, that hazard gets a row in the register. The Linked FMEA ID column traces back to the analysis that surfaced it.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is a hazard log required by ISO 14971?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. ISO 14971 clause 4.4 requires maintaining a risk management file throughout the product lifecycle. The hazard log is typically the core artifact in that file. It must capture hazard identification (clause 5.3), risk estimation (clause 5.4), risk evaluation against acceptance criteria (clause 5.5), risk control implementation and verification (clause 5.6), residual risk evaluation (clause 5.7), and post-production monitoring inputs (clause 8).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What does ALARP mean in risk management?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ALARP stands for As Low As Reasonably Practicable. A risk at the ALARP level is tolerable only if you can demonstrate that further risk reduction is impracticable or that the clinical benefit to the patient outweighs the residual risk. ISO 14971 requires a benefit-risk justification for ALARP determinations. The hazard log Notes column is where you document that justification.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does the hazard log connect to the RTMify Requirements Tracking Template?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Three cross-reference columns link the documents: Linked REQ references requirement IDs from the RTM Requirements tab (each risk control measure should trace to a verifiable requirement); Linked Risk ID references risk IDs from the RTM Risks tab; and Linked FMEA ID references entries in the RTMify FMEA Template for hazards identified through failure mode analysis. The Severity and Probability scales use the same 1–5 scoring as the RTM Risks tab.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Free Hazard Log Template for Medical Device and Regulated Products"
+  description="Free hazard log template for medical devices. ISO 14971, ISO 13485, IEC 62304, AS9100, ISO 26262. Living hazard register with ALARP risk matrix, risk control tracking, and verification status. Download .xlsx, no account required."
+  canonical="https://rtmify.io/free-templates/hazard-log"
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+
+    <!-- Hero -->
+    <section class="bg-[#163A2A] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-[1.25fr_0.75fr] gap-10 items-start">
+        <div>
+          <p class="text-sm font-semibold text-[#52D9B0] uppercase tracking-[0.22em] mb-4">Free Hazard Log Template</p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            Your identified hazards need a living register, not a snapshot.
+          </h1>
+          <p class="text-lg text-[#C8EDE4] mb-6 max-w-2xl">
+            A free hazard log spreadsheet for medical device and regulated product development. Tracks every identified hazard from initial scoring through risk control implementation, verification, and final acceptability determination, across the full product lifecycle. Use it standalone or alongside the RTMify Requirements Tracking Template and FMEA Template. No account, no gate.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <DownloadButton href="/RTMify_Hazard_Log_Template.xlsx" label="Download Hazard Log Template (.xlsx)" size="lg" variant="light" />
+            <a href="/download" class="inline-flex items-center px-6 py-3 border border-white/25 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+              Also get the RTM Template (.xlsx)
+            </a>
+          </div>
+        </div>
+        <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+          <div class="text-sm font-semibold text-[#52D9B0] uppercase tracking-[0.18em] mb-3">Workbook shape</div>
+          <div class="space-y-4 text-sm text-[#C8EDE4]">
+            <div>
+              <div class="font-semibold text-white mb-1">README</div>
+              <div>Field reference, hazard log vs. FMEA explanation, standard-specific notes, and instructions for connecting to the RTM and FMEA templates.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">Hazard Log</div>
+              <div>One row per identified hazard. Hazard, hazardous situation, harm, initial S×P scoring, risk control measures with ISO 14971 type classification, verification status, residual scoring, acceptability, and <code>Linked REQ</code> / <code>Linked Risk ID</code> / <code>Linked FMEA ID</code> cross-references.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">Risk Matrix</div>
+              <div>5×5 Severity vs. Probability matrix with auto-calculated risk levels: Acceptable, ALARP, Unacceptable. Adapt thresholds to your Risk Management Plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What a hazard log requires -->
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What a hazard log requires you to do</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">ISO 14971 clause 4.4 requires maintaining a risk management file throughout the product lifecycle. The hazard log is the core artifact in that file. It must capture every identified hazard, the hazardous situation and potential harm, risk scoring, control measures and their verification status, and a final acceptability determination. It is not a one-time document. It lives with the product from design through post-market surveillance.</p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Hazard vs. failure mode vs. harm</h3>
+            <p class="text-sm text-[#555555] m-0">ISO 14971 distinguishes three levels: the hazard (source of potential harm), the hazardous situation (circumstances of exposure), and the harm (injury or damage). All three must be documented. Conflating them is a common audit finding: writing "speaker failure causes hearing loss" instead of separating the hazard (excessive acoustic energy), situation (patient wearing earpiece), and harm (hearing loss).</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Risk controls must be verified</h3>
+            <p class="text-sm text-[#555555] m-0">Documenting a risk control is not the same as verifying it works. The Verification Status column tracks where each control stands: Not Started, In Progress, Verified, or Failed. An unverified control is an open risk. Auditors look specifically for hazards with Unacceptable or ALARP initial risk where verification is still Not Started or In Progress.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">ALARP requires justification</h3>
+            <p class="text-sm text-[#555555] m-0">A residual risk at the ALARP level is not automatically acceptable. ISO 14971 requires that you demonstrate further risk reduction is impracticable or that the clinical benefit outweighs the residual risk. That benefit-risk justification must be documented in the Notes column. "ALARP" without a rationale is an audit finding.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hazard Log vs FMEA -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Hazard log vs. FMEA</h2>
+        <p class="text-[#555555] mb-6 max-w-3xl">These two artifacts serve different purposes and operate at different levels of analysis. Both are typically required for regulated medical device development. They are designed to be used together.</p>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-6">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-3">Hazard log: top-level register</h3>
+            <p class="text-sm text-[#555555] mb-3">The hazard log lists every identified hazard and tracks it through the full risk management lifecycle: evaluation, control, verification, and final acceptability. It is the document an auditor reviews to confirm that all known hazards have been addressed. ISO 14971 clause 4.4 requires maintaining it.</p>
+            <p class="text-sm text-[#555555] m-0">Hazards come from multiple sources: preliminary hazard analysis, FMEA findings, use-case analysis, regulatory requirements, and post-market surveillance.</p>
+          </div>
+          <div class="border border-[#0C2218]/20 bg-[#F0FAF6] rounded-xl p-6">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-3">FMEA: bottom-up analysis method</h3>
+            <p class="text-sm text-[#555555] mb-3">The FMEA identifies failure modes for specific components or functions, analyzes their downstream effects, and scores them with Severity × Occurrence × Detection. FMEA findings feed the hazard log: when a failure mode analysis surfaces a new hazard, that hazard gets a row in the register.</p>
+            <p class="text-sm text-[#555555] m-0">The <code style="font-family: var(--font-family-mono); font-size: 0.8em;" class="bg-white px-1 rounded border border-[#DDDDDD]">Linked FMEA ID</code> column creates the explicit trace from hazard log entry back to the FMEA analysis that identified it. <a href="/free-templates/fmea" class="underline hover:text-[#1A1A2E]">FMEA template →</a></p>
+          </div>
+        </div>
+        <p class="text-sm text-[#555555] mt-5">Typical workflow: run the FMEA during design, transfer identified hazards to this log, document risk controls as requirements in the RTM, verify controls through testing, update the log with residual risk and acceptability status.</p>
+      </div>
+    </section>
+
+    <!-- Field reference -->
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-2" style="font-family: var(--font-family-display);">Field reference: Hazard Log tab</h2>
+        <p class="text-[#555555] mb-8">One row per identified hazard. If a single hazard produces multiple hazardous situations, each situation gets its own row and Hazard ID.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#163A2A] text-white">
+                <th class="text-left px-4 py-3 font-semibold" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Column</th>
+                <th class="text-left px-4 py-3 font-semibold">What goes here</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Hazard ID</td>
+                <td class="px-4 py-3 text-[#555555]">Unique identifier (HAZ-001, HAZ-002…). One hazard per row. If a single hazard produces multiple hazardous situations, each gets its own row.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Hazard</td>
+                <td class="px-4 py-3 text-[#555555]">The potential source of harm. Describe the hazard itself, not the failure mode or the harm: "Excessive acoustic energy", not "Speaker driver failure" (that is a cause) and not "Hearing damage" (that is harm).</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Hazardous Situation</td>
+                <td class="px-4 py-3 text-[#555555]">The circumstance in which a person is exposed to the hazard. ISO 14971 distinguishes hazard from hazardous situation from harm; this column captures the middle link.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Potential Harm</td>
+                <td class="px-4 py-3 text-[#555555]">The injury or damage to health that could result. Be specific about severity: "Temporary hearing threshold shift" vs. "Permanent sensorineural hearing loss." This directly informs the Severity score.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Initial Severity</td>
+                <td class="px-4 py-3 text-[#555555]">How serious is the harm if it occurs? 1 = negligible, 5 = catastrophic. See Risk Matrix tab. Use the same scale as the RTM Risks tab.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Initial Probability</td>
+                <td class="px-4 py-3 text-[#555555]">How likely is the hazardous situation to result in harm? 1 = remote, 5 = frequent. This is the probability of the complete sequence: cause, hazardous situation, and resulting harm.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Initial Risk Level</td>
+                <td class="px-4 py-3 text-[#555555]">Auto-calculated from the Risk Matrix tab based on Severity and Probability: Acceptable, ALARP, or Unacceptable. See the Risk Matrix section below.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Risk Control Measure(s)</td>
+                <td class="px-4 py-3 text-[#555555]">What has been done or will be done to reduce the risk. ISO 14971 requires controls to be considered in priority order: inherent safety by design first, then protective measures, then information for safety.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Risk Control Type</td>
+                <td class="px-4 py-3 text-[#555555]"><strong class="text-[#1A1A2E] font-medium">Design</strong> (inherent safety, eliminating or reducing the hazard by design), <strong class="text-[#1A1A2E] font-medium">Protective</strong> (guards, alarms, interlocks), or <strong class="text-[#1A1A2E] font-medium">Information</strong> (labeling, IFU warnings). Auditors check that you considered Design controls before falling back to Information for safety.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Risk Control Verification</td>
+                <td class="px-4 py-3 text-[#555555]">How was the control verified? Reference test IDs, inspection records, or design review minutes. If the control is a requirement in the RTM, the Tests tab provides the verification evidence.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Verification Status</td>
+                <td class="px-4 py-3 text-[#555555]">Not Started, In Progress, Verified, or Failed. This is the column that reveals whether your risk controls are actually confirmed effective, not just planned.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Residual Severity</td>
+                <td class="px-4 py-3 text-[#555555]">Severity after controls are applied. Usually unchanged. Controls rarely reduce the severity of harm; they reduce the probability that harm occurs. If it changes, document why.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Residual Probability</td>
+                <td class="px-4 py-3 text-[#555555]">Probability after controls are applied. This is where effective controls make a measurable difference. A well-designed protective measure or information control reduces the likelihood that the hazardous situation results in harm.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Residual Risk Level</td>
+                <td class="px-4 py-3 text-[#555555]">Auto-calculated from the Risk Matrix tab. If residual risk is Unacceptable, further controls are required. If ALARP, benefit-risk justification is required in the Notes column.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Risk Acceptability</td>
+                <td class="px-4 py-3 text-[#555555]">Final determination: Acceptable, Acceptable (ALARP with benefit-risk justification), or Unacceptable. This is a deliberate decision against criteria in your Risk Management Plan, not the same as the calculated Risk Level.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Linked REQ</td>
+                <td class="px-4 py-3 text-[#555555]">Requirement ID from the RTMify Requirements Tracking Template. Each risk control measure should trace to a verifiable requirement (ISO 14971 §5.5).</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Linked Risk ID</td>
+                <td class="px-4 py-3 text-[#555555]">Risk ID from the RTM Risks tab (RSK-101, RSK-102…). Maps this hazard to the summary risk register for bidirectional traceability.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Linked FMEA ID</td>
+                <td class="px-4 py-3 text-[#555555]">FMEA ID from the RTMify FMEA Template (FMEA-001, FMEA-002…). Traces back to the failure mode analysis that identified this hazard. Not all hazards originate from FMEA. Some come from preliminary hazard analysis, use-case analysis, or regulatory requirements.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Status</td>
+                <td class="px-4 py-3 text-[#555555]">Lifecycle status: Open (identified, not yet controlled), Mitigated (controls in place, not yet verified), Closed (controls verified, residual risk acceptable), or Transferred (risk accepted by another party via labeling).</td>
+              </tr>
+              <tr class="bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Notes</td>
+                <td class="px-4 py-3 text-[#555555]">Rationale, regulatory citations, audit notes. Document benefit-risk justification here for ALARP determinations. Without a documented rationale, "ALARP" is not an acceptable risk acceptability finding.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Risk Matrix -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">The Risk Matrix tab</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">The Risk Matrix tab provides a 5×5 Severity vs. Probability reference and auto-calculates risk levels for the Initial Risk Level and Residual Risk Level columns. Adapt the thresholds to your Risk Management Plan. The matrix here is a starting point, not a universal standard.</p>
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-block text-xs font-semibold text-white bg-[#2E7D32] px-2 py-0.5 rounded mb-3">Acceptable</div>
+            <p class="text-sm text-[#555555] m-0">Risk is broadly acceptable. No additional controls required. Document the rationale in the hazard log.</p>
+          </div>
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-block text-xs font-semibold text-white bg-[#E65100] px-2 py-0.5 rounded mb-3">ALARP</div>
+            <p class="text-sm text-[#555555] m-0">As Low As Reasonably Practicable. Risk is tolerable only if further reduction is impracticable or the clinical benefit outweighs the residual risk. Benefit-risk justification required in the Notes column.</p>
+          </div>
+          <div class="bg-white border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-block text-xs font-semibold text-white bg-[#B71C1C] px-2 py-0.5 rounded mb-3">Unacceptable</div>
+            <p class="text-sm text-[#555555] m-0">Risk exceeds acceptance threshold. Additional risk controls are required. If risk cannot be reduced, the hazard must be eliminated by design change.</p>
+          </div>
+        </div>
+        <div class="bg-white border border-[#DDDDDD] rounded-xl p-6">
+          <h3 class="text-base font-bold text-[#1A1A2E] mb-3">The Severity 5 special case</h3>
+          <p class="text-sm text-[#555555] mb-3">The matrix treats all Severity 5 (catastrophic) hazards as at least ALARP, even at Probability 1 (remote). A Severity 5 / Probability 1 combination scores as ALARP rather than Acceptable.</p>
+          <p class="text-sm text-[#555555] m-0">This reflects a common risk management principle: catastrophic outcomes (death or irreversible serious harm) require explicit justification even when probability is very low. The formula in the Hazard Log tab is: Unacceptable if S×P ≥ 15; ALARP if S×P ≥ 6 or S ≥ 5; Acceptable otherwise. Modify the formula if your Risk Management Plan defines different thresholds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standards mapping -->
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Standards coverage</h2>
+        <p class="text-sm text-[#555555] mb-6">The hazard log is the primary artifact for risk management evidence across all major regulated-product standards. The specific clause, terminology, and documentation requirements differ by standard.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#163A2A] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Standard</th>
+                <th class="text-left px-4 py-3 font-semibold">Relevant clause</th>
+                <th class="text-left px-4 py-3 font-semibold">Why the template helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 14971:2019</td>
+                <td class="px-4 py-3 text-[#555555]">Clause 4.4 risk management file, §5.3–5.7 full risk cycle, §8 post-production</td>
+                <td class="px-4 py-3 text-[#555555]">The hazard log is the core artifact in the ISO 14971 risk management file. Captures the complete clause 5 cycle: hazard identification, risk estimation, evaluation against criteria, control documentation, and residual risk assessment. Clause 8 post-market inputs feed back into the same log.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485:2016</td>
+                <td class="px-4 py-3 text-[#555555]">§7.1 risk-based approach, §7.3.3 design inputs, §7.3.5 design verification</td>
+                <td class="px-4 py-3 text-[#555555]">Hazards with Unacceptable or ALARP initial risk level must produce design inputs (§7.3.3). The Linked REQ column creates that trace. Verification Status and Risk Control Verification columns document §7.3.5 evidence.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">IEC 62304:2006+A1</td>
+                <td class="px-4 py-3 text-[#555555]">§7 software risk management integrated with ISO 14971</td>
+                <td class="px-4 py-3 text-[#555555]">Software-specific hazards (data corruption, timing failures, UI misinterpretation) belong in the hazard log alongside hardware hazards. Software safety classification (A/B/C) drives which lifecycle activities are mandatory. Note the safety class in the Notes column for software-related hazards.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">AS9100 Rev D</td>
+                <td class="px-4 py-3 text-[#555555]">§6.1 actions to address risks and opportunities, §8.3.5 design verification</td>
+                <td class="px-4 py-3 text-[#555555]">AS9100 does not mandate a hazard log by name, but it is standard practice for product-level risk tracking in aerospace programs. The log provides the evidence trail from risk identification through control verification that auditors expect under §6.1 and §8.3.5.</td>
+              </tr>
+              <tr class="bg-[#F9F9F9]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 26262:2018</td>
+                <td class="px-4 py-3 text-[#555555]">Part 3 §7 Hazard Analysis and Risk Assessment (HARA)</td>
+                <td class="px-4 py-3 text-[#555555]">HARA produces safety goals and ASIL assignments that feed this register. Note the ASIL in the Notes column for each hazard. For automotive, "Probability" maps to the Exposure and Controllability components of ASIL determination. The hazard log tracks safety goals through functional safety concept, technical safety requirements, and verification.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Using alongside RTM + FMEA -->
+    <section class="py-16 px-4 bg-[#101321] text-white border-t border-black/10">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-family-display);">Using this alongside the RTM and FMEA templates</h2>
+        <p class="text-[#A0AEC8] mb-8 max-w-3xl">The hazard log connects to both the RTMify Requirements Tracking Template and the RTMify FMEA Template through three cross-reference columns and a shared scoring scale.</p>
+        <div class="grid lg:grid-cols-4 gap-4 text-sm">
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#52D9B0] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Linked REQ</div>
+            <p class="text-[#D4DBF7] m-0">References requirement IDs (REQ-001…) from the RTM Requirements tab. Each risk control measure should trace to a requirement that can be verified in the test plan.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#52D9B0] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Linked Risk ID</div>
+            <p class="text-[#D4DBF7] m-0">References risk IDs (RSK-101…) from the RTM Risks tab. Creates bidirectional traceability between the detailed hazard log and the summary risk register.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#52D9B0] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Linked FMEA ID</div>
+            <p class="text-[#D4DBF7] m-0">References FMEA entries (FMEA-001…) in the RTMify FMEA Template. Traces each hazard back to the failure mode analysis that identified it, where applicable.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#52D9B0] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Shared scales</div>
+            <p class="text-[#D4DBF7] m-0">Severity and Probability use the same 1–5 scales as the RTM Risks tab and the FMEA template. Risk assessments across all three documents are directly comparable.</p>
+          </div>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/download" class="inline-flex items-center gap-2 px-5 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download RTM Template (.xlsx)
+          </a>
+          <a href="/free-templates/fmea" class="inline-flex items-center gap-2 px-5 py-3 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-sm">
+            FMEA Template →
+          </a>
+          <a href="/free-templates" class="inline-flex items-center gap-2 px-5 py-3 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-sm">
+            All free templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Download the hazard log template</h2>
+        <p class="text-[#555555] text-lg mb-8 max-w-2xl mx-auto">Free hazard register for ISO 14971, ISO 13485, IEC 62304, AS9100, and ISO 26262. Works in Excel and Google Sheets.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <DownloadButton href="/RTMify_Hazard_Log_Template.xlsx" label="Download Hazard Log Template (.xlsx)" size="lg" />
+          <a href="/free-templates" class="inline-flex items-center px-8 py-4 border border-[#1A1A2E] rounded-lg text-[#1A1A2E] font-semibold hover:bg-white transition-colors">
+            All free templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>

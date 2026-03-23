@@ -4,6 +4,59 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import DownloadButton from '../../components/DownloadButton.astro';
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: 'https://rtmify.io/free-templates' },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      name: 'Free Compliance and Regulatory Templates',
+      description: 'Free downloadable spreadsheet templates for regulated-industry engineering. No account required.',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'FMEA Template', url: 'https://rtmify.io/free-templates/fmea' },
+        { '@type': 'ListItem', position: 2, name: 'Hazard Log Template', url: 'https://rtmify.io/free-templates/hazard-log' },
+        { '@type': 'ListItem', position: 3, name: 'SOUP Template', url: 'https://rtmify.io/soup-template' },
+        { '@type': 'ListItem', position: 4, name: 'Design BOM Template', url: 'https://rtmify.io/bom-template' },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What templates are required for ISO 14971 medical device risk management?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ISO 14971 requires maintaining a risk management file throughout the product lifecycle. The two core artifacts are a hazard log (tracking all identified hazards, risk controls, verification status, and residual risk acceptability) and an FMEA (bottom-up failure mode analysis for specific components and functions). Both are available as free downloads here with no account required.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do I need any software to use these templates?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. Every template is a standalone .xlsx workbook that works in Microsoft Excel or Google Sheets. No account, no subscription, and no email address is required to download.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between the FMEA template and the hazard log template?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The FMEA template is a bottom-up analysis method that identifies failure modes for specific components or functions and scores them with Severity × Occurrence × Detection. The hazard log is a top-level register that tracks all identified hazards through the full risk management lifecycle: evaluation, control, verification, and final acceptability determination. FMEA findings feed the hazard log — the Linked FMEA ID column creates the explicit trace between the two documents.',
+          },
+        },
+      ],
+    },
+  ],
+};
+
 const templates = [
   {
     name: 'FMEA Template',
@@ -13,41 +66,60 @@ const templates = [
     downloadHref: '/RTMify_FMEA_Template.xlsx',
     guideHref: '/free-templates/fmea',
   },
+  {
+    name: 'Hazard Log Template',
+    subtitle: 'ISO 14971 Hazard Register',
+    desc: 'Top-level hazard register for ISO 14971 risk management. Tracks hazards, hazardous situations, potential harm, initial and residual risk levels (Severity × Probability), risk control measures with type classification, verification status, and ALARP justification. Includes a 5×5 Risk Matrix tab with Acceptable / ALARP / Unacceptable levels.',
+    standards: ['ISO 14971', 'ISO 13485', 'IEC 62304', 'AS9100', 'ISO 26262'],
+    downloadHref: '/RTMify_Hazard_Log_Template.xlsx',
+    guideHref: '/free-templates/hazard-log',
+  },
+  {
+    name: 'SOUP Template',
+    subtitle: 'Software of Unknown Provenance Register',
+    desc: 'IEC 62304 SOUP register with component name, version, supplier, license, safety class, known anomalies, anomaly evaluation, and direct requirement and test references. Use standalone or connect to RTMify Live as a read-only SOUP source.',
+    standards: ['IEC 62304', 'ISO 13485', 'DO-178C', 'AS9100', 'ISO 26262', 'ASPICE'],
+    downloadHref: '/RTMify_SOUP_Template.xlsx',
+    guideHref: '/soup-template',
+  },
+  {
+    name: 'Design BOM Template',
+    subtitle: 'Design Bill of Materials',
+    desc: 'Structured design-intent BOM with a Product tab and Design BOM tab. Hierarchy, quantity, supplier, part revision, and explicit requirement and test reference columns for typed trace links. Use standalone or connect to RTMify Live for BOM gaps, impact analysis, and MCP queries.',
+    standards: ['AS9100', 'ISO 13485', 'DO-178C', 'IEC 62304', 'ISO 26262', 'ASPICE'],
+    downloadHref: '/RTMify_Design_BOM_Template.xlsx',
+    guideHref: '/bom-template',
+  },
 ];
 
-const comingSoon = [
-  'Hazard Log Template',
-  'Verification and Validation Plan Template',
-  'SBOM / Software Bill of Materials Template',
-  'Design History File Template',
-  'Test Case Specification Template',
-  'Design FMEA / Process FMEA Templates',
-  'Configuration Item List Template',
-  'Change Impact Analysis Template',
-  'Requirements Review Checklist',
-];
 ---
 
 <BaseLayout
   title="Free Compliance and Regulatory Templates — RTMify"
-  description="Free downloadable templates for regulated-industry engineering: FMEA, hazard log, V&V plan, SBOM, design history file, and more. No email gate, no account required."
+  description="Free downloadable templates for regulated-industry engineering: FMEA, hazard log, SOUP register, and Design BOM. Direct download, no account required."
   canonical="https://rtmify.io/free-templates"
+  jsonLd={jsonLd}
 >
   <Nav />
 
   <main class="flex-1">
 
-    <section class="bg-[#1A1A2E] text-white py-16 px-4">
+    <section class="bg-[#163A2A] text-white py-16 px-4">
       <div class="max-w-3xl mx-auto">
         <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Free compliance templates</h1>
-        <p class="text-gray-300 text-lg">Standalone templates for regulated-industry engineering. Every template is a free direct download — no email, no account, no friction.</p>
+        <p class="text-[#D8E7DD] text-lg mb-5">Standalone templates for risk management, SOUP tracking, and design-output documentation in medical device, aerospace, and automotive programs. Easy, free direct download. We don't even need your email.</p>
+        <div class="flex flex-wrap gap-2 text-sm">
+          {['ISO 14971', 'ISO 13485', 'IEC 62304', 'AS9100', 'ISO 26262', 'ASPICE'].map(s => (
+            <span class="bg-white/10 border border-white/20 text-white px-2.5 py-0.5 rounded-full font-medium">{s}</span>
+          ))}
+        </div>
       </div>
     </section>
 
     <section class="py-16 px-4 bg-white">
       <div class="max-w-4xl mx-auto">
 
-        <div class="space-y-6 mb-16">
+        <div class="space-y-6">
           {templates.map(t => (
             <div class="border border-[#DDDDDD] rounded-xl p-6 flex flex-col sm:flex-row sm:items-start gap-6">
               <div class="flex-1">
@@ -70,17 +142,7 @@ const comingSoon = [
           ))}
         </div>
 
-        <div>
-          <h2 class="text-base font-semibold text-[#1A1A2E] mb-4">Coming soon</h2>
-          <ul class="space-y-2">
-            {comingSoon.map(name => (
-              <li class="flex items-center gap-3 text-sm text-[#555555]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#DDDDDD] shrink-0"></span>
-                {name}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p class="text-sm text-[#555555] mt-8">More in development: Verification and Validation Plan, Design History File, Test Case Specification, Configuration Item List, Change Impact Analysis, Requirements Review Checklist.</p>
 
       </div>
     </section>
