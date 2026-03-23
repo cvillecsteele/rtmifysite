@@ -1,0 +1,317 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import DownloadButton from '../../components/DownloadButton.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify FMEA Template',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any (spreadsheet)',
+      description: 'Free FMEA spreadsheet template for medical device and regulated product development. Covers ISO 14971 risk analysis with Severity × Occurrence × Detection scoring, recommended actions, and direct links to requirements and risk register.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      downloadUrl: 'https://rtmify.io/RTMify_FMEA_Template.xlsx',
+      url: 'https://rtmify.io/free-templates/fmea',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: 'https://rtmify.io/' },
+        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: 'https://rtmify.io/free-templates' },
+        { '@type': 'ListItem', position: 3, name: 'FMEA Template', item: 'https://rtmify.io/free-templates/fmea' },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is this FMEA template compatible with ISO 14971?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. The template implements the risk analysis process described in ISO 14971 §5.4: identification of hazards and hazardous situations, risk estimation via Severity × Occurrence, risk evaluation, risk control documentation, and residual risk assessment via revised S/O/D scoring. The Linked REQ column supports the §5.5 requirement that risk control measures trace to verifiable requirements.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does the FMEA template connect to the RTMify Requirements Tracking Template?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Two cross-reference columns link the documents: Linked REQ references requirement IDs from the RTM Requirements tab, and Linked Risk ID references risk IDs from the RTM Risks tab. The Severity and Occurrence scales use the same 1–5 scoring as the RTM Risks tab. Every risk control action in the FMEA should become a verifiable requirement in the RTM.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is a risk control measure?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A risk control measure is an action taken to reduce risk to an acceptable level. ISO 14971 §5.5 defines three options in priority order: inherent safety by design (eliminate or reduce the hazard), protective measures (guards, alarms, detection), and information for safety (labeling, warnings). Each risk control measure should be implemented as a verifiable requirement, with the Recommended Action column documenting what was planned and the Action Taken column documenting what was built.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I use this FMEA template without RTMify Live?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. The FMEA template is a standalone spreadsheet that does not require any RTMify software. RTMify Live does not ingest FMEA data directly. The connection to RTMify is through the RTMify Requirements Tracking Template, which Live syncs from Google Sheets.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Free FMEA Template for Medical Device and Regulated Products"
+  description="Free FMEA template for medical devices. ISO 14971, ISO 13485, IEC 62304, AS9100, ISO 26262. Download .xlsx — no account required."
+  canonical="https://rtmify.io/free-templates/fmea"
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+
+    <!-- Hero -->
+    <section class="bg-[#221200] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-[1.25fr_0.75fr] gap-10 items-start">
+        <div>
+          <p class="text-sm font-semibold text-[#FFBA3B] uppercase tracking-[0.22em] mb-4">Free FMEA Template</p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            Your failure modes need more than a column in a risk register.
+          </h1>
+          <p class="text-lg text-[#F5E5C8] mb-6 max-w-2xl">
+            A free FMEA spreadsheet for medical device and regulated product development. Gives risk analysis a structured shape: item, failure mode, downstream effect, Severity &times; Occurrence &times; Detection scoring, recommended actions, mitigation tracking, and direct cross-references to your requirements and risk register. Use it standalone or alongside the RTMify Requirements Tracking Template. No account, no gate.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <DownloadButton href="/RTMify_FMEA_Template.xlsx" label="Download FMEA Template (.xlsx)" size="lg" variant="light" />
+            <a href="/download" class="inline-flex items-center px-6 py-3 border border-white/25 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+              Also get the RTM Template (.xlsx)
+            </a>
+          </div>
+        </div>
+        <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+          <div class="text-sm font-semibold text-[#FFBA3B] uppercase tracking-[0.18em] mb-3">Workbook shape</div>
+          <div class="space-y-4 text-sm text-[#F5E5C8]">
+            <div>
+              <div class="font-semibold text-white mb-1">README</div>
+              <div>Field reference, RPN guidance, standard-specific notes, and instructions for connecting this FMEA to the RTM template.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">FMEA</div>
+              <div>One row per failure mode. Item, failure mode, effect, cause, S/O/D scoring, RPN (auto-calculated), recommended action, mitigation tracking, and <code>Linked REQ</code> / <code>Linked Risk ID</code> cross-references.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">Scales</div>
+              <div>Reference tables for Severity, Occurrence, and Detection ratings (1–5) with descriptions adapted to medical device and regulated product contexts. Adapt to your risk management plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What FMEA requires -->
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What FMEA requires you to do</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">Failure Mode and Effects Analysis is one of the primary risk analysis methods identified in ISO 14971 §5.4. For each item or function, you identify how it could fail, what happens downstream if it does, and how likely and detectable that failure is. RPN = Severity &times; Occurrence &times; Detection gives you a relative number for prioritizing action. Important: RPN is an internal prioritization tool, not a compliance threshold. ISO 14971:2019 evaluates risk acceptability using a 2D Probability × Severity matrix defined in your Risk Management Plan — RPN alone cannot justify a finding of acceptable risk. For automotive contexts, ISO 26262 (2018) and the AIAG-VDA FMEA alignment have largely replaced RPN with Action Priority (AP): High, Medium, or Low.</p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Identify before you build</h3>
+            <p class="text-sm text-[#555555] m-0">FMEA is most valuable during design, identifying failure modes before hardware or software is committed. Post-build FMEA satisfies regulatory requirements but cannot prevent failures already embedded in the design.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Risk controls become requirements</h3>
+            <p class="text-sm text-[#555555] m-0">Every recommended action that mitigates a risk should become a verifiable requirement in your SRS. The <code style="font-family: var(--font-family-mono); font-size: 0.8em;" class="bg-[#F5F5F5] px-1 rounded">Linked REQ</code> column makes that linkage explicit. ISO 14971 §5.5 requires it.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Residual risk needs re-scoring</h3>
+            <p class="text-sm text-[#555555] m-0">After controls are applied, re-score Severity, Occurrence, and Detection. If residual RPN remains above your acceptance threshold, iterate. The Revised S/O/D/RPN columns document this loop explicitly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Field reference -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-2" style="font-family: var(--font-family-display);">Field reference — FMEA tab</h2>
+        <p class="text-[#555555] mb-8">One row per failure mode. If one item has multiple failure modes, each gets its own row and FMEA ID.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#221200] text-white">
+                <th class="text-left px-4 py-3 font-semibold" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Column</th>
+                <th class="text-left px-4 py-3 font-semibold">What goes here</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">FMEA ID</td>
+                <td class="px-4 py-3 text-[#555555]">Unique identifier for each failure mode (FMEA-001, FMEA-002…). One failure mode per row.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Item / Function</td>
+                <td class="px-4 py-3 text-[#555555]">The component, subsystem, or function being analyzed. Be specific: "Temperature sensor analog front-end" not "sensor."</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Potential Failure Mode</td>
+                <td class="px-4 py-3 text-[#555555]">How this item or function could fail. State the failure, not the cause: "Reads 2°C high" not "Solder joint cracks."</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Potential Effect(s)</td>
+                <td class="px-4 py-3 text-[#555555]">Downstream consequence of the failure, including harm to patient, user, or operator. ISO 14971 requires identifying the hazardous situation and the resulting harm.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Severity (S)</td>
+                <td class="px-4 py-3 text-[#555555]">How serious is the effect if the failure occurs? 1 = negligible, 5 = catastrophic. See Scales tab. Severity almost never decreases with mitigation. If it does, document why.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Potential Cause(s)</td>
+                <td class="px-4 py-3 text-[#555555]">Root cause or mechanism that produces the failure mode. One failure mode may have multiple causes; use separate rows or comma-separate if they share the same S/O/D profile.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Occurrence (O)</td>
+                <td class="px-4 py-3 text-[#555555]">How likely is this cause to produce the failure? 1 = remote, 5 = frequent. Based on historical data, test results, or engineering judgment.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Current Controls — Prevention</td>
+                <td class="px-4 py-3 text-[#555555]">Existing design or process controls that prevent the cause or failure mode from occurring. "TCXO specified in BOM" or "Input range check in firmware."</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Current Controls — Detection</td>
+                <td class="px-4 py-3 text-[#555555]">Controls that detect the failure before it reaches the user. "Power-on self-test" or "Automated boundary scan during manufacturing."</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Detection (D)</td>
+                <td class="px-4 py-3 text-[#555555]">How likely are current controls to detect the failure before it reaches the user? 1 = certain detection, 5 = undetectable. The scale is inverted, so lower is better.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">RPN</td>
+                <td class="px-4 py-3 text-[#555555]">Risk Priority Number = S × O × D. Calculated automatically. Range 1–125 with 1–5 scales. Use RPN to prioritize actions internally. It is not a compliance threshold: ISO 14971:2019 requires acceptability to be determined by a Probability × Severity matrix in your Risk Management Plan, not by an RPN cutoff. For automotive (ISO 26262 / AIAG-VDA), consider replacing RPN with Action Priority (High / Medium / Low).</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Recommended Action</td>
+                <td class="px-4 py-3 text-[#555555]">What should be done to reduce risk? Target the highest contributor: reduce Occurrence (better design), improve Detection (better testing), or both. Severity reduction requires a fundamental design change.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Action Taken</td>
+                <td class="px-4 py-3 text-[#555555]">What was actually implemented (not just the plan). Document the mitigation as it was built and verified.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Revised S / O / D / RPN</td>
+                <td class="px-4 py-3 text-[#555555]">Re-score after mitigation is implemented. Revised RPN is calculated automatically. If residual risk remains above your acceptance threshold, iterate.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Linked REQ</td>
+                <td class="px-4 py-3 text-[#555555]">Requirement ID from the RTMify Requirements Tracking Template. Every risk control measure should trace to a verifiable requirement (ISO 14971 §5.5).</td>
+              </tr>
+              <tr class="bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Linked Risk ID</td>
+                <td class="px-4 py-3 text-[#555555]">Risk ID from the RTM Risks tab. Maps this FMEA entry to the summary risk register for bidirectional traceability between detailed per-failure-mode analysis and top-level risk assessment.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standards mapping -->
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Standards coverage</h2>
+        <p class="text-sm text-[#555555] mb-6">FMEA is required or commonly expected across all major regulated-product standards. The specific clause, required rigor, and documentation depth differ by standard and product class.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#221200] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Standard</th>
+                <th class="text-left px-4 py-3 font-semibold">Relevant clause</th>
+                <th class="text-left px-4 py-3 font-semibold">Why the template helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 14971:2019</td>
+                <td class="px-4 py-3 text-[#555555]">§5.4 Risk analysis, §5.5 Risk evaluation</td>
+                <td class="px-4 py-3 text-[#555555]">Implements the ISO 14971 risk cycle: hazard identification, risk estimation, control documentation, and residual risk assessment via revised scoring. Note: ISO 14971:2019 determines risk acceptability using a Probability × Severity matrix defined in the Risk Management Plan. RPN is useful for internal prioritization but cannot by itself justify a finding of acceptable risk.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485:2016</td>
+                <td class="px-4 py-3 text-[#555555]">§7.1 risk-based approach, §7.3.3 design inputs</td>
+                <td class="px-4 py-3 text-[#555555]">FMEA findings feed design inputs (§7.3.3). Risk control measures link directly to requirements, giving auditors the chain from hazard to design output to verification test.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">IEC 62304:2006+A1</td>
+                <td class="px-4 py-3 text-[#555555]">§7 Software risk management</td>
+                <td class="px-4 py-3 text-[#555555]">Software-specific failure modes (race conditions, buffer overflows, state machine errors) are analyzed alongside hardware. Software safety class (A/B/C) drives which failure modes require analysis. Class C requires analysis of all failure modes.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">AS9100 Rev D</td>
+                <td class="px-4 py-3 text-[#555555]">§6.1 Actions to address risks and opportunities, §8.3.5 design verification</td>
+                <td class="px-4 py-3 text-[#555555]">AS9100 does not mandate FMEA by name, but it is the most common method used to satisfy §6.1 for product-level risk analysis. Failure modes link to verification activities in the test plan.</td>
+              </tr>
+              <tr class="bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 26262:2018</td>
+                <td class="px-4 py-3 text-[#555555]">Part 5 §7 hardware FMEA, Part 11 method description</td>
+                <td class="px-4 py-3 text-[#555555]">ASIL C and D components typically require systematic hardware FMEA. Note: ISO 26262 (2018) and the AIAG-VDA FMEA methodology have moved away from RPN in favor of Action Priority (AP): High, Medium, or Low — based on Severity, Occurrence, and Detection bands rather than a multiplied score. Note the ASIL assignment in the Notes column. For software, fault tree analysis is more common but FMEA is an accepted method.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Using with RTM template -->
+    <section class="py-16 px-4 bg-[#101321] text-white border-t border-black/10">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-family-display);">Using this alongside the RTM template</h2>
+        <p class="text-[#A0AEC8] mb-8 max-w-3xl">The FMEA template is designed to work alongside the RTMify Requirements Tracking Template. The connection runs through two cross-reference columns and a shared scoring scale.</p>
+        <div class="grid lg:grid-cols-3 gap-4 text-sm">
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#FFBA3B] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Linked REQ</div>
+            <p class="text-[#D4DBF7] m-0">References requirement IDs (REQ-001, REQ-002…) from the RTM Requirements tab. Every risk control measure in the FMEA should trace to a requirement that can be verified in the test plan.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#FFBA3B] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Linked Risk ID</div>
+            <p class="text-[#D4DBF7] m-0">References risk IDs (RSK-101, RSK-102…) from the RTM Risks tab. Creates bidirectional traceability between the detailed per-failure-mode FMEA analysis and the summary risk register.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#FFBA3B] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Shared scales</div>
+            <p class="text-[#D4DBF7] m-0">Severity and Occurrence use the same 1–5 scales as the RTM Risks tab. Risk assessments made in either document are directly comparable without translation.</p>
+          </div>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/download" class="inline-flex items-center gap-2 px-5 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download RTM Template (.xlsx)
+          </a>
+          <a href="/download" class="inline-flex items-center gap-2 px-5 py-3 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-sm">
+            All RTMify templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Download the FMEA template</h2>
+        <p class="text-[#555555] text-lg mb-8 max-w-2xl mx-auto">Free FMEA template for ISO 14971, ISO 13485, IEC 62304, AS9100, and ISO 26262. Works in Excel and Google Sheets.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <DownloadButton href="/RTMify_FMEA_Template.xlsx" label="Download FMEA Template (.xlsx)" size="lg" />
+          <a href="/free-templates" class="inline-flex items-center px-8 py-4 border border-[#1A1A2E] rounded-lg text-[#1A1A2E] font-semibold hover:bg-white transition-colors">
+            All free templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>

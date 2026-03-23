@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import DownloadButton from '../../components/DownloadButton.astro';
+
+const templates = [
+  {
+    name: 'FMEA Template',
+    subtitle: 'Failure Mode and Effects Analysis',
+    desc: 'ISO 14971 risk analysis with Severity × Occurrence × Detection scoring, RPN, recommended actions, mitigation tracking, and cross-references to the RTM requirements and risk register. Covers medical device, aerospace, automotive, and software contexts.',
+    standards: ['ISO 14971', 'ISO 13485', 'IEC 62304', 'AS9100', 'ISO 26262'],
+    downloadHref: '/RTMify_FMEA_Template.xlsx',
+    guideHref: '/free-templates/fmea',
+  },
+];
+
+const comingSoon = [
+  'Hazard Log Template',
+  'Verification and Validation Plan Template',
+  'SBOM / Software Bill of Materials Template',
+  'Design History File Template',
+  'Test Case Specification Template',
+  'Design FMEA / Process FMEA Templates',
+  'Configuration Item List Template',
+  'Change Impact Analysis Template',
+  'Requirements Review Checklist',
+];
+---
+
+<BaseLayout
+  title="Free Compliance and Regulatory Templates — RTMify"
+  description="Free downloadable templates for regulated-industry engineering: FMEA, hazard log, V&V plan, SBOM, design history file, and more. No email gate, no account required."
+  canonical="https://rtmify.io/free-templates"
+>
+  <Nav />
+
+  <main class="flex-1">
+
+    <section class="bg-[#1A1A2E] text-white py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Free compliance templates</h1>
+        <p class="text-gray-300 text-lg">Standalone templates for regulated-industry engineering. Every template is a free direct download — no email, no account, no friction.</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+
+        <div class="space-y-6 mb-16">
+          {templates.map(t => (
+            <div class="border border-[#DDDDDD] rounded-xl p-6 flex flex-col sm:flex-row sm:items-start gap-6">
+              <div class="flex-1">
+                <h2 class="text-lg font-bold text-[#1A1A2E] mb-0.5">{t.name}</h2>
+                <p class="text-sm text-[#555555] mt-0 mb-3">{t.subtitle}</p>
+                <p class="text-[#555555] text-sm mb-4">{t.desc}</p>
+                <div class="flex flex-wrap gap-1.5">
+                  {t.standards.map(s => (
+                    <span class="text-xs font-medium text-[#555555] bg-[#F5F5F5] border border-[#DDDDDD] px-2 py-0.5 rounded">{s}</span>
+                  ))}
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 shrink-0 sm:pt-1">
+                <DownloadButton href={t.downloadHref} label="Download (.xlsx)" size="sm" />
+                <a href={t.guideHref} class="text-center text-sm text-[#555555] hover:text-[#1A1A2E] underline underline-offset-4 transition-colors">
+                  Field guide →
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h2 class="text-base font-semibold text-[#1A1A2E] mb-4">Coming soon</h2>
+          <ul class="space-y-2">
+            {comingSoon.map(name => (
+              <li class="flex items-center gap-3 text-sm text-[#555555]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#DDDDDD] shrink-0"></span>
+                {name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="py-12 px-4 bg-[#F5F5F5] border-t border-[#DDDDDD]">
+      <div class="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center gap-6">
+        <div class="flex-1">
+          <h2 class="text-base font-bold text-[#1A1A2E] mb-1">The core RTM template</h2>
+          <p class="text-sm text-[#555555]">The Requirements Tracking Template is the starting point for all six supported standards. These free templates are standalone artifacts designed to work alongside it.</p>
+        </div>
+        <DownloadButton size="sm" />
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
