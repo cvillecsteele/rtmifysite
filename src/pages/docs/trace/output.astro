@@ -16,10 +16,10 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": "https://rtmify.io/" },
-    { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://rtmify.io/docs/" },
-    { "@type": "ListItem", "position": 3, "name": "Trace", "item": "https://rtmify.io/docs/trace/" },
-    { "@type": "ListItem", "position": 4, "name": "Output Formats", "item": "https://rtmify.io/docs/trace/output/" },
+    { "@type": "ListItem", "position": 1, "name": "RTMify", "item": { "@id": "https://rtmify.io/" } },
+    { "@type": "ListItem", "position": 2, "name": "Docs", "item": { "@id": "https://rtmify.io/docs/" } },
+    { "@type": "ListItem", "position": 3, "name": "Trace", "item": { "@id": "https://rtmify.io/docs/trace/" } },
+    { "@type": "ListItem", "position": 4, "name": "Output Formats", "item": { "@id": "https://rtmify.io/docs/trace/output/" } },
   ]
 };
 ---

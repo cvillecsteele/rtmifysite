@@ -106,7 +106,7 @@ const jsonLd = {
         "@type": "ListItem",
         "position": idx + 1,
         "name": bc.name,
-        "item": `https://rtmify.io${bc.url}`
+        "item": { "@id": `https://rtmify.io${bc.url}` }
       }))
     }
   ]
