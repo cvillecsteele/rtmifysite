@@ -1,0 +1,222 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+const title = 'RTMify Live: Design Artifacts';
+const description = 'Upload RTM workbook snapshots and requirements documents to RTMify Live as design artifacts that supplement the connected workbook.';
+const canonical = 'https://rtmify.io/docs/live/artifacts';
+
+const breadcrumbs = [
+  { name: 'RTMify', url: '/' },
+  { name: 'Docs', url: '/docs' },
+  { name: 'Live', url: '/docs/live' },
+  { name: 'Design Artifacts', url: '/docs/live/artifacts' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: { "@id": "https://rtmify.io/" } },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: { "@id": "https://rtmify.io/docs/" } },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: { "@id": "https://rtmify.io/docs/live/" } },
+    { '@type': 'ListItem', position: 4, name: 'Design Artifacts', item: { "@id": "https://rtmify.io/docs/live/artifacts/" } },
+  ],
+};
+---
+
+<DocsLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  activeSlug="live-artifacts"
+  lane="live"
+>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="w-3 h-3 rounded-full bg-[#2E7D32] shrink-0"></span>
+      <span class="text-sm font-semibold text-[#2E7D32] uppercase tracking-wide">Live</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">
+      Design Artifacts
+    </h1>
+    <p class="text-lg text-[#555555] max-w-3xl leading-relaxed">
+      Design artifacts are documents and workbook snapshots that you upload to Live alongside the connected RTM workbook. They capture upstream requirements specifications (URS, SRS, SwRS, HRS, SysRD) and RTM snapshots that are not part of the live sync but whose requirement assertions belong in the same traceability graph.
+    </p>
+    <div class="mt-6 border border-[#2E7D32] border-opacity-20 bg-[#F5FBF5] rounded-lg p-4 max-w-3xl">
+      <p class="text-sm text-[#2E7D32] font-semibold mb-1">Artifacts supplement the connected workbook. They do not replace it.</p>
+      <p class="text-[#555555] text-sm m-0">The Google Sheets or Excel Online workbook you connected during setup is the live source-of-truth. It is polled every 30 seconds and drives the sync cycle. Design artifacts are uploaded once or periodically. Live stores them, parses their requirement content, and adds those assertions to the graph. They do not override workbook data.</p>
+    </div>
+  </div>
+
+  <!-- Why use design artifacts -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Why use design artifacts?</h2>
+    <p class="text-[#555555] text-sm mb-4">Your connected workbook is the operational source of truth. Design artifacts give that source of truth context.</p>
+    <p class="text-[#555555] text-sm mb-4">In real programs, requirements do not live in one place. User needs may start in a URS, software requirements may be reviewed in a SwRS, hardware constraints may be defined in an HRS, and the RTM workbook may only reflect the subset that has been brought into the live traceability flow. If you only sync the workbook, you can miss the evidence that matters most during review: what the upstream document actually said, when it diverged, and whether the workbook still matches it.</p>
+    <p class="text-[#555555] text-sm mb-4">Design artifacts solve that.</p>
+    <p class="text-[#555555] text-sm mb-8">When you upload requirement documents and RTM snapshots into Live, RTMify parses their requirement assertions and places them into the same traceability graph as your connected workbook, tests, risks, code, BOMs, SOUP, and execution evidence. That gives you a second lens on the system: not just what the workbook says now, but what the controlled source documents also say.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Benefits</h3>
+    <ul class="space-y-4 mb-8">
+      {[
+        ['Catch requirement drift early', 'Live can show when the same requirement ID carries different text across the RTM, SRS, SysRD, URS, SwRS, or HRS.'],
+        ['Preserve upstream intent', 'Auditors and reviewers can see the original requirement wording from the source document, not just the current workbook row.'],
+        ['Close traceability blind spots', 'Requirements that exist in a design document but never made it into the workbook are surfaced instead of disappearing quietly.'],
+        ['Strengthen review readiness', 'Artifact-backed assertions make source provenance visible in MCP, reports, suspect review, and requirement trace views.'],
+        ['Support real document-controlled workflows', 'Teams can keep using their existing Word specifications and workbook exports without forcing everything into one authoring system on day one.'],
+        ['Reduce false confidence', 'A green workbook is less meaningful if the upstream controlled documents disagree with it. Artifacts make that disagreement visible.'],
+      ].map(([title, body]) => (
+        <li class="flex gap-4">
+          <span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span>
+          <span class="text-sm text-[#555555]"><strong class="text-[#1A1A2E]">{title}.</strong> {body}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div class="border border-[#DDDDDD] rounded-lg p-5 bg-[#FAFAFA]">
+      <p class="text-sm font-semibold text-[#1A1A2E] mb-2">In short</p>
+      <p class="text-sm text-[#555555] m-0">The workbook tells Live what is active. Design artifacts tell Live what else was specified, reviewed, or released around it. Together, they give you a more defensible traceability record than the workbook alone.</p>
+    </div>
+  </section>
+
+  <!-- Ingest paths -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">How artifacts get in</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">Dashboard upload</h3>
+        <p class="text-[#555555] text-sm">Drag and drop files in the Dashboard's <strong>Artifacts</strong> section. Live detects the artifact type from the file extension and content. Best for ad-hoc uploads during development.</p>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">Onboarding upload</h3>
+        <p class="text-[#555555] text-sm">The setup wizard prompts for an initial RTM workbook snapshot and any upstream requirements docs. These seed the graph before the first live sync completes.</p>
+      </div>
+      <div class="p-5 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">Inbox file-drop</h3>
+        <p class="text-[#555555] text-sm">Drop files into <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">~/.rtmify/inbox/</code>. Live polls every 5 seconds, detects the artifact type, and ingests automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported types -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-2" style="font-family: var(--font-family-display);">Supported artifact types</h2>
+    <p class="text-[#555555] text-sm mb-6">Live recognises two categories: workbook snapshots (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.xlsx</code>) and requirements documents (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">.docx</code>).</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Artifact type</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Format</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">What Live extracts</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['RTM workbook snapshot', '.xlsx', 'Requirement assertions parsed using the same tab schema as the connected workbook (User Needs, Requirements, Tests, Risks). Stored as a point-in-time snapshot and does not drive sync.'],
+            ['URS (User Requirements Specification)', '.docx', 'User-level requirement assertions extracted from the document and linked to matching IDs in the connected workbook.'],
+            ['SRS (System Requirements Specification)', '.docx', 'System-level requirement assertions extracted and cross-referenced against the active graph.'],
+            ['SwRS (Software Requirements Specification)', '.docx', 'Software requirement assertions extracted and linked to matching IDs in the Requirements tab.'],
+            ['HRS (Hardware Requirements Specification)', '.docx', 'Hardware requirement assertions extracted and linked to matching IDs in the Requirements tab.'],
+            ['SysRD / SRD (System Requirements Document)', '.docx', 'System requirements extracted and treated identically to SRS assertions in the graph.'],
+          ].map(([type, fmt, desc]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-medium text-[#1A1A2E]">{type}</td>
+              <td class="px-4 py-3 text-[#555555]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{fmt}</td>
+              <td class="px-4 py-3 text-[#555555]">{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- What happens on upload -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What happens on upload</h2>
+    <ol class="space-y-3 text-sm text-[#555555] list-decimal list-inside mb-6">
+      <li>Live stores the file and records the artifact type, source filename, and upload timestamp.</li>
+      <li>The parser extracts requirement assertions, including requirement IDs, descriptions, and any declared trace references present in the file.</li>
+      <li>Assertions are added to the graph as <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">DesignArtifact</code> nodes linked to the originating artifact record.</li>
+      <li>Where an assertion ID matches a requirement already in the connected workbook, Live creates a cross-reference edge. Unmatched assertion IDs are retained as warnings rather than errors and become linkable when the workbook catches up.</li>
+      <li>The artifact and its parse status appear in the Dashboard's <strong>Artifacts</strong> section.</li>
+    </ol>
+    <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
+      <p class="text-sm text-[#E65100] font-semibold mb-1">Re-uploading replaces the previous artifact</p>
+      <p class="text-[#555555] text-sm m-0">Uploading a file with the same name and artifact type replaces the prior version. All assertion nodes from the old version are removed and rebuilt from the new file. Use distinct filenames (for example, append a date or revision) if you want to retain previous versions alongside the current one.</p>
+    </div>
+  </section>
+
+  <!-- Artifacts vs. connected workbook -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Artifacts vs. the connected workbook</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white"></th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Connected workbook</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Design artifact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['Update model', 'Polled every 30 seconds. Changes are detected automatically.', 'Uploaded manually or dropped into the inbox.'],
+            ['Authority', 'Authoritative. Drives the sync cycle, writeback, and gap logic.', 'Supplementary. Adds assertion nodes and does not override workbook data.'],
+            ['Format', 'Google Sheets or Excel Online (live connection)', '.xlsx workbook snapshot or .docx requirements document'],
+            ['Versioning', 'A change token tracks the latest workbook state.', 'Each upload is a discrete snapshot. Rename files to keep multiple versions.'],
+            ['Inbox routing', 'Configured at setup and not inbox-driven.', 'The inbox detects the type by file extension and content.'],
+          ].map(([aspect, workbook, artifact]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 font-semibold text-[#1A1A2E]">{aspect}</td>
+              <td class="px-4 py-3 text-[#555555]">{workbook}</td>
+              <td class="px-4 py-3 text-[#555555]">{artifact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Inbox routing -->
+  <section class="border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Inbox routing</h2>
+    <p class="text-[#555555] text-sm mb-5">
+      When Live picks up a file from <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">~/.rtmify/inbox/</code>, it determines the artifact type by extension first and then by content inspection.
+    </p>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Extension / content</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Routed as</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['.xlsx', 'RTM workbook snapshot, parsed with the standard tab schema'],
+            ['.docx containing "user requirement"', 'URS artifact'],
+            ['.docx containing "software requirement"', 'SwRS artifact'],
+            ['.docx containing "hardware requirement"', 'HRS artifact'],
+            ['.docx (other or ambiguous content)', 'SRS artifact (default for requirements documents)'],
+            ['.json with bomFormat: CycloneDX or spdxVersion', 'Routed to BOM ingest. See Design BOM.'],
+            ['.json with test_cases', 'Routed to test results ingest. See Test Results API.'],
+          ].map(([ext, route]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{ext}</td>
+              <td class="px-4 py-3 text-[#555555]">{route}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-4 text-sm mb-4" style="font-family: var(--font-family-mono);">
+      ~/.rtmify/inbox/<br/>
+      &nbsp;&nbsp;processed/   <span class="text-[#888888] font-sans">// successfully ingested files moved here</span><br/>
+      &nbsp;&nbsp;rejected/    <span class="text-[#888888] font-sans">// unrecognised or unparseable files moved here</span>
+    </div>
+    <p class="text-[#555555] text-sm">The inbox path can be changed with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--inbox-dir &lt;path&gt;</code> at startup. The current path is shown in the Dashboard's <strong>Guide &rarr; MCP &amp; AI</strong> tab.</p>
+  </section>
+</DocsLayout>

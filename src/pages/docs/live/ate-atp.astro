@@ -3,13 +3,13 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live: ATE / ATP Results';
 const description = 'Use RTMify Live test-results JSON to ingest per-unit as-built evidence from ATE stations and ATP workflows, including serial numbers and product-scoped unit history.';
-const canonical = 'https://rtmify.io/docs/live/ate-atp/';
+const canonical = 'https://rtmify.io/docs/live/ate-atp';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
-  { name: 'Docs', url: '/docs/' },
-  { name: 'Live', url: '/docs/live/' },
-  { name: 'ATE / ATP Results', url: '/docs/live/ate-atp/' },
+  { name: 'Docs', url: '/docs' },
+  { name: 'Live', url: '/docs/live' },
+  { name: 'ATE / ATP Results', url: '/docs/live/ate-atp' },
 ];
 
 const jsonLd = {
@@ -192,6 +192,6 @@ const jsonLd = {
 
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Cross-check with the generic test-results contract</h2>
-    <p class="text-[#555555] text-sm">This page is an as-built production-test framing of the same ingestion contract documented in <a href="/docs/live/test-results/" class="text-[#1565C0] underline hover:no-underline">Test Results API</a>. Use that page for the canonical field-by-field contract and bearer-token details. Use this page when you need to explain to operators, QA, or manufacturing how per-unit ATE and ATP evidence lands in the Live graph.</p>
+    <p class="text-[#555555] text-sm">This page is an as-built production-test framing of the same ingestion contract documented in <a href="/docs/live/test-results" class="text-[#1565C0] underline hover:no-underline">Test Results API</a>. Use that page for the canonical field-by-field contract and bearer-token details. Use this page when you need to explain to operators, QA, or manufacturing how per-unit ATE and ATP evidence lands in the Live graph.</p>
   </section>
 </DocsLayout>

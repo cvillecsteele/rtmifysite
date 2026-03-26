@@ -3,12 +3,12 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
 const title = 'The Traceability Chain — How the Four RTMify Tabs Connect';
 const description = 'How User Needs, Requirements, Tests, and Risks link together in the RTMify template. Bidirectional traceability, suspect flagging, and impact analysis for AS9100, ISO 13485, DO-178C, IEC 62304, ISO 26262, and ASPICE.';
-const canonical = 'https://rtmify.io/docs/traceability/';
+const canonical = 'https://rtmify.io/docs/traceability';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
-  { name: 'Docs', url: '/docs/' },
-  { name: 'Traceability', url: '/docs/traceability/' }
+  { name: 'Docs', url: '/docs' },
+  { name: 'Traceability', url: '/docs/traceability' }
 ];
 
 const jsonLd = {
@@ -138,7 +138,7 @@ const jsonLd = {
         </tbody>
       </table>
 
-      <p class="text-[#555555]">If an ID in any of these cells doesn't match a row in the target tab, RTMify flags it as <code class="font-mono bg-red-100 px-1.5 py-0.5 rounded text-xs text-red-900" style="font-family: var(--font-family-mono);">UNRESOLVED</code>. If the cell is blank where a link is expected, RTMify flags the appropriate warning (<code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code> or <code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>). See <a href="/docs/status-codes/" class="text-[#1A1A2E] underline">Status Codes</a> for the full reference.</p>
+      <p class="text-[#555555]">If an ID in any of these cells doesn't match a row in the target tab, RTMify flags it as <code class="font-mono bg-red-100 px-1.5 py-0.5 rounded text-xs text-red-900" style="font-family: var(--font-family-mono);">UNRESOLVED</code>. If the cell is blank where a link is expected, RTMify flags the appropriate warning (<code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code> or <code class="font-mono bg-yellow-100 px-1.5 py-0.5 rounded text-xs text-yellow-900" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>). See <a href="/docs/status-codes" class="text-[#1A1A2E] underline">Status Codes</a> for the full reference.</p>
     </section>
 
     <!-- Bidirectional traceability -->
@@ -254,7 +254,7 @@ const jsonLd = {
       <div class="space-y-4">
         <details class="border border-[#DDDDDD] rounded-lg p-4">
           <summary class="font-semibold text-[#1A1A2E] cursor-pointer">What happens if the traceability chain is broken?</summary>
-          <p class="text-[#555555] mt-3 mb-0 text-sm">A broken chain means an auditor can't follow the thread from a user need to the test that verifies it — or from a test back to the need that justifies it. RTMify flags breaks with <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code>, <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>, or <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">UNRESOLVED</code> status codes. Every regulated standard treats incomplete traceability as a finding. See <a href="/docs/status-codes/" class="text-[#1A1A2E]">Status Codes</a> for how to fix each one.</p>
+          <p class="text-[#555555] mt-3 mb-0 text-sm">A broken chain means an auditor can't follow the thread from a user need to the test that verifies it — or from a test back to the need that justifies it. RTMify flags breaks with <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">MISSING_USER_NEED</code>, <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">NO_TEST_LINKED</code>, or <code class="font-mono text-xs" style="font-family: var(--font-family-mono);">UNRESOLVED</code> status codes. Every regulated standard treats incomplete traceability as a finding. See <a href="/docs/status-codes" class="text-[#1A1A2E]">Status Codes</a> for how to fix each one.</p>
         </details>
 
         <details class="border border-[#DDDDDD] rounded-lg p-4">
@@ -283,12 +283,12 @@ const jsonLd = {
     <section class="border-t border-[#DDDDDD] pt-10 mt-10">
       <h2 class="text-xl font-bold text-[#1A1A2E] mb-4">Related documentation</h2>
       <div class="grid grid-cols-2 gap-3">
-        <a href="/docs/user-needs/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">User Needs →</a>
-        <a href="/docs/requirements/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Requirements →</a>
-        <a href="/docs/tests/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Tests →</a>
-        <a href="/docs/risks/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Risks →</a>
-        <a href="/docs/status-codes/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Status Codes →</a>
-        <a href="/docs/" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Back to Docs Hub →</a>
+        <a href="/docs/user-needs" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">User Needs →</a>
+        <a href="/docs/requirements" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Requirements →</a>
+        <a href="/docs/tests" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Tests →</a>
+        <a href="/docs/risks" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Risks →</a>
+        <a href="/docs/status-codes" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Status Codes →</a>
+        <a href="/docs" class="block p-3 border border-[#DDDDDD] rounded no-underline text-sm text-[#1A1A2E] font-semibold">Back to Docs Hub →</a>
       </div>
     </section>
 

@@ -3,12 +3,12 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
 const title = 'Risks Tab | RTMify Documentation';
 const description = 'Complete guide to RTMify Risks tab: hazard and failure mode assessment with risk scoring, severity-likelihood matrices, and traceability to requirements.';
-const canonical = 'https://rtmify.io/docs/risks/';
+const canonical = 'https://rtmify.io/docs/risks';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
-  { name: 'Docs', url: '/docs/' },
-  { name: 'Risks', url: '/docs/risks/' }
+  { name: 'Docs', url: '/docs' },
+  { name: 'Risks', url: '/docs/risks' }
 ];
 
 const jsonLd = {
@@ -213,7 +213,7 @@ const standards = [
     color: '#004D40',
     clauses: 'Clauses: SYS.1, SWE.1, MAN.5',
     title: 'Risk Integration in System and Software Engineering',
-    content: '<p><strong>ASPICE</strong> (Automotive SPICE v3.0) defines capability levels for system and software engineering processes. Risk items (SYS.1 System Requirements Definition, SWE.1 Software Requirements Analysis) feed into functional requirements. <strong>MAN.5 Management of Risk</strong> is a horizontal process requiring identification, analysis, and mitigation of project and product risks. The Risks tab fulfills both product risk (SYS.1/SWE.1 safety/security requirements) and project risk (schedule, resource, supplier) documentation. Each risk must be mapped to a requirement (column F) and tracked to test (via the <a href="/docs/requirements/">Requirements tab</a> and <a href="/docs/tests/">Tests tab</a>). ASPICE audits expect to see this traceability chain.</p>'
+    content: '<p><strong>ASPICE</strong> (Automotive SPICE v3.0) defines capability levels for system and software engineering processes. Risk items (SYS.1 System Requirements Definition, SWE.1 Software Requirements Analysis) feed into functional requirements. <strong>MAN.5 Management of Risk</strong> is a horizontal process requiring identification, analysis, and mitigation of project and product risks. The Risks tab fulfills both product risk (SYS.1/SWE.1 safety/security requirements) and project risk (schedule, resource, supplier) documentation. Each risk must be mapped to a requirement (column F) and tracked to test (via the <a href="/docs/requirements">Requirements tab</a> and <a href="/docs/tests">Tests tab</a>). ASPICE audits expect to see this traceability chain.</p>'
   }
 ];
 ---
@@ -397,7 +397,7 @@ Test Result (PASS)</pre>
     <h3 class="text-2xl font-bold text-[#1A1A2E] mb-4">RTMify Status Validation</h3>
     <p class="text-[#555555] mb-4 leading-relaxed">RTMify automatically populates column I (RTMify Status) based on column F:</p>
     <ul class="text-[#555555] mb-6 ml-6 space-y-2 leading-relaxed">
-      <li><strong>RESOLVED:</strong> Linked REQ exists and points to a valid requirement in the <a href="/docs/requirements/" class="text-[#1565C0] hover:underline">Requirements tab</a>.</li>
+      <li><strong>RESOLVED:</strong> Linked REQ exists and points to a valid requirement in the <a href="/docs/requirements" class="text-[#1565C0] hover:underline">Requirements tab</a>.</li>
       <li><strong>UNRESOLVED:</strong> Linked REQ is empty, contains a non-existent requirement ID, or points to a deleted requirement. RTMify flags this to prevent incomplete traceability.</li>
     </ul>
 
@@ -474,11 +474,11 @@ Linked REQ: REQ-053; REQ-054
   <section class="mb-12 p-6 bg-[#F5F5F5] border border-[#DDDDDD] rounded-lg" id="related">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4">Related Pages</h2>
     <ul class="space-y-2 text-[#555555]">
-      <li><a href="/docs/requirements/" class="text-[#1565C0] hover:underline">Requirements Tab</a> – Create and manage requirements that mitigate risks.</li>
-      <li><a href="/docs/tests/" class="text-[#1565C0] hover:underline">Tests Tab</a> – Define tests that verify requirements (which implement risk mitigations).</li>
-      <li><a href="/docs/traceability/" class="text-[#1565C0] hover:underline">Traceability View</a> – Visualize the risk → requirement → test chain.</li>
-      <li><a href="/docs/status-codes/" class="text-[#1565C0] hover:underline">Status Codes and Validation</a> – Understand RTMify's automated validation rules.</li>
-      <li><a href="/docs/" class="text-[#1565C0] hover:underline">Documentation Hub</a> – Overview of all tabs, standard-specific guides, and the traceability chain.</li>
+      <li><a href="/docs/requirements" class="text-[#1565C0] hover:underline">Requirements Tab</a> – Create and manage requirements that mitigate risks.</li>
+      <li><a href="/docs/tests" class="text-[#1565C0] hover:underline">Tests Tab</a> – Define tests that verify requirements (which implement risk mitigations).</li>
+      <li><a href="/docs/traceability" class="text-[#1565C0] hover:underline">Traceability View</a> – Visualize the risk → requirement → test chain.</li>
+      <li><a href="/docs/status-codes" class="text-[#1565C0] hover:underline">Status Codes and Validation</a> – Understand RTMify's automated validation rules.</li>
+      <li><a href="/docs" class="text-[#1565C0] hover:underline">Documentation Hub</a> – Overview of all tabs, standard-specific guides, and the traceability chain.</li>
     </ul>
   </section>
 </DocsLayout>

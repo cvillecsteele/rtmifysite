@@ -3,12 +3,12 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Live Overview';
 const description = 'RTMify Live is a local-first traceability runtime that continuously syncs your spreadsheet, scans your codebase, ingests test results, and answers coverage questions through MCP, Design BOM, and SOUP surfaces.';
-const canonical = 'https://rtmify.io/docs/live/';
+const canonical = 'https://rtmify.io/docs/live';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
-  { name: 'Docs', url: '/docs/' },
-  { name: 'Live', url: '/docs/live/' },
+  { name: 'Docs', url: '/docs' },
+  { name: 'Live', url: '/docs/live' },
 ];
 
 const jsonLd = {
@@ -99,15 +99,15 @@ const jsonLd = {
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Dedicated ingest guides</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <a href="/docs/live/design-bom/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
+      <a href="/docs/live/design-bom" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">Design BOM Ingestion</h3>
         <p class="text-[#555555] text-sm m-0">Hardware BOM CSV, grouped workbook, read-only Design BOM Sync, graph shape, replacement semantics, and template download path.</p>
       </a>
-      <a href="/docs/live/ate-atp/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
+      <a href="/docs/live/ate-atp" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">ATE / ATP Results</h3>
         <p class="text-[#555555] text-sm m-0">Production-test and acceptance-test evidence through the JSON test-results API, with serial-number and product-scoped unit history.</p>
       </a>
-      <a href="/docs/live/soup/" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
+      <a href="/docs/live/soup" class="block p-5 border border-[#DDDDDD] rounded-lg hover:bg-[#F7F7F8] transition-colors">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2">SOUP Ingestion</h3>
         <p class="text-[#555555] text-sm m-0">Dedicated SOUP JSON and workbook ingest, SOUP Sync, anomaly fields, software graph shape, and the downloadable SOUP template.</p>
       </a>
@@ -129,7 +129,7 @@ const jsonLd = {
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A spreadsheet editor — it reads and writes status cells but does not edit requirement content</span></li>
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A GitHub or GitLab integration — it reads local git history, not remote APIs</span></li>
       <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A public MCP endpoint — MCP is loopback-only, same-machine</span></li>
-      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A replacement for <a href="/docs/trace/" class="text-[#1565C0] underline hover:no-underline">Trace</a> — Trace is a single-run report generator; Live is a continuous runtime</span></li>
+      <li class="flex gap-2"><span class="text-[#AAAAAA] mt-0.5">—</span><span>A replacement for <a href="/docs/trace" class="text-[#1565C0] underline hover:no-underline">Trace</a> — Trace is a single-run report generator; Live is a continuous runtime</span></li>
     </ul>
   </section>
 </DocsLayout>

@@ -3,11 +3,11 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
 const title = 'RTMify Documentation';
 const description = 'Documentation for the full RTMify product family: the requirements traceability template, RTMify Trace for generating RTM packages, and RTMify Live for real-time traceability against your codebase.';
-const canonical = 'https://rtmify.io/docs/';
+const canonical = 'https://rtmify.io/docs';
 
 const breadcrumbs = [
   { name: 'RTMify', url: '/' },
-  { name: 'Docs', url: '/docs/' }
+  { name: 'Docs', url: '/docs' }
 ];
 
 const jsonLd = {
@@ -42,7 +42,7 @@ const jsonLd = {
   <div class="space-y-4 mt-10">
 
     <!-- Template -->
-    <a href="/docs/template/" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
+    <a href="/docs/template" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
       <div class="flex-shrink-0 mt-1">
         <span class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1A1A2E]">
           <span class="text-white text-base font-bold" style="font-family: var(--font-family-mono);">T</span>
@@ -56,7 +56,7 @@ const jsonLd = {
     </a>
 
     <!-- Trace -->
-    <a href="/docs/trace/" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
+    <a href="/docs/trace" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
       <div class="flex-shrink-0 mt-1">
         <span class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1565C0]">
           <span class="text-white text-base font-bold" style="font-family: var(--font-family-mono);">&rarr;</span>
@@ -70,7 +70,7 @@ const jsonLd = {
     </a>
 
     <!-- Live -->
-    <a href="/docs/live/" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
+    <a href="/docs/live" class="flex gap-6 p-6 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline group">
       <div class="flex-shrink-0 mt-1">
         <span class="flex items-center justify-center w-9 h-9 rounded-full bg-[#2E7D32]">
           <span class="text-white text-base font-bold" style="font-family: var(--font-family-mono);">&#9679;</span>
@@ -92,27 +92,27 @@ const jsonLd = {
     </h2>
     <p class="text-[#555555] mb-6 text-sm">Jump straight to the template guide for your regulatory context.</p>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-      <a href="/docs/for/as9100/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #1565C0;">
+      <a href="/docs/for/as9100" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #1565C0;">
         <span class="text-sm font-bold" style="color: #1565C0;">AS9100</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Aerospace quality. §8.3 design controls.</p>
       </a>
-      <a href="/docs/for/iso-13485/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #2E7D32;">
+      <a href="/docs/for/iso-13485" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #2E7D32;">
         <span class="text-sm font-bold" style="color: #2E7D32;">ISO 13485</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Medical devices. §7.3 design controls.</p>
       </a>
-      <a href="/docs/for/do-178c/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #6A1B9A;">
+      <a href="/docs/for/do-178c" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #6A1B9A;">
         <span class="text-sm font-bold" style="color: #6A1B9A;">DO-178C</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Airborne software. HLR/LLR, DAL A–E.</p>
       </a>
-      <a href="/docs/for/iec-62304/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #BF360C;">
+      <a href="/docs/for/iec-62304" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #BF360C;">
         <span class="text-sm font-bold" style="color: #BF360C;">IEC 62304</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Medical device software. Class A/B/C.</p>
       </a>
-      <a href="/docs/for/iso-26262/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #E65100;">
+      <a href="/docs/for/iso-26262" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #E65100;">
         <span class="text-sm font-bold" style="color: #E65100;">ISO 26262</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Automotive functional safety. HARA, ASIL.</p>
       </a>
-      <a href="/docs/for/aspice/" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #004D40;">
+      <a href="/docs/for/aspice" class="block p-4 border border-[#DDDDDD] rounded-lg hover:shadow-md transition-shadow no-underline" style="border-left: 4px solid #004D40;">
         <span class="text-sm font-bold" style="color: #004D40;">ASPICE</span>
         <p class="text-[#555555] text-xs m-0 mt-1">Automotive SPICE. SYS.2/SWE.1–6.</p>
       </a>
