@@ -8,6 +8,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://rtmify.io',
   trailingSlash: 'never',
+  build: {
+    format: 'file'
+  },
   vite: {
     plugins: [tailwindcss()]
   },
