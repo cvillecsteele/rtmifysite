@@ -2,10 +2,34 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is support available for RTMify?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'RTMify is a self-serve tool. The template and RTMify Trace are provided as-is, with no onboarding, customization, or support included. If you can fill in a spreadsheet, you can use it.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What if we need expert help with RTMify?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Consulting engagements are available at $5,000/day with a signed MSA. Email hello@rtmify.io with a brief description of the engagement.',
+      },
+    },
+  ],
+};
 ---
 
 <BaseLayout
-  title="FAQ — RTMify"
+  title="RTMify FAQ — Licensing, Standards Support, Tool Qualification"
+  jsonLd={jsonLd}
   description="Common questions about RTMify, support, and consulting engagements."
 >
   <Nav />

@@ -3,10 +3,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import DownloadButton from '../components/DownloadButton.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify Trace',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Windows, macOS, Linux',
+      url: 'https://rtmify.io/trace',
+      offers: [
+        { '@type': 'Offer', name: 'Lab / Non-Commercial', price: '79', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#trace' },
+        { '@type': 'Offer', name: 'Individual', price: '99', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#trace' },
+        { '@type': 'Offer', name: 'Team / Commercial', price: '199', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#trace' },
+      ],
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify Live',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Windows, macOS, Linux',
+      url: 'https://rtmify.io/live',
+      offers: [
+        { '@type': 'Offer', name: 'Individual', price: '599', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#live' },
+        { '@type': 'Offer', name: 'Per Seat', price: '1499', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#live' },
+        { '@type': 'Offer', name: 'Site License', price: '4999', priceCurrency: 'USD', url: 'https://rtmify.io/pricing#live' },
+      ],
+    },
+  ],
+};
 ---
 
 <BaseLayout
-  title="Pricing: RTMify"
+  title="RTMify Pricing — Perpetual Licenses from $79, No Subscription"
+  jsonLd={jsonLd}
   description="RTMify Template is free. RTMify Trace from $79. RTMify Live from $599. Perpetual licenses. No subscription required. Source code escrow."
 >
   <Nav />
