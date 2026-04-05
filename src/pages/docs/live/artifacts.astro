@@ -16,10 +16,10 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'RTMify', item: { "@id": "https://rtmify.io/" } },
-    { '@type': 'ListItem', position: 2, name: 'Docs', item: { "@id": "https://rtmify.io/docs" } },
-    { '@type': 'ListItem', position: 3, name: 'Live', item: { "@id": "https://rtmify.io/docs/live" } },
-    { '@type': 'ListItem', position: 4, name: 'Design Artifacts', item: { "@id": "https://rtmify.io/docs/live/artifacts" } },
+    { '@type': 'ListItem', position: 1, name: 'RTMify', item: "https://rtmify.io/" },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: "https://rtmify.io/docs" },
+    { '@type': 'ListItem', position: 3, name: 'Live', item: "https://rtmify.io/docs/live" },
+    { '@type': 'ListItem', position: 4, name: 'Design Artifacts', item: "https://rtmify.io/docs/live/artifacts" },
   ],
 };
 ---
@@ -133,6 +133,57 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- Requirement ID format -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Requirement ID format</h2>
+    <p class="text-[#555555] text-sm mb-4">Live identifies requirement assertions by recognising structured IDs in document text. This is the only mechanism for requirement extraction: if a requirement statement in a source document does not include an ID in this format, it will not be extracted.</p>
+    <p class="text-[#555555] text-sm mb-6">A structured ID must satisfy all of the following rules:</p>
+    <ul class="space-y-2 mb-6 text-sm text-[#555555]">
+      <li class="flex gap-3"><span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span><span>At least 3 characters total.</span></li>
+      <li class="flex gap-3"><span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span><span>At least one hyphen.</span></li>
+      <li class="flex gap-3"><span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span><span>No leading or trailing hyphen.</span></li>
+      <li class="flex gap-3"><span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span><span>No consecutive hyphens (each hyphen must be preceded and followed by at least one character).</span></li>
+      <li class="flex gap-3"><span class="w-2 h-2 rounded-full bg-[#2E7D32] shrink-0 mt-1.5"></span><span>Every character is alphanumeric (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">A–Z</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">a–z</code>, <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">0–9</code>) or an underscore. Spaces, slashes, dots, and parentheses are not permitted.</span></li>
+    </ul>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">ID</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Accepted</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['REQ-001', true, ''],
+            ['SRS-047', true, ''],
+            ['REQ-OQ-001', true, 'Multiple hyphen-separated segments are allowed.'],
+            ['TST-IQ-003', true, ''],
+            ['ABC_DEF-01_A', true, 'Underscores are permitted within segments.'],
+            ['REQ001', false, 'No hyphen.'],
+            ['REQ 001', false, 'Space is not a valid segment character.'],
+            ['REQ--001', false, 'Consecutive hyphens produce an empty segment.'],
+            ['REQ/001', false, 'Slash is not a valid segment character.'],
+            ['-REQ-001', false, 'Leading hyphen.'],
+          ].map(([id, accepted, note]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 text-[#1A1A2E]" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{id}</td>
+              <td class="px-4 py-3">
+                {accepted
+                  ? <span class="text-xs font-semibold text-[#2E7D32] bg-[#F5FBF5] border border-[#2E7D32] border-opacity-30 px-2 py-0.5 rounded">Yes</span>
+                  : <span class="text-xs font-semibold text-[#C62828] bg-[#FFF5F5] border border-[#C62828] border-opacity-30 px-2 py-0.5 rounded">No</span>
+                }
+              </td>
+              <td class="px-4 py-3 text-[#555555]">{note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-[#555555] text-sm">IDs are case-preserved but normalised (BOM stripped, smart quotes replaced, whitespace collapsed) before comparison. <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">REQ-001</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">req-001</code> are treated as distinct IDs.</p>
+  </section>
+
   <!-- What happens on upload -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What happens on upload</h2>
@@ -146,6 +197,63 @@ const jsonLd = {
     <div class="border border-[#E65100] border-opacity-30 bg-[#FFF8F5] rounded-lg p-4">
       <p class="text-sm text-[#E65100] font-semibold mb-1">Re-uploading replaces the previous artifact</p>
       <p class="text-[#555555] text-sm m-0">Uploading a file with the same name and artifact type replaces the prior version. All assertion nodes from the old version are removed and rebuilt from the new file. Use distinct filenames (for example, append a date or revision) if you want to retain previous versions alongside the current one.</p>
+    </div>
+  </section>
+
+  <!-- Parse status reference -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Parse status reference</h2>
+    <p class="text-[#555555] text-sm mb-6">Each extracted assertion carries a <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">parse_status</code> that appears in the artifact detail view. Statuses other than <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">ok</code> indicate that the extracted text may need attention before the assertion can be treated as reliable.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white">Status</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Meaning</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">What to do</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            [
+              'ok',
+              'Requirement ID and text were extracted cleanly and the normalized text is non-empty.',
+              'No action needed.',
+            ],
+            [
+              'null_text',
+              'The ID was recognized but no requirement text could be extracted from the adjacent content in the document.',
+              'Check that the requirement statement immediately follows the ID in the source document and that the paragraph is not empty or hidden.',
+            ],
+            [
+              'low_confidence_empty_after_trim',
+              'Text was present in the source but reduced to nothing after stripping leading and trailing whitespace.',
+              'Review the source document paragraph for non-printing characters or formatting-only content adjacent to the ID.',
+            ],
+            [
+              'low_confidence_long_text',
+              'Extracted text exceeds 300 characters. This usually indicates two requirements merged into a single paragraph, or a requirement followed immediately by rationale or commentary that was not separated.',
+              'Split the paragraph in the source document so each requirement ID is followed by a single, concise statement.',
+            ],
+            [
+              'low_confidence_nested_ids',
+              'The extracted statement contains another structured ID. This typically indicates an inline trace reference that belongs in a dedicated column in the RTM rather than in the requirement text itself.',
+              'Remove the inline reference from the requirement statement and express the trace relationship as a separate column value or cross-reference.',
+            ],
+            [
+              'ambiguous_within_artifact',
+              'The same requirement ID appears more than once in the document with different normalized text. The parser cannot determine which assertion is authoritative.',
+              'Locate the duplicate occurrences in the source document, resolve to a single canonical statement, and re-upload.',
+            ],
+          ].map(([status, meaning, action]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{status}</td>
+              <td class="px-4 py-3 text-[#555555]">{meaning}</td>
+              <td class="px-4 py-3 text-[#555555]">{action}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -177,6 +285,64 @@ const jsonLd = {
           ))}
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- Conflict resolution -->
+  <section class="mb-12 border-t border-[#DDDDDD] pt-10">
+    <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Conflict resolution and authoritative source</h2>
+    <p class="text-[#555555] text-sm mb-6">When multiple sources assert the same requirement ID — the connected workbook, a snapshot, an SRS, a SwRS — Live resolves them into a single effective statement using a fixed priority rule and records the outcome as a <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">text_status</code> on the requirement.</p>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3" style="font-family: var(--font-family-display);">Resolution rules</h3>
+    <p class="text-[#555555] text-sm mb-4">The workbook assertion always wins as the <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">effective_statement</code> when it is present. Artifact-only assertions are then compared against it. If no workbook assertion exists, artifact sources are compared against each other. The <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">authoritative_source</code> field identifies which artifact provided the winning text; it is <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">null</code> when multiple artifact sources conflict and there is no workbook to break the tie.</p>
+
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-[#1A1A2E] text-white">
+            <th class="text-left px-4 py-3 font-semibold text-white"><code style="font-family: var(--font-family-mono); font-size: 0.8125rem;">text_status</code></th>
+            <th class="text-left px-4 py-3 font-semibold text-white">When it occurs</th>
+            <th class="text-left px-4 py-3 font-semibold text-white">Effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            [
+              'single_source',
+              'Exactly one source asserts this requirement and it is not the workbook.',
+              'Effective statement comes from that source. The requirement is not suspect, but is flagged with an informational diagnostic (REQ_SINGLE_SOURCE) because it has not been corroborated.',
+            ],
+            [
+              'aligned',
+              'Multiple sources assert the same requirement and all non-workbook normalized texts match. If a workbook assertion is present, it also agrees with the artifacts.',
+              'Effective statement is the workbook text (if present) or the common artifact text. No suspect flag.',
+            ],
+            [
+              'conflict',
+              'Sources disagree on normalized text. Either the workbook and one or more artifacts differ, or two or more artifacts differ with no workbook to break the tie.',
+              'The requirement is marked suspect with reason "Requirement text differs across design sources". CONFLICTS_WITH edges are created between the disagreeing RequirementText nodes. The conflict appears in the dashboard, suspect review, and MCP responses.',
+            ],
+            [
+              'no_source',
+              'The requirement ID exists in the graph but no source has asserted text for it.',
+              'Effective statement is absent. The requirement is flagged with a warning diagnostic (REQ_NO_SOURCE).',
+            ],
+          ].map(([status, when, effect]) => (
+            <tr class="border-b border-[#EEEEEE]">
+              <td class="px-4 py-3 text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8125rem;">{status}</td>
+              <td class="px-4 py-3 text-[#555555]">{when}</td>
+              <td class="px-4 py-3 text-[#555555]">{effect}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-bold text-[#1A1A2E] mb-3" style="font-family: var(--font-family-display);">Example</h3>
+    <div class="border border-[#DDDDDD] rounded-lg p-5 bg-[#FAFAFA] text-sm text-[#555555]">
+      <p class="mb-3">Your SRS document says <strong class="text-[#1A1A2E]">REQ-047</strong> is <em>"System shall maintain temperature within ±0.5°C."</em> Your connected RTM workbook says <em>"System shall maintain temperature within ±1.0°C."</em></p>
+      <p class="mb-3">Live marks REQ-047 as <span class="font-semibold text-[#1A1A2E]">suspect</span> with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">text_status: conflict</code>. The workbook text is used as the <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">effective_statement</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">authoritative_source</code> points to the workbook artifact. A <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">CONFLICTS_WITH</code> edge is created between the SRS <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">RequirementText</code> node and the workbook <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">RequirementText</code> node. Both assertions are visible in the requirement detail view with their sources.</p>
+      <p class="m-0">To resolve: correct the discrepancy in either the workbook or the SRS, then re-sync or re-upload the updated document. The conflict edges are rebuilt automatically and the suspect flag is cleared if all sources then agree.</p>
     </div>
   </section>
 
