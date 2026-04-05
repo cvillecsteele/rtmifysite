@@ -21,14 +21,23 @@ const jsonLd = {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'FMEA Template', url: 'https://rtmify.io/free-templates/fmea' },
         { '@type': 'ListItem', position: 2, name: 'Hazard Log Template', url: 'https://rtmify.io/free-templates/hazard-log' },
-        { '@type': 'ListItem', position: 3, name: 'V&V Plan Template', url: 'https://rtmify.io/free-templates/vv-plan' },
-        { '@type': 'ListItem', position: 4, name: 'SOUP Template', url: 'https://rtmify.io/soup-template' },
-        { '@type': 'ListItem', position: 5, name: 'Design BOM Template', url: 'https://rtmify.io/bom-template' },
+        { '@type': 'ListItem', position: 3, name: 'Risk Management Plan Template', url: 'https://rtmify.io/free-templates/risk-management-plan' },
+        { '@type': 'ListItem', position: 4, name: 'V&V Plan Template', url: 'https://rtmify.io/free-templates/vv-plan' },
+        { '@type': 'ListItem', position: 5, name: 'SOUP Template', url: 'https://rtmify.io/soup-template' },
+        { '@type': 'ListItem', position: 6, name: 'Design BOM Template', url: 'https://rtmify.io/bom-template' },
       ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What does an ISO 14971 risk management plan template include?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'An ISO 14971:2019 risk management plan must include: the scope of risk management activities, assignment of responsibilities, risk acceptability criteria (severity and probability scales, the risk evaluation matrix, and criteria for when probability cannot be estimated), the method for evaluating overall residual risk, requirements for risk control verification, review milestones, and post-production monitoring requirements. The RTMify Risk Management Plan template covers all seven Clause 4.4 requirements in a ready-to-fill Word document.',
+          },
+        },
         {
           '@type': 'Question',
           name: 'What templates are required for ISO 14971 medical device risk management?',
@@ -78,6 +87,15 @@ const templates = [
     guideHref: '/free-templates/hazard-log',
   },
   {
+    name: 'Risk Management Plan Template',
+    subtitle: 'ISO 14971:2019 Risk Management Plan',
+    desc: 'ISO 14971:2019 compliant Risk Management Plan covering scope, roles and responsibilities, risk acceptability criteria (5×5 matrix with Acceptable / ALARP / Unacceptable), risk control verification, lifecycle review milestones, post-production monitoring, and a full traceability chain from hazard to test report. Word document (.docx).',
+    standards: ['ISO 14971', 'ISO 13485', 'IEC 62304', 'EU MDR', 'FDA QMSR'],
+    downloadHref: '/RTMify_Risk_Management_Plan_Template.docx',
+    downloadLabel: 'Download (.docx)',
+    guideHref: '/free-templates/risk-management-plan',
+  },
+  {
     name: 'V&V Plan Template',
     subtitle: 'Verification and Validation Plan',
     desc: 'Structured V&V Plan covering verification and validation strategy, activity tables (VER-xxx / VAL-xxx IDs), four verification methods (Test / Analysis / Inspection / Demonstration), risk control verification per ISO 14971 §5.6, RTM traceability summary, and standard-specific guidance for ISO 13485, IEC 62304, DO-178C, ISO 26262, and AS9100.',
@@ -110,7 +128,7 @@ const templates = [
 
 <BaseLayout
   title="Free Compliance and Regulatory Templates — RTMify"
-  description="Free downloadable templates for regulated-industry engineering: FMEA, hazard log, SOUP register, and Design BOM. Direct download, no account required."
+  description="Free downloadable templates for regulated-industry engineering: ISO 14971 risk management plan, FMEA, hazard log, V&V plan, SOUP register, and Design BOM. No account required."
   canonical="https://rtmify.io/free-templates"
   jsonLd={jsonLd}
 >

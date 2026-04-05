@@ -1,0 +1,347 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import DownloadButton from '../../components/DownloadButton.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'RTMify Risk Management Plan Template',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any (Word document)',
+      description: 'Free ISO 14971:2019 risk management plan template for medical devices. Covers risk acceptability criteria, ALARP, benefit-risk analysis, traceability, and post-production review.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      downloadUrl: 'https://rtmify.io/RTMify_Risk_Management_Plan_Template.docx',
+      url: 'https://rtmify.io/free-templates/risk-management-plan',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: { "@id": "https://rtmify.io/" } },
+        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: { "@id": "https://rtmify.io/free-templates" } },
+        { '@type': 'ListItem', position: 3, name: 'Risk Management Plan Template', item: { "@id": "https://rtmify.io/free-templates/risk-management-plan" } },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is an ISO 14971:2019 risk management plan?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'An ISO 14971:2019 risk management plan is the governing document that defines how risk management will be conducted for a specific medical device. It is required by Clause 4.4 and must be established before any risk analysis begins. The plan specifies the scope of risk management activities, assignment of responsibilities and authorities, risk acceptability criteria (the severity and probability scales and the risk evaluation matrix), requirements for verifying risk control measures, review milestones, post-production monitoring requirements, and the method for evaluating overall residual risk. Without an approved plan, risk analysis results have no defined acceptance criteria to compare against.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What must ISO 14971:2019 risk acceptability criteria include?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ISO 14971:2019 Clause 4.4(d) requires risk acceptability criteria to include: a severity scale describing the potential harm, a probability of occurrence scale, the risk evaluation matrix mapping severity and probability to Acceptable / ALARP / Unacceptable zones, required actions for each zone, and criteria for situations where probability of harm cannot be estimated (Clause 4.4(d) specifically requires this). The 2019 revision also added Clause 4.4(g), requiring the method for evaluating overall residual risk to be defined in the plan — this is distinct from evaluating individual risks and considers the cumulative effect of all residual risks against the clinical benefit of the device.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between a risk management plan and a hazard log?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A risk management plan defines the framework: the scope, roles, acceptability criteria, review milestones, and post-production monitoring requirements. A hazard log is the operational register that records the execution of that framework — every identified hazard, its initial and residual risk scores, the risk controls implemented, verification status, and ALARP justifications. The risk management plan must be approved before the hazard log is populated, because the hazard log entries are scored against the criteria defined in the plan. Both are required artifacts in the ISO 14971 risk management file.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is a benefit-risk analysis required by ISO 14971?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. ISO 14971:2019 Clause 7.4 requires a benefit-risk analysis when a risk classified as Unacceptable cannot be further reduced by risk control measures. The analysis compares the medical benefits of the intended use against the residual risk — if the benefit outweighs the risk, the device may still be released with documented justification. Benefit-risk justification is also required when accepting ALARP-classified residual risks: the manufacturer must demonstrate that further risk reduction is not practicable and that the benefit-risk ratio is favorable. The Risk Management Report documents the outcome of both analyses.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Free ISO 14971 Risk Management Plan Template — RTMify"
+  description="Free ISO 14971:2019 risk management plan template for medical devices. Covers risk acceptability criteria, ALARP, benefit-risk analysis, traceability, and post-production review. Download .docx — no account required."
+  canonical="https://rtmify.io/free-templates/risk-management-plan"
+  jsonLd={jsonLd}
+>
+  <Nav />
+
+  <main class="flex-1">
+
+    <!-- Hero -->
+    <section class="bg-[#163A2A] text-white py-20 px-4">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-[1.25fr_0.75fr] gap-10 items-start">
+        <div>
+          <p class="text-sm font-semibold text-[#C4B5FD] uppercase tracking-[0.22em] mb-4">Free Risk Management Plan Template</p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-5 tracking-tight" style="font-family: var(--font-family-display);">
+            You cannot evaluate risk acceptability without criteria. ISO 14971 requires those criteria to be defined before analysis begins.
+          </h1>
+          <p class="text-lg text-[#EDE9FE] mb-6 max-w-2xl">
+            A free ISO 14971:2019 Risk Management Plan template for medical device development. Ten-section Word document covering scope, roles and responsibilities, 5&times;5 risk matrix with Acceptable / ALARP / Unacceptable thresholds, risk control verification, lifecycle review milestones, post-production monitoring, and a full traceability chain from hazard to test report. No account, no gate.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <DownloadButton href="/RTMify_Risk_Management_Plan_Template.docx" label="Download RMP Template (.docx)" size="lg" variant="light" />
+            <a href="/free-templates" class="inline-flex items-center px-6 py-3 border border-white/25 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+              All free templates →
+            </a>
+          </div>
+        </div>
+        <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+          <div class="text-sm font-semibold text-[#C4B5FD] uppercase tracking-[0.18em] mb-3">Document structure</div>
+          <div class="space-y-4 text-sm text-[#EDE9FE]">
+            <div>
+              <div class="font-semibold text-white mb-1">§1–2 Introduction &amp; Scope</div>
+              <div>Document info, referenced documents table linking all Risk Management File artifacts, device description, intended use, and foreseeable misuse per Clause 5.2.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">§3–4 Responsibilities &amp; Criteria</div>
+              <div>Role and responsibility table, competence requirements per Clause 4.3, 5×5 risk matrix, ALARP and Unacceptable thresholds, overall residual risk method per Clause 4.4(g).</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">§5–6 Controls &amp; Review</div>
+              <div>3-tier risk control hierarchy, verification activity table, new-hazards evaluation, and six lifecycle review milestones from Design Input through Post-Production.</div>
+            </div>
+            <div>
+              <div class="font-semibold text-white mb-1">§7–10 Post-Production, Traceability, Techniques &amp; Schedule</div>
+              <div>Post-production information sources and update criteria per Clause 10, full Hazard → REQ-xxx → VER-xxx → TR-xxx traceability chain, risk analysis method selection, and activity schedule.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What a risk management plan requires -->
+    <section class="py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">What a risk management plan requires you to do</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">A Risk Management Plan is not a risk register. It is the governing document that defines how risk management will be conducted before any risk analysis begins. ISO 14971 Clause 4.4 specifies what it must contain. Without an approved plan, risk analysis results have no defined acceptance criteria to compare against — and retroactively adjusting criteria to fit scoring already done is a major audit finding.</p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Acceptability criteria must come first</h3>
+            <p class="text-sm text-[#555555] m-0">Severity and probability scales, the 5×5 matrix, and ALARP / Unacceptable thresholds must be defined and approved before any risks are scored. Every row in the hazard log and every RPN in the FMEA is evaluated against these criteria. Changing them after scoring invalidates the analysis.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">"Acceptable" is not unconditional</h3>
+            <p class="text-sm text-[#555555] m-0">ISO 14971:2019 Clause 7.1 requires further risk reduction to be considered for every risk, including those already in the acceptable zone. The plan documents how that obligation is discharged — you must demonstrate that further reduction is not practicable, not simply accept the score.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <h3 class="text-base font-bold text-[#1A1A2E] mb-2">Post-production is in scope</h3>
+            <p class="text-sm text-[#555555] m-0">Clause 10 (significantly expanded in 2019) requires collecting and acting on field data throughout the device lifetime. The plan must define what information sources are monitored, at what frequency, and what triggers a risk analysis update. Post-market surveillance connects directly to the risk management file.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section reference table -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-2" style="font-family: var(--font-family-display);">Section reference</h2>
+        <p class="text-[#555555] mb-8">Complete sections in order during design planning. §4 (risk acceptability criteria) must be approved before any risk analysis activity begins.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#163A2A] text-white">
+                <th class="text-left px-4 py-3 font-semibold" style="font-family: var(--font-family-mono); font-size: 0.8rem;">Section</th>
+                <th class="text-left px-4 py-3 font-semibold">What it covers</th>
+                <th class="text-left px-4 py-3 font-semibold">When to complete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§1 Introduction</td>
+                <td class="px-4 py-3 text-[#555555]">Document purpose, device identification, classification, applicable standards and regulations, and a referenced documents table linking all artifacts in the Risk Management File (hazard log, FMEA, V&amp;V Plan, Risk Management Report, RTM, and others).</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§2 Scope</td>
+                <td class="px-4 py-3 text-[#555555]">Device description and scope boundaries (accessories, software components, packaging, lifecycle phases covered). Intended use statement and foreseeable misuse scenarios per Clause 5.2 — these feed hazard identification in the hazard log.</td>
+                <td class="px-4 py-3 text-[#555555]">During design planning. Update if device description or intended use changes.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§3 Responsibilities</td>
+                <td class="px-4 py-3 text-[#555555]">Role and responsibility table (Risk Management Lead, Risk Management Authority, Clinical Expert, Design Engineer, QA/Reg) and competence requirements per Clause 4.3. The Risk Management Authority has the right to halt product release if overall residual risk is unsatisfactory.</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation. Update if team changes.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§4 Risk Acceptability Criteria</td>
+                <td class="px-4 py-3 text-[#555555]">5-level severity scale, 5-level probability scale, 5×5 risk evaluation matrix, Acceptable / ALARP / Unacceptable thresholds with required actions per zone, overall residual risk evaluation method (Clause 4.4(g)), and criteria when probability cannot be estimated (required by Clause 4.4(d)).</td>
+                <td class="px-4 py-3 text-[#555555]">Before any risk analysis begins — must be approved first. Do not revise to fit existing scoring.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§5 Risk Control &amp; Verification</td>
+                <td class="px-4 py-3 text-[#555555]">3-tier risk control hierarchy (inherent safety by design → protective measures → information for safety), verification activity table (method, acceptance criteria, responsible party), and evaluation of new hazards introduced by risk controls per Clause 7.3.</td>
+                <td class="px-4 py-3 text-[#555555]">After risk controls are identified in the hazard log and FMEA.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§6 Review Activities</td>
+                <td class="px-4 py-3 text-[#555555]">Six lifecycle review milestones (Design Input, Design Output, Design Verification, Design Validation, Risk Management Review pre-release, Post-Production). Participants and scope for each. Pre-release checklist per Clause 9 confirming plan execution, overall residual risk acceptability, and Risk Management Report approval.</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation. Update if milestone structure changes.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§7 Post-Production</td>
+                <td class="px-4 py-3 text-[#555555]">Seven information sources with review frequencies (complaints, field safety corrective actions, adverse event reports, literature, CAPA, service records, similar device field data) and criteria that trigger a risk analysis update per Clause 10 of the 2019 revision.</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation. Maintained actively throughout the product lifetime.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§8 Traceability</td>
+                <td class="px-4 py-3 text-[#555555]">Full traceability chain: Hazard → Hazardous Situation → Risk Control → REQ-xxx → VER-xxx → TR-xxx (test report). Risk control measures assigned REQ-xxx identifiers and traced downstream in the RTM to verification activities and test report IDs providing objective evidence.</td>
+                <td class="px-4 py-3 text-[#555555]">Maintained continuously throughout development.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§9 Risk Analysis Techniques</td>
+                <td class="px-4 py-3 text-[#555555]">Selection of risk analysis methods (FMEA, FTA, HAZOP, PHA, use-related risk analysis per IEC 62366-1) with lifecycle stage mapping, required inputs, and output documentation locations.</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation.</td>
+              </tr>
+              <tr class="bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§10 Activity Schedule</td>
+                <td class="px-4 py-3 text-[#555555]">Milestone plan or Gantt chart reference mapping risk management activities to design phase gates. Identifies which activities must complete before design transfer.</td>
+                <td class="px-4 py-3 text-[#555555]">At plan creation. Keep updated through design phases.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Risk acceptability zones -->
+    <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Risk acceptability criteria — what §4 defines</h2>
+        <p class="text-[#555555] mb-8 max-w-3xl">The risk acceptability section is the most consequential part of the plan. Everything in the hazard log and FMEA is scored against these criteria. The 2019 revision of ISO 14971 added a new requirement: the method for evaluating overall residual risk (Clause 4.4(g)) must also be defined here — considering the cumulative effect of all residual risks against the clinical benefit of the device.</p>
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-flex items-center gap-2 mb-3">
+              <span class="text-xs font-bold text-white bg-[#2E7D32] px-2.5 py-1 rounded-full">Acceptable</span>
+              <span class="text-sm text-[#555555]">Score 1–4</span>
+            </div>
+            <p class="text-sm text-[#555555] m-0">Risk is within acceptability criteria. ISO 14971:2019 Clause 7.1 still requires further risk reduction to be considered — "acceptable" is not unconditional. The manufacturer must document that further reduction is not practicable before accepting the residual risk.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-flex items-center gap-2 mb-3">
+              <span class="text-xs font-bold text-white bg-[#E65100] px-2.5 py-1 rounded-full">ALARP</span>
+              <span class="text-sm text-[#555555]">Score 5–12</span>
+            </div>
+            <p class="text-sm text-[#555555] m-0">Risk shall be reduced as low as reasonably practicable. Acceptance requires documented justification that further reduction is impracticable and that the benefit-risk ratio is favorable. The hazard log Notes column is where this justification is recorded.</p>
+          </div>
+          <div class="border border-[#DDDDDD] rounded-xl p-5">
+            <div class="inline-flex items-center gap-2 mb-3">
+              <span class="text-xs font-bold text-white bg-[#C62828] px-2.5 py-1 rounded-full">Unacceptable</span>
+              <span class="text-sm text-[#555555]">Score 15–25</span>
+            </div>
+            <p class="text-sm text-[#555555] m-0">Risk shall be reduced. If risk cannot be reduced below this threshold, a documented benefit-risk analysis per Clause 7.4 is required before the device can be released. Risk reduction measures must be implemented before this analysis can justify acceptance.</p>
+          </div>
+        </div>
+        <div class="bg-[#F7F7F8] border border-[#E5E5E7] rounded-xl p-5">
+          <p class="text-sm font-semibold text-[#1A1A2E] mb-1">When probability cannot be estimated</p>
+          <p class="text-sm text-[#555555] m-0">For novel technologies, rare failure modes, or limited clinical history, probability of harm cannot be reliably quantified. Clause 4.4(d) requires the plan to define how risk acceptability is determined in these cases. The template specifies that severity alone governs: Severity 4 or 5 is treated as Unacceptable unless the risk is reduced by design or supported by a benefit-risk analysis per Clause 7.4.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standards coverage -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Standards coverage</h2>
+        <p class="text-sm text-[#555555] mb-6">A Risk Management Plan is required by ISO 14971 and referenced by every other regulated-product standard. The specific integration points and depth of evidence differ by standard.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#163A2A] text-white">
+                <th class="text-left px-4 py-3 font-semibold">Standard</th>
+                <th class="text-left px-4 py-3 font-semibold">Relevant clause</th>
+                <th class="text-left px-4 py-3 font-semibold">What the plan addresses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 14971:2019</td>
+                <td class="px-4 py-3 text-[#555555]">Clause 4.4 (plan requirements), Clause 9 (review), Clause 10 (post-production)</td>
+                <td class="px-4 py-3 text-[#555555]">The primary standard. The plan addresses all seven items in Clause 4.4: scope of activities, responsibilities, acceptability criteria, risk control verification requirements, review milestones, post-production monitoring, and the overall residual risk evaluation method. The 2019 edition added Clause 4.4(g) (overall residual risk) and significantly expanded Clause 10 post-production obligations.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485:2016</td>
+                <td class="px-4 py-3 text-[#555555]">§7.1 risk-based approach, §7.3.2 design and development planning</td>
+                <td class="px-4 py-3 text-[#555555]">ISO 13485 requires risk management to be integrated throughout design controls. The Risk Management Plan is typically referenced in the Design and Development Plan (§7.3.2). Risk management file completeness is a required element of the design history file, and auditors verify the plan was established before analysis activities began.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE]">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">IEC 62304:2006+A1</td>
+                <td class="px-4 py-3 text-[#555555]">§7 Software risk management</td>
+                <td class="px-4 py-3 text-[#555555]">Software risk management operates as a subset of the overall risk management process governed by this plan. Software safety class assignment, hazard identification for software failure modes, and risk control verification for software controls all execute within the framework defined here. The plan scope section should explicitly state whether software components are in scope.</td>
+              </tr>
+              <tr class="border-b border-[#EEEEEE] bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">EU MDR 2017/745</td>
+                <td class="px-4 py-3 text-[#555555]">Annex I §3 General Safety and Performance Requirements, Chapter I §10</td>
+                <td class="px-4 py-3 text-[#555555]">EU MDR requires a risk management system conforming to ISO 14971 as a condition of GSPR conformity (Annex I §3). The Risk Management Plan demonstrates that the system is established and followed. The clinical benefit-risk analysis required under Annex I §1 must align with the benefit-risk framework and acceptability criteria defined in §4 of this plan.</td>
+              </tr>
+              <tr class="bg-white">
+                <td class="px-4 py-3 font-medium text-[#1A1A2E]">FDA QMSR (21 CFR 820)</td>
+                <td class="px-4 py-3 text-[#555555]">§820.30 Design controls (effective February 2026)</td>
+                <td class="px-4 py-3 text-[#555555]">QMSR incorporates ISO 13485 by reference and aligns design control requirements with §7.3.x. Risk management documentation — including the Risk Management Plan — is part of the design history file under §820.30. The plan's review milestones align with QMSR design review requirements, and the post-production monitoring section satisfies §820.30(g) post-market feedback obligations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Using alongside other templates -->
+    <section class="py-16 px-4 bg-[#101321] text-white border-t border-black/10">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4" style="font-family: var(--font-family-display);">Using this alongside other templates</h2>
+        <p class="text-[#A0AEC8] mb-8 max-w-3xl">The Risk Management Plan defines the framework that the hazard log and FMEA operate within. The §4 acceptability criteria are the thresholds against which every risk score in every other template is evaluated.</p>
+        <div class="grid lg:grid-cols-4 gap-4 text-sm">
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#C4B5FD] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Hazard Log</div>
+            <p class="text-[#D4DBF7] m-0">Executes under this plan. Every hazard log row is scored using the severity and probability scales defined in §4. ALARP justifications and verification status records become part of the Risk Management File listed in §1.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#C4B5FD] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">FMEA Template</div>
+            <p class="text-[#D4DBF7] m-0">Provides bottom-up failure mode analysis that feeds the hazard log. FMEA-identified hazards get rows in the hazard register. Their risk controls are verified using the activity table structure in §5 of this plan.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#C4B5FD] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">V&amp;V Plan Template</div>
+            <p class="text-[#D4DBF7] m-0">Risk control verification activities (ISO 14971 §5.6) planned in the V&amp;V Plan execute under the verification framework defined in §5 of this plan. VER-xxx activities linked to HAZ-xxx and FMEA-xxx IDs close the loop.</p>
+          </div>
+          <div class="border border-white/10 rounded-xl p-5 bg-white/5">
+            <div class="text-[#C4B5FD] font-semibold mb-2" style="font-family: var(--font-family-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">RTM Template</div>
+            <p class="text-[#D4DBF7] m-0">Risk control measures that become design requirements are assigned REQ-xxx IDs in the RTM. The traceability chain in §8 of this plan — Hazard → Control → REQ-xxx → VER-xxx → TR-xxx — is maintained in the RTM.</p>
+          </div>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/download" class="inline-flex items-center gap-2 px-5 py-3 bg-white text-[#1A1A2E] font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download RTM Template (.xlsx)
+          </a>
+          <a href="/free-templates" class="inline-flex items-center gap-2 px-5 py-3 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-sm">
+            All free templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-16 px-4 bg-[#F7F7F8] border-t border-[#E5E5E7]">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Download the Risk Management Plan template</h2>
+        <p class="text-[#555555] text-lg mb-8 max-w-2xl mx-auto">Free ISO 14971:2019 Risk Management Plan template for medical device development. Word document (.docx), ready to fill in.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <DownloadButton href="/RTMify_Risk_Management_Plan_Template.docx" label="Download RMP Template (.docx)" size="lg" />
+          <a href="/free-templates" class="inline-flex items-center px-8 py-4 border border-[#1A1A2E] rounded-lg text-[#1A1A2E] font-semibold hover:bg-white transition-colors">
+            All free templates →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
