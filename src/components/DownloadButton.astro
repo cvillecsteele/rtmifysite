@@ -13,6 +13,17 @@ const {
   variant = 'dark',
 } = Astro.props;
 
+const fileLabels: Record<string, string> = {
+  '/RTMify_Requirements_Tracking_Template.xlsx': 'Requirements Tracking Template',
+  '/RTMify_FMEA_Template.xlsx': 'FMEA Template',
+  '/RTMify_Hazard_Log_Template.xlsx': 'Hazard Log Template',
+  '/RTMify_VV_Plan_Template.docx': 'VV Plan Template',
+  '/RTMify_SOUP_Template.xlsx': 'SOUP Template',
+  '/RTMify_Design_BOM_Template.xlsx': 'Design BOM Template',
+  '/RTMify_Risk_Management_Plan_Template.docx': 'Risk Management Plan Template',
+};
+const fileLabel = fileLabels[href] ?? href.split('/').pop() ?? 'unknown';
+
 const sizeClasses = {
   sm: 'px-4 py-2 text-sm',
   md: 'px-6 py-3 text-base',
@@ -30,6 +41,7 @@ const variantClasses = {
   download
   class={`group inline-flex items-center gap-2 font-semibold rounded-lg transition-colors ${sizeClasses[size]} ${variantClasses[variant]}`}
   data-plausible-event="Download Template"
+  data-props-file={fileLabel}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="group-hover:translate-y-0.5 transition-transform duration-150">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
