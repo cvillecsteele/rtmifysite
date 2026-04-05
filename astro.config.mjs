@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import indexnow from 'astro-indexnow';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,5 +15,8 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  integrations: [sitemap()]
+  integrations: [
+    sitemap(),
+    indexnow({ key: process.env.INDEXNOW_KEY ?? '3a6a8a6554a141abaa4277ad5762f814' }),
+  ]
 });
