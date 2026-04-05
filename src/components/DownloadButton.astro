@@ -23,6 +23,7 @@ const fileLabels: Record<string, string> = {
   '/RTMify_Risk_Management_Plan_Template.docx': 'Risk Management Plan Template',
 };
 const fileLabel = fileLabels[href] ?? href.split('/').pop() ?? 'unknown';
+const fileLabelClass = fileLabel.replaceAll(' ', '+');
 
 const sizeClasses = {
   sm: 'px-4 py-2 text-sm',
@@ -39,9 +40,7 @@ const variantClasses = {
 <a
   href={href}
   download
-  class={`group inline-flex items-center gap-2 font-semibold rounded-lg transition-colors ${sizeClasses[size]} ${variantClasses[variant]}`}
-  data-plausible-event="Download Template"
-  data-props-file={fileLabel}
+  class={`group inline-flex items-center gap-2 font-semibold rounded-lg transition-colors ${sizeClasses[size]} ${variantClasses[variant]} plausible-event-name=Download+Template plausible-event-file=${fileLabelClass}`}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="group-hover:translate-y-0.5 transition-transform duration-150">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
