@@ -20,9 +20,9 @@ const jsonLd = {
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'RTMify', item: { "@id": "https://rtmify.io/" } },
-        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: { "@id": "https://rtmify.io/free-templates" } },
-        { '@type': 'ListItem', position: 3, name: 'V&V Plan Template', item: { "@id": "https://rtmify.io/free-templates/vv-plan" } },
+        { '@type': 'ListItem', position: 1, name: 'RTMify', item: "https://rtmify.io/" },
+        { '@type': 'ListItem', position: 2, name: 'Free Templates', item: "https://rtmify.io/free-templates" },
+        { '@type': 'ListItem', position: 3, name: 'V&V Plan Template', item: "https://rtmify.io/free-templates/vv-plan" },
       ],
     },
     {
@@ -59,7 +59,7 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title="Free V&V Plan Template — Verification and Validation for Regulated Products"
+  title="Free V&V Plan Template for Regulated Products"
   description="Free Verification and Validation Plan template for ISO 13485, ISO 14971, IEC 62304, DO-178C, ISO 26262, and AS9100. Download .docx — no account required."
   canonical="https://rtmify.io/free-templates/vv-plan"
   jsonLd={jsonLd}
