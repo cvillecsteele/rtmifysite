@@ -1,6 +1,6 @@
 ---
-title: "ASPICE Traceability Template — Automotive SPICE Requirements RTM (Free Download)"
-description: "Free RTM template for Automotive SPICE. Covers SWE.1–SWE.6, SYS.2 traceability requirements. Download .xlsx, generate PDF."
+title: "ASPICE Requirements Traceability Matrix Template — Automotive SPICE (Free Download)"
+description: "Free requirements traceability matrix (RTM) template for Automotive SPICE. Covers SWE.1–SWE.6, SYS.2 traceability requirements."
 standard: aspice
 badge_color: "#004D40"
 clauses:
@@ -13,9 +13,9 @@ clauses:
 
 ## What Automotive SPICE requires for traceability
 
-Automotive SPICE (Software Process Improvement and Capability dEtermination) is the process assessment framework used across the automotive supply chain, mandated by OEMs including BMW, Mercedes-Benz, Volkswagen Group, and Stellantis. The current reference model is VDA Automotive SPICE PAM 3.1. Unlike ISO 26262 (which is a safety standard), ASPICE is a process maturity assessment that evaluates how well your development processes are defined, performed, and improved.
+Automotive SPICE (Software Process Improvement and Capability dEtermination) is the process assessment framework used across the automotive supply chain, mandated by OEMs including BMW, Mercedes-Benz, Volkswagen Group, and Stellantis. A requirements traceability matrix (RTM) is the primary evidence artifact assessed under SWE.1 and SWE.4–6, where most ASPICE traceability gaps are found. The current reference model is VDA Automotive SPICE PAM 3.1. Unlike ISO 26262 (which is a safety standard), ASPICE is a process maturity assessment that evaluates how well your development processes are defined, performed, and improved.
 
-**SYS.2: System Requirements Analysis** covers the process of eliciting, understanding, and documenting system requirements. Base Practice SYS.2.BP1 through BP9 require that requirements be uniquely identified, bidirectionally traceable to stakeholder requirements, consistent, and verifiable. The RTM provides the traceability evidence for this process.
+**SYS.2: System Requirements Analysis** covers the process of eliciting, understanding, and documenting system requirements. Base Practice SYS.2.BP1 through BP9 require that requirements be uniquely identified, bidirectionally traceable to stakeholder requirements, consistent, and verifiable. The requirements traceability matrix (RTM) provides the traceability evidence for this process.
 
 **SWE.1: Software Requirements Analysis** is the most commonly assessed ASPICE process and the one where traceability gaps are most frequently found. SWE.1.BP6 explicitly requires bidirectional traceability between software requirements and system requirements. SWE.1.BP7 requires that requirements be consistent; SWE.1.BP8 requires that requirements be agreed with the customer. A requirements document with no parent references to system requirements fails BP6 at any capability level.
 
