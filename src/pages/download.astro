@@ -1,15 +1,107 @@
 ---
+import { readFileSync } from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import DownloadButton from '../components/DownloadButton.astro';
 import ProductLadder from '../components/ProductLadder.astro';
 
+type DownloadAsset = {
+  product: string;
+  platform: string;
+  version: string;
+  path: string;
+  filename: string;
+  kind: string;
+  sha256: string;
+  url: string;
+};
+
+type DownloadManifest = {
+  version: string | null;
+  tag: string | null;
+  releaseUrl: string | null;
+  repo: string | null;
+  assets: DownloadAsset[];
+};
+
+function loadDownloadManifest(): DownloadManifest {
+  try {
+    const path = new URL('../../public/downloads/latest.json', import.meta.url);
+    return JSON.parse(readFileSync(path, 'utf-8'));
+  } catch {
+    return {
+      version: null,
+      tag: null,
+      releaseUrl: null,
+      repo: null,
+      assets: [],
+    };
+  }
+}
+
+function platformLabel(platform: string): string {
+  switch (platform) {
+    case 'macos':
+      return 'macOS';
+    case 'windows':
+      return 'Windows';
+    case 'linux':
+      return 'Linux';
+    default:
+      return platform;
+  }
+}
+
+function productLabel(product: string): string {
+  switch (product) {
+    case 'trace':
+      return 'RTMify Trace';
+    case 'live':
+      return 'RTMify Live';
+    default:
+      return product;
+  }
+}
+
+function kindLabel(kind: string): string {
+  switch (kind) {
+    case 'pkg':
+      return '.pkg installer';
+    case 'exe':
+      return '.exe download';
+    case 'tar.gz':
+      return '.tar.gz archive';
+    default:
+      return kind;
+  }
+}
+
+const downloadManifest = loadDownloadManifest();
+const installerKindOrder = { pkg: 0, exe: 1, 'tar.gz': 2 };
+const platformOrder = { macos: 0, windows: 1, linux: 2, any: 3 };
+
+const installerAssets = downloadManifest.assets
+  .filter((asset) => ['pkg', 'exe', 'tar.gz'].includes(asset.kind) && ['trace', 'live'].includes(asset.product))
+  .sort((left, right) => {
+    const leftPlatform = platformOrder[left.platform as keyof typeof platformOrder] ?? 9;
+    const rightPlatform = platformOrder[right.platform as keyof typeof platformOrder] ?? 9;
+    if (leftPlatform !== rightPlatform) return leftPlatform - rightPlatform;
+    const leftKind = installerKindOrder[left.kind as keyof typeof installerKindOrder] ?? 9;
+    const rightKind = installerKindOrder[right.kind as keyof typeof installerKindOrder] ?? 9;
+    if (leftKind !== rightKind) return leftKind - rightKind;
+    return left.filename.localeCompare(right.filename);
+  });
+
+const utilityAssets = downloadManifest.assets.filter((asset) =>
+  ['checksums.txt', 'package-manifest.json', 'manifest.json'].includes(asset.filename)
+);
+
 const softwareSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'RTMify Requirements Tracking Template',
-  description: 'Free requirements traceability, Design BOM, and SOUP templates for regulated industries.',
+  name: 'RTMify Downloads',
+  description: 'RTMify desktop installers and free requirements traceability templates for regulated industries.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Windows, macOS, Linux',
   offers: {
@@ -22,8 +114,8 @@ const softwareSchema = {
 ---
 
 <BaseLayout
-  title="Free RTMify Downloads — Requirements, Design BOM, and SOUP Templates"
-  description="Download the free RTMify Requirements Tracking Template, Design BOM Template, and SOUP Template (.xlsx)."
+  title="Free Requirements Traceability Matrix Excel Template | RTMify"
+  description="Four-tab RTM spreadsheet for AS9100, ISO 13485, DO-178C, IEC 62304, and ISO 26262. Works in Excel and Google Sheets. No account, no email required."
   jsonLd={softwareSchema}
 >
   <Nav />
@@ -34,6 +126,69 @@ const softwareSchema = {
       <div class="max-w-3xl mx-auto">
         <h1 class="text-3xl md:text-4xl font-bold mb-3" style="font-family: var(--font-family-display);">Free requirements traceability templates</h1>
         <p class="text-gray-300 text-lg">Free template. Nothing requires an account or an email address.</p>
+      </div>
+    </section>
+
+    <section class="py-16 px-4 bg-[#F8F9FB] border-b border-[#E5E7EB]">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 bg-[#1A1A2E] rounded-lg flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-2xl font-bold text-[#1A1A2E] mb-2">Desktop installers</h2>
+            {downloadManifest.version ? (
+              <p class="text-[#555555]">
+                Latest published release: <span class="font-semibold text-[#1A1A2E]">{downloadManifest.version}</span>
+                {downloadManifest.releaseUrl && (
+                  <>
+                    {' '}
+                    <a href={downloadManifest.releaseUrl} class="font-semibold text-[#1A1A2E] underline underline-offset-2 hover:opacity-70 transition-opacity">view release notes</a>
+                  </>
+                )}
+              </p>
+            ) : (
+              <p class="text-[#555555]">Installer links appear here after the first packaged GitHub Release is published.</p>
+            )}
+          </div>
+        </div>
+
+        {installerAssets.length > 0 ? (
+          <>
+            <div class="space-y-4 mb-6">
+              {installerAssets.map((asset) => (
+                <div class="bg-white border border-[#DDDDDD] rounded-xl p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div class="flex-1">
+                    <p class="text-xs uppercase tracking-[0.18em] text-[#1A1A2E] font-semibold mb-2">{platformLabel(asset.platform)}</p>
+                    <h3 class="text-lg font-bold text-[#1A1A2E] mb-1">{productLabel(asset.product)}</h3>
+                    <p class="text-sm text-[#555555] mb-2">{kindLabel(asset.kind)} &middot; {asset.filename}</p>
+                    <p class="text-xs text-[#777777] font-mono break-all">SHA-256: {asset.sha256}</p>
+                  </div>
+                  <a
+                    href={asset.url}
+                    class="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#1A1A2E] text-white font-semibold hover:bg-[#2A2A4E] transition-colors"
+                  >
+                    Download
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            {utilityAssets.length > 0 && (
+              <div class="flex flex-wrap gap-4 text-sm">
+                {utilityAssets.map((asset) => (
+                  <a href={asset.url} class="text-[#1A1A2E] font-semibold hover:underline">
+                    {asset.filename}
+                  </a>
+                ))}
+              </div>
+            )}
+          </>
+        ) : null}
       </div>
     </section>
 
