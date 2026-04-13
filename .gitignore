@@ -60,3 +60,6 @@ out/
 
 # Cloudflare Pages
 .wrangler/
+
+# IndexNow build cache
+.astro-indexnow-cache.json
