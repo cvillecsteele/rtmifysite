@@ -1,6 +1,6 @@
 ---
 title: "ASPICE Requirements Traceability Matrix Template — Automotive SPICE (Free Download)"
-description: "Free requirements traceability matrix (RTM) template for Automotive SPICE. Covers SWE.1–SWE.6, SYS.2 traceability requirements."
+description: "Achieve ASPICE Level 2 traceability with a ready-made RTM. Free template covering SYS.2 through SWE.6 with bidirectional links and gap detection."
 standard: aspice
 badge_color: "#004D40"
 clauses:
