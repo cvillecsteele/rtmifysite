@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import indexnow from 'astro-indexnow';
+import trailingSlashRedirect from './src/integrations/trailing-slash-redirect.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,5 +19,6 @@ export default defineConfig({
   integrations: [
     sitemap(),
     indexnow({ key: process.env.INDEXNOW_KEY ?? '3a6a8a6554a141abaa4277ad5762f814' }),
+    trailingSlashRedirect(),
   ]
 });
