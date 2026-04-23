@@ -6,9 +6,9 @@
       "path": "checksums.txt",
       "platform": "any",
       "product": "metadata",
-      "sha256": "069ae3fe41b50cf67be41728009585923e932b761d106c41fe82cc8270fdd52f",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/checksums.txt",
-      "version": "20260417-a"
+      "sha256": "92622dfd7a9002da0463b4a4943558226a04fb68a5849f62be90eb777fd3f8c7",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/checksums.txt",
+      "version": "20260422-b"
     },
     {
       "filename": "manifest.json",
@@ -16,9 +16,9 @@
       "path": "manifest.json",
       "platform": "any",
       "product": "metadata",
-      "sha256": "dad41bfd12a151370812944d66ec9b5b56dfe4e3348cca6028acc91f62cc05d6",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/manifest.json",
-      "version": "20260417-a"
+      "sha256": "55b002c57c9eecaa7e19d602163d79267dc7610ea3747e8766bd12fad336bdb5",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/manifest.json",
+      "version": "20260422-b"
     },
     {
       "filename": "package-manifest.json",
@@ -26,63 +26,63 @@
       "path": "package-manifest.json",
       "platform": "any",
       "product": "metadata",
-      "sha256": "eecb4d46f800838e2ffd587bdc16f8cba9120f1325c0aa4941dd7b8e1a260be7",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/package-manifest.json",
-      "version": "20260417-a"
+      "sha256": "31733c2708ad04142cbd9732a41c18346f842be8fbb18a2c739d7d5e0ed8646e",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/package-manifest.json",
+      "version": "20260422-b"
     },
     {
-      "filename": "RTMify_Trace_IQOQ_Evidence_v20260417-a.pdf",
+      "filename": "RTMify_Trace_IQOQ_Evidence_v20260422-b.pdf",
       "kind": "pdf",
-      "path": "validation/package/RTMify_Trace_IQOQ_Evidence_v20260417-a.pdf",
+      "path": "validation/package/RTMify_Trace_IQOQ_Evidence_v20260422-b.pdf",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "d7126669b7055418dece34c5b34b16ff6d1ef0236ebc5ffe43bad86c825eee3e",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/RTMify_Trace_IQOQ_Evidence_v20260417-a.pdf",
-      "version": "20260417-a"
+      "sha256": "1f2588c02aa5e0f259ae8139c1a6f9feda0e63ed4cffce4f1284e1b78315bb41",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/RTMify_Trace_IQOQ_Evidence_v20260422-b.pdf",
+      "version": "20260422-b"
     },
     {
-      "filename": "RTMify_Trace_IQOQ_Protocol_v20260417-a.pdf",
+      "filename": "RTMify_Trace_IQOQ_Protocol_v20260422-b.pdf",
       "kind": "pdf",
-      "path": "validation/package/RTMify_Trace_IQOQ_Protocol_v20260417-a.pdf",
+      "path": "validation/package/RTMify_Trace_IQOQ_Protocol_v20260422-b.pdf",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "04d11f54bd9a5dd15086717202bf3295b08f203d29dc45950f15badb9632c66d",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/RTMify_Trace_IQOQ_Protocol_v20260417-a.pdf",
-      "version": "20260417-a"
+      "sha256": "d35f60e1321c59e99d24e960e532a7ce43dc36fbe5936958c60d9801e31ed33e",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/RTMify_Trace_IQOQ_Protocol_v20260422-b.pdf",
+      "version": "20260422-b"
     },
     {
-      "filename": "RTMify_Trace_Validation_Package_v20260417-a.zip",
+      "filename": "RTMify_Trace_Validation_Package_v20260422-b.zip",
       "kind": "zip",
-      "path": "validation/RTMify_Trace_Validation_Package_v20260417-a.zip",
+      "path": "validation/RTMify_Trace_Validation_Package_v20260422-b.zip",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "f03dbee6b8c0a37d1ada5ea97c6fb5901f37f630c663c651d548af4d5f7799aa",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/RTMify_Trace_Validation_Package_v20260417-a.zip",
-      "version": "20260417-a"
+      "sha256": "319511f010bcf1d4f1bc0f69d601f24f83a315b610a148a2a14a1bb4cf7af5a9",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/RTMify_Trace_Validation_Package_v20260422-b.zip",
+      "version": "20260422-b"
     },
     {
-      "filename": "RTMify_Live_Installer_20260417-a.exe",
+      "filename": "RTMify_Live_Installer_20260422-b.exe",
       "kind": "exe",
-      "path": "packages/windows/RTMify_Live_Installer_20260417-a.exe",
+      "path": "packages/windows/RTMify_Live_Installer_20260422-b.exe",
       "platform": "windows",
       "product": "live",
-      "sha256": "8bd40abd7ee96db4e284cedc7ec6a256a816dc92543b4cf7d07b4917a5c65740",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/RTMify_Live_Installer_20260417-a.exe",
-      "version": "20260417-a"
+      "sha256": "1e99534bd39588b09ac1cd252c2f2af3f2ac8c90b7392d6ed41bbbeff61810db",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/RTMify_Live_Installer_20260422-b.exe",
+      "version": "20260422-b"
     },
     {
-      "filename": "RTMify_Trace_Installer_20260417-a.exe",
+      "filename": "RTMify_Trace_Installer_20260422-b.exe",
       "kind": "exe",
-      "path": "packages/windows/RTMify_Trace_Installer_20260417-a.exe",
+      "path": "packages/windows/RTMify_Trace_Installer_20260422-b.exe",
       "platform": "windows",
       "product": "trace",
-      "sha256": "f9e00c884827dc7abea4d8425b74dff4da34afff54f00ebeca588bee231e14f2",
-      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260417-a/RTMify_Trace_Installer_20260417-a.exe",
-      "version": "20260417-a"
+      "sha256": "1f0c5b601c52776eee21514f3041edf1c627b8661aca1bb7cc6b2a7f1ba8dff6",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260422-b/RTMify_Trace_Installer_20260422-b.exe",
+      "version": "20260422-b"
     }
   ],
-  "releaseUrl": "https://github.com/cvillecsteele/rtmify/releases/tag/v20260417-a",
+  "releaseUrl": "https://github.com/cvillecsteele/rtmify/releases/tag/v20260422-b",
   "repo": "cvillecsteele/rtmify",
-  "tag": "v20260417-a",
-  "version": "20260417-a"
+  "tag": "v20260422-b",
+  "version": "20260422-b"
 }
