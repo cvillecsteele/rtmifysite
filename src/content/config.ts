@@ -6,7 +6,7 @@ const standards = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().max(155),
-    standard: z.enum(['as9100', 'iso-13485', 'do-178c', 'iec-62304', 'iso-26262', 'aspice']),
+    standard: z.enum(['as9100', 'iso-13485', 'do-178c', 'iec-62304', 'iso-26262', 'aspice', 'iso-14971']),
     badge_color: z.string(),
     clauses: z.array(
       z.object({
@@ -14,6 +14,12 @@ const standards = defineCollection({
         label: z.string(),
       })
     ),
+    faq: z.array(
+      z.object({
+        q: z.string(),
+        a: z.string(),
+      })
+    ).optional(),
   }),
 });
 

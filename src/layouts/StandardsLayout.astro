@@ -9,15 +9,21 @@ interface Clause {
   label: string;
 }
 
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
 interface Props {
   title: string;
   description: string;
   standard: string;
   badge_color: string;
   clauses: Clause[];
+  faq?: FaqItem[];
 }
 
-const { title, description, standard, badge_color, clauses } = Astro.props;
+const { title, description, standard, badge_color, clauses, faq } = Astro.props;
 
 const standardLabels: Record<string, string> = {
   'as9100': 'AS9100',
@@ -26,21 +32,22 @@ const standardLabels: Record<string, string> = {
   'iec-62304': 'IEC 62304',
   'iso-26262': 'ISO 26262',
   'aspice': 'Automotive SPICE',
+  'iso-14971': 'ISO 14971',
 };
 
 const relatedStandards = [
-  { slug: 'as9100', label: 'AS9100', color: '#1565C0' },
   { slug: 'iso-13485', label: 'ISO 13485', color: '#2E7D32' },
-  { slug: 'do-178c', label: 'DO-178C', color: '#6A1B9A' },
+  { slug: 'iso-14971', label: 'ISO 14971', color: '#B71C1C' },
   { slug: 'iec-62304', label: 'IEC 62304', color: '#BF360C' },
   { slug: 'iso-26262', label: 'ISO 26262', color: '#E65100' },
+  { slug: 'do-178c', label: 'DO-178C', color: '#6A1B9A' },
+  { slug: 'as9100', label: 'AS9100', color: '#1565C0' },
   { slug: 'aspice', label: 'ASPICE', color: '#004D40' },
 ].filter(s => s.slug !== standard).slice(0, 3);
 
 const standardLabel = standardLabels[standard] ?? standard;
 
-const articleSchema = {
-  '@context': 'https://schema.org',
+const articleNode = {
   '@type': 'Article',
   headline: title,
   description: description,
@@ -57,6 +64,21 @@ const articleSchema = {
   datePublished: '2024-11-01',
   url: `https://rtmify.io/standards/${standard}`,
 };
+
+const faqNode = faq && faq.length > 0
+  ? {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    }
+  : null;
+
+const articleSchema = faqNode
+  ? { '@context': 'https://schema.org', '@graph': [articleNode, faqNode] }
+  : { '@context': 'https://schema.org', ...articleNode };
 ---
 
 <BaseLayout
@@ -147,6 +169,20 @@ const articleSchema = {
           </div>
         </aside>
       </div>
+
+      {faq && faq.length > 0 && (
+        <section class="mt-16 border-t border-[#DDDDDD] pt-12">
+          <h2 class="text-2xl font-bold text-[#1A1A2E] mb-6" style="font-family: var(--font-family-display);">Frequently Asked Questions</h2>
+          <div class="space-y-3 max-w-3xl">
+            {faq.map((item) => (
+              <details class="border border-[#DDDDDD] rounded p-4 group bg-white">
+                <summary class="font-semibold text-[#1A1A2E] cursor-pointer group-open:text-[#1A1A2E]">{item.q}</summary>
+                <p class="text-[#555555] mt-4 pt-4 border-t border-[#DDDDDD] leading-relaxed" set:html={item.a}></p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
       <!-- Footer CTA -->
       <div class="mt-16 border-t border-[#DDDDDD] pt-12 text-center">

@@ -41,7 +41,7 @@ const jsonLd = {
           name: 'What must ISO 14971:2019 risk acceptability criteria include?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'ISO 14971:2019 Clause 4.4(d) requires risk acceptability criteria to include: a severity scale describing the potential harm, a probability of occurrence scale, the risk evaluation matrix mapping severity and probability to Acceptable / ALARP / Unacceptable zones, required actions for each zone, and criteria for situations where probability of harm cannot be estimated (Clause 4.4(d) specifically requires this). The 2019 revision also added Clause 4.4(g), requiring the method for evaluating overall residual risk to be defined in the plan — this is distinct from evaluating individual risks and considers the cumulative effect of all residual risks against the clinical benefit of the device.',
+            text: 'ISO 14971:2019 Clause 4.4(d) requires risk acceptability criteria to include: a severity scale describing the potential harm, a probability of occurrence scale, the risk evaluation matrix mapping severity and probability to Acceptable / ALARP / Unacceptable zones, and required actions for each zone. Clause 4.4(f) separately requires criteria for situations where probability of harm cannot be estimated. Clause 4.4(g) requires the method for evaluating overall residual risk to be defined in the plan — this is distinct from evaluating individual risks and considers the cumulative effect of all residual risks against the clinical benefit of the device.',
           },
         },
         {
@@ -57,7 +57,7 @@ const jsonLd = {
           name: 'Is a benefit-risk analysis required by ISO 14971?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. ISO 14971:2019 Clause 7.4 requires a benefit-risk analysis when a risk classified as Unacceptable cannot be further reduced by risk control measures. The analysis compares the medical benefits of the intended use against the residual risk — if the benefit outweighs the risk, the device may still be released with documented justification. Benefit-risk justification is also required when accepting ALARP-classified residual risks: the manufacturer must demonstrate that further risk reduction is not practicable and that the benefit-risk ratio is favorable. The Risk Management Report documents the outcome of both analyses.',
+            text: 'Yes. ISO 14971:2019 Clause 7.5 requires a benefit-risk analysis when a risk classified as Unacceptable cannot be further reduced by risk control measures. The analysis compares the medical benefits of the intended use against the residual risk — if the benefit outweighs the risk, the device may still be released with documented justification. Benefit-risk justification is also required when accepting ALARP-classified residual risks: the manufacturer must demonstrate that further risk reduction is not practicable and that the benefit-risk ratio is favorable. The Risk Management Report documents the outcome of both analyses.',
           },
         },
       ],
@@ -172,7 +172,7 @@ const jsonLd = {
               </tr>
               <tr class="border-b border-[#EEEEEE] bg-white">
                 <td class="px-4 py-3 font-medium text-[#1A1A2E] whitespace-nowrap" style="font-family: var(--font-family-mono); font-size: 0.8rem;">§4 Risk Acceptability Criteria</td>
-                <td class="px-4 py-3 text-[#555555]">5-level severity scale, 5-level probability scale, 5×5 risk evaluation matrix, Acceptable / ALARP / Unacceptable thresholds with required actions per zone, overall residual risk evaluation method (Clause 4.4(g)), and criteria when probability cannot be estimated (required by Clause 4.4(d)).</td>
+                <td class="px-4 py-3 text-[#555555]">5-level severity scale, 5-level probability scale, 5×5 risk evaluation matrix, Acceptable / ALARP / Unacceptable thresholds with required actions per zone, overall residual risk evaluation method (Clause 4.4(g)), and criteria when probability cannot be estimated (required by Clause 4.4(f)).</td>
                 <td class="px-4 py-3 text-[#555555]">Before any risk analysis begins — must be approved first. Do not revise to fit existing scoring.</td>
               </tr>
               <tr class="border-b border-[#EEEEEE]">
@@ -215,7 +215,7 @@ const jsonLd = {
     <section class="py-16 px-4 bg-white border-t border-[#E5E5E7]">
       <div class="max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Risk acceptability criteria — what §4 defines</h2>
-        <p class="text-[#555555] mb-8 max-w-3xl">The risk acceptability section is the most consequential part of the plan. Everything in the hazard log and FMEA is scored against these criteria. The 2019 revision of ISO 14971 added a new requirement: the method for evaluating overall residual risk (Clause 4.4(g)) must also be defined here — considering the cumulative effect of all residual risks against the clinical benefit of the device.</p>
+        <p class="text-[#555555] mb-8 max-w-3xl">The risk acceptability section is the most consequential part of the plan. Everything in the hazard log and FMEA is scored against these criteria. ISO 14971:2019 also requires the method for evaluating overall residual risk (Clause 4.4(g)) to be defined here — considering the cumulative effect of all residual risks against the clinical benefit of the device.</p>
         <div class="grid md:grid-cols-3 gap-4 mb-6">
           <div class="border border-[#DDDDDD] rounded-xl p-5">
             <div class="inline-flex items-center gap-2 mb-3">
@@ -236,12 +236,12 @@ const jsonLd = {
               <span class="text-xs font-bold text-white bg-[#C62828] px-2.5 py-1 rounded-full">Unacceptable</span>
               <span class="text-sm text-[#555555]">Score 15–25</span>
             </div>
-            <p class="text-sm text-[#555555] m-0">Risk shall be reduced. If risk cannot be reduced below this threshold, a documented benefit-risk analysis per Clause 7.4 is required before the device can be released. Risk reduction measures must be implemented before this analysis can justify acceptance.</p>
+            <p class="text-sm text-[#555555] m-0">Risk shall be reduced. If risk cannot be reduced below this threshold, a documented benefit-risk analysis per Clause 7.5 is required before the device can be released. Risk reduction measures must be implemented before this analysis can justify acceptance.</p>
           </div>
         </div>
         <div class="bg-[#F7F7F8] border border-[#E5E5E7] rounded-xl p-5">
           <p class="text-sm font-semibold text-[#1A1A2E] mb-1">When probability cannot be estimated</p>
-          <p class="text-sm text-[#555555] m-0">For novel technologies, rare failure modes, or limited clinical history, probability of harm cannot be reliably quantified. Clause 4.4(d) requires the plan to define how risk acceptability is determined in these cases. The template specifies that severity alone governs: Severity 4 or 5 is treated as Unacceptable unless the risk is reduced by design or supported by a benefit-risk analysis per Clause 7.4.</p>
+          <p class="text-sm text-[#555555] m-0">For novel technologies, rare failure modes, or limited clinical history, probability of harm cannot be reliably quantified. Clause 4.4(f) requires the plan to define how risk acceptability is determined in these cases. The template specifies that severity alone governs: Severity 4 or 5 is treated as Unacceptable unless the risk is reduced by design or supported by a benefit-risk analysis per Clause 7.5.</p>
         </div>
       </div>
     </section>
@@ -264,7 +264,7 @@ const jsonLd = {
               <tr class="border-b border-[#EEEEEE]">
                 <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 14971:2019</td>
                 <td class="px-4 py-3 text-[#555555]">Clause 4.4 (plan requirements), Clause 9 (review), Clause 10 (post-production)</td>
-                <td class="px-4 py-3 text-[#555555]">The primary standard. The plan addresses all seven items in Clause 4.4: scope of activities, responsibilities, acceptability criteria, risk control verification requirements, review milestones, post-production monitoring, and the overall residual risk evaluation method. The 2019 edition added Clause 4.4(g) (overall residual risk) and significantly expanded Clause 10 post-production obligations.</td>
+                <td class="px-4 py-3 text-[#555555]">The primary standard. The plan addresses all items in Clause 4.4: scope of activities, responsibilities, personnel competence (4.4(e)), acceptability criteria including criteria when probability cannot be estimated (4.4(f)), the overall residual risk evaluation method (4.4(g)), risk control verification requirements, review milestones, and the post-production information collection method (4.4(i)). Clause 10 post-production obligations are significantly expanded over the 2007 edition.</td>
               </tr>
               <tr class="border-b border-[#EEEEEE] bg-white">
                 <td class="px-4 py-3 font-medium text-[#1A1A2E]">ISO 13485:2016</td>

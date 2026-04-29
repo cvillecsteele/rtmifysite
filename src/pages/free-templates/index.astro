@@ -43,7 +43,7 @@ const jsonLd = {
           name: 'What templates are required for ISO 14971 medical device risk management?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'ISO 14971 requires maintaining a risk management file throughout the product lifecycle. The two core artifacts are a hazard log (tracking all identified hazards, risk controls, verification status, and residual risk acceptability) and an FMEA (bottom-up failure mode analysis for specific components and functions). Both are available as free downloads here with no account required.',
+            text: 'ISO 14971:2019 requires maintaining a risk management file throughout the product lifecycle. The required artifacts are a Risk Management Plan (Clause 4.4), hazard analysis records — typically a Hazard Log (Clauses 5–7), and a Risk Management Report (Clause 9). FMEA is a recognized analysis technique per ISO/TR 24971 whose findings feed the Hazard Log, but FMEA Detection and RPN are not used to determine Hazard Log acceptability under ISO 14971. All four templates are available as free downloads here with no account required. See https://rtmify.io/standards/iso-14971 for detailed clause-by-clause guidance.',
           },
         },
         {
@@ -174,7 +174,9 @@ const templates = [
           ))}
         </div>
 
-        <p class="text-sm text-[#555555] mt-8">More in development: Design History File, Test Case Specification, Configuration Item List, Change Impact Analysis, Requirements Review Checklist.</p>
+        <p class="text-sm text-[#555555] mt-8">Building an ISO 14971 risk management file? The Risk Management Plan, Hazard Log, and FMEA templates above all map to specific clauses — see <a href="/standards/iso-14971" class="underline underline-offset-4 hover:text-[#1A1A2E]">our ISO 14971:2019 clause-by-clause guidance</a> for how they fit together.</p>
+
+        <p class="text-sm text-[#555555] mt-4">More in development: Design History File, Test Case Specification, Configuration Item List, Change Impact Analysis, Requirements Review Checklist.</p>
 
       </div>
     </section>

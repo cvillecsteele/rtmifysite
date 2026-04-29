@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, standard, badge_color, clauses } = entry.data;
+const { title, description, standard, badge_color, clauses, faq } = entry.data;
 ---
 
 <StandardsLayout
@@ -21,6 +21,7 @@ const { title, description, standard, badge_color, clauses } = entry.data;
   standard={standard}
   badge_color={badge_color}
   clauses={clauses}
+  faq={faq}
 >
   <Content />
 </StandardsLayout>
