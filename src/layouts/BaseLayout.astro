@@ -22,7 +22,10 @@ const {
 } = Astro.props;
 
 const siteUrl = 'https://rtmify.io';
-const path = Astro.url.pathname.replace(/\/+$/, '');
+const path = Astro.url.pathname
+  .replace(/\/index\.html$/, '/')
+  .replace(/\.html$/, '')
+  .replace(/\/+$/, '');
 const canonicalUrl = canonical ?? `${siteUrl}${path}`;
 ---
 
