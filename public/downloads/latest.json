@@ -6,7 +6,7 @@
       "path": "checksums.txt",
       "platform": "any",
       "product": "metadata",
-      "sha256": "ae433b0f07383a2b3f53482630b176784c852114605469941c5824680e66f02b",
+      "sha256": "802a126a4d27f059df8909289e549be6513b4087d734be47d3d22680bf8dac8f",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/checksums.txt",
       "version": "20260508-a"
     },
@@ -16,7 +16,7 @@
       "path": "manifest.json",
       "platform": "any",
       "product": "metadata",
-      "sha256": "a538f860b3ac5e39c9deaa0a915f7acee2e5851cd09327a940df778cb9488eda",
+      "sha256": "83b04612c6dc7cc585d1e7a695797632a952f7eaf35a82febf166e7a7910c5f4",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/manifest.json",
       "version": "20260508-a"
     },
@@ -26,7 +26,7 @@
       "path": "package-manifest.json",
       "platform": "any",
       "product": "metadata",
-      "sha256": "a704f78fa6710575ec395da4910c267e9013ea155ccf6a957af7d5602bd05e1c",
+      "sha256": "37c1135f2d98937bce0a67554ce737f009d03989719aa1821cdeb200d8565d2f",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/package-manifest.json",
       "version": "20260508-a"
     },
@@ -36,7 +36,7 @@
       "path": "validation/package/RTMify_Trace_IQOQ_Evidence_v20260508-a.pdf",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "0d88c6c5e29d5f2a09c71a1e7f8f9c92af72bc39a1ef8e8df32291787d3d037a",
+      "sha256": "ef647464b2e7fe6ad5a680b081287292df214d905f0c00f73b2461e5c6e2662e",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Trace_IQOQ_Evidence_v20260508-a.pdf",
       "version": "20260508-a"
     },
@@ -46,7 +46,7 @@
       "path": "validation/package/RTMify_Trace_IQOQ_Protocol_v20260508-a.pdf",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "5f9a88e8996c613a2c624a1e567c70b3fb62ce02bb441bdb655fbd2d18490f01",
+      "sha256": "61778bbd94460ca730b773104befc193969f6a7ed5806b25a355182acfeb15c7",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Trace_IQOQ_Protocol_v20260508-a.pdf",
       "version": "20260508-a"
     },
@@ -56,8 +56,18 @@
       "path": "validation/RTMify_Trace_Validation_Package_v20260508-a.zip",
       "platform": "any",
       "product": "trace-validation",
-      "sha256": "b955bd202945ee0909686f074f7476b9f5cb3bd6520d96f5fee5f85ba8035b8f",
+      "sha256": "a71411369959ffd7abac9060041684f7e7bf05b428c52e458d7171b182fabe64",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Trace_Validation_Package_v20260508-a.zip",
+      "version": "20260508-a"
+    },
+    {
+      "filename": "rtmify-trace-linux-x64-20260508-a.tar.gz",
+      "kind": "tar.gz",
+      "path": "packages/linux/rtmify-trace-linux-x64-20260508-a.tar.gz",
+      "platform": "linux",
+      "product": "trace",
+      "sha256": "fcd0e5d651e457524eede12d75247bcff7563922af7b7c693c9fde642200941e",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/rtmify-trace-linux-x64-20260508-a.tar.gz",
       "version": "20260508-a"
     },
     {
@@ -66,7 +76,7 @@
       "path": "packages/macos/RTMify_Live_20260508-a.dmg",
       "platform": "macos",
       "product": "live",
-      "sha256": "4f1144fd007a3c0b9eb0d0cc0158766c59960780ea13a669450c07b317f154af",
+      "sha256": "f192f1a11efb4d6ee47780cfa8d11b078e7626b1cdb52b17a7cf73f4a921391b",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Live_20260508-a.dmg",
       "version": "20260508-a"
     },
@@ -76,8 +86,28 @@
       "path": "packages/macos/RTMify_Trace_20260508-a.dmg",
       "platform": "macos",
       "product": "trace",
-      "sha256": "ba5708512211dc3abd412e0a434b5bf98a7148de8948cecb4b505bf363ed3105",
+      "sha256": "0658a04e8b8426a857800d47861885149c2e97a92709bb198c2f35e98f780968",
       "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Trace_20260508-a.dmg",
+      "version": "20260508-a"
+    },
+    {
+      "filename": "RTMify_Live_Installer_20260508-a.exe",
+      "kind": "exe",
+      "path": "packages/windows/RTMify_Live_Installer_20260508-a.exe",
+      "platform": "windows",
+      "product": "live",
+      "sha256": "cf7930c2c8b35642e48d054e70695dfbfa9763a535775eefbe2ee7b41159a6c3",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Live_Installer_20260508-a.exe",
+      "version": "20260508-a"
+    },
+    {
+      "filename": "RTMify_Trace_Installer_20260508-a.exe",
+      "kind": "exe",
+      "path": "packages/windows/RTMify_Trace_Installer_20260508-a.exe",
+      "platform": "windows",
+      "product": "trace",
+      "sha256": "8fa5ed60b96efffcc2ab5773a44a025607cc1b01ab5cee41ef42a24775477e8f",
+      "url": "https://github.com/cvillecsteele/rtmify/releases/download/v20260508-a/RTMify_Trace_Installer_20260508-a.exe",
       "version": "20260508-a"
     }
   ],
