@@ -42,7 +42,7 @@ const jsonLd = {
       Setup &amp; First Sync
     </h1>
     <p class="text-lg text-[#555555] max-w-2xl leading-relaxed">
-      Getting Live running involves three things: installing the app, installing a signed license file, and connecting your workbook through the onboarding flow. First sync happens automatically once the connection is established.
+      There are currently two startup paths. The native shell apps on macOS and Windows manage the local runtime for you and can launch unlicensed in preview mode. The raw <code style="font-family: var(--font-family-mono); font-size: 0.9em; background: #F5F5F5; padding: 0 0.25rem; border-radius: 0.2rem;">rtmify-live</code> runtime can also be launched directly, and that path also runs in preview mode without a license. First sync happens automatically once a workbook connection is established.
     </p>
   </div>
 
@@ -52,16 +52,16 @@ const jsonLd = {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="p-5 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">macOS</h3>
-        <p class="text-[#555555] text-sm m-0">Download the macOS app from <a href="/download" class="text-[#2E7D32] underline hover:no-underline">the downloads page</a>. It installs as a menu-bar application. On launch it checks your license and manages the <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live</code> runtime process.</p>
+        <p class="text-[#555555] text-sm m-0">Download the macOS app from <a href="/download" class="text-[#2E7D32] underline hover:no-underline">the downloads page</a>. It installs as a menu-bar application, manages the <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live</code> runtime process, and allows you to start in preview mode when no license is installed.</p>
       </div>
       <div class="p-5 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">Windows</h3>
-        <p class="text-[#555555] text-sm m-0">Download the Windows bundle. It is portable — no installer. Place <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">RTMify Live.exe</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live.exe</code> in the same directory and run the tray app.</p>
+        <p class="text-[#555555] text-sm m-0">Download the Windows bundle. It is portable — no installer. Place <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">RTMify Live.exe</code> and <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live.exe</code> in the same directory and run the tray app. When no valid license is installed, the tray app still starts and labels the session as preview mode.</p>
       </div>
     </div>
     <div class="mt-4 p-5 border border-[#DDDDDD] rounded-lg">
-      <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">CLI / headless</h3>
-      <p class="text-[#555555] text-sm mb-3">The runtime can also be run directly without a native shell. This is useful for server-side or CI contexts.</p>
+      <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">Linux / CLI / headless</h3>
+      <p class="text-[#555555] text-sm mb-3">Linux is currently a direct-runtime distribution only. There is no Linux tray or menu-bar shell in this release. The runtime can also be run directly without a native shell on any platform, which is useful for server-side or CI contexts and operates in preview mode without a license file.</p>
       <pre class="bg-[#F5F5F5] border border-[#DDDDDD] rounded p-3 text-sm overflow-x-auto" style="font-family: var(--font-family-mono);">rtmify-live [--port N] [--db path] [--no-browser] [--repo path] [--profile name]</pre>
       <p class="text-[#555555] text-xs mt-2 m-0">Default port: 8000 (scans up to 8010 for a free port). Default DB: <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">graph.db</code> in the working directory. Omit <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--no-browser</code> and Live opens the dashboard automatically.</p>
     </div>
@@ -107,18 +107,18 @@ const jsonLd = {
   <!-- License install flow -->
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">License install flow</h2>
-    <p class="text-[#555555] text-sm mb-4">Live no longer uses activation keys. It looks for a signed <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license.json</code> file and, if one is not installed, starts in a gated state.</p>
+    <p class="text-[#555555] text-sm mb-4">Live no longer uses activation keys. It looks for a signed <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license.json</code> file. macOS, Windows, and the raw <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">rtmify-live</code> runtime can all start without that file in preview mode, where the workbook remains readable but licensed features stay disabled.</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">From the app</h3>
-        <p class="text-[#555555] text-sm m-0">Use <strong>Select License File</strong> in the license gate. The native shell or dashboard imports the signed file and unlocks Live immediately if it is valid for the Live product.</p>
+        <p class="text-[#555555] text-sm m-0">Use <strong>Install License File</strong> in the macOS or Windows shell. If the shell is already running Live in preview mode, it restarts the managed runtime and returns in licensed mode after a valid import.</p>
       </div>
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-2 uppercase tracking-wide">Manual placement</h3>
         <p class="text-[#555555] text-sm m-0">Place the signed file at <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">~/.rtmify/license.json</code>, or point a single run at a specific file with <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">--license &lt;path&gt;</code>.</p>
       </div>
     </div>
-    <p class="text-[#555555] text-sm mb-0">If the file is expired, tampered, or issued for Trace instead of Live, the gate stays in place and the app shows the reason. Use <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license clear</code> or the in-app clear action to remove an installed file.</p>
+    <p class="text-[#555555] text-sm mb-0">If the file is expired, tampered, or issued for Trace instead of Live, the import is rejected and the shell shows the reason without unlocking the app. Preview mode currently locks MCP, reports, repository scanning, code traceability, and background sync. Use <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">license clear</code> or the in-app clear action to remove an installed file.</p>
   </section>
 
   <!-- Startup sequence -->
@@ -135,9 +135,8 @@ const jsonLd = {
       <li>Migrate any legacy connection metadata</li>
       <li>Check license state and set product-gating</li>
       <li>Load any previously configured provider connection</li>
-      <li>If licensed and connected: start the workbook sync thread</li>
-      <li>Start the repo-scan thread</li>
-      <li>Start the test-results inbox-polling thread</li>
+      <li>If licensed and connected: start the workbook sync thread, repo-scan thread, and test-results inbox-polling thread</li>
+      <li>If unlicensed and connected: keep licensed routes gated and allow preview-mode workbook sync only</li>
       <li>Select a free loopback port (8000–8010)</li>
       <li>Store the selected port in config</li>
       <li>Optionally open the browser</li>
@@ -224,7 +223,7 @@ const jsonLd = {
   <section class="mb-12 border-t border-[#DDDDDD] pt-10">
     <h2 class="text-2xl font-bold text-[#1A1A2E] mb-4" style="font-family: var(--font-family-display);">Credential security</h2>
     <p class="text-[#555555] text-sm mb-4">Live does not store provider secrets in the SQLite database. Secrets are held in the platform-native secure store:</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">macOS</h3>
         <p class="text-[#555555] text-sm m-0">Keychain-backed secure storage</p>
@@ -232,6 +231,10 @@ const jsonLd = {
       <div class="p-4 border border-[#DDDDDD] rounded-lg">
         <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Windows</h3>
         <p class="text-[#555555] text-sm m-0">DPAPI-backed encrypted blob storage</p>
+      </div>
+      <div class="p-4 border border-[#DDDDDD] rounded-lg">
+        <h3 class="text-sm font-bold text-[#1A1A2E] mb-1">Linux</h3>
+        <p class="text-[#555555] text-sm m-0">No supported secure-store backend yet. Direct runtime preview works, but workbook credential persistence is currently out of scope.</p>
       </div>
     </div>
     <p class="text-[#555555] text-sm">SQLite stores only non-secret metadata: provider type, workbook URL, display label, and a credential reference. The secret payload never touches the database file.</p>

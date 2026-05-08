@@ -54,14 +54,14 @@ const jsonLd = {
         <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#1A1A2E] text-white text-xs font-bold">1</span>
         <div>
           <strong class="text-[#1A1A2E] text-sm block mb-0.5">Native shell</strong>
-          <p class="text-[#555555] text-sm m-0">A menu-bar app (macOS) or system tray app (Windows) that manages the runtime process: start/stop, launch-at-login, crash restart, and license gate. It is not the product UI.</p>
+          <p class="text-[#555555] text-sm m-0">A menu-bar app (macOS) or system tray app (Windows) that manages the runtime process: start/stop, launch-at-login, crash restart, and license state. It can run unlicensed in preview mode and restart the runtime into licensed mode after a valid license import. It is not the product UI.</p>
         </div>
       </div>
       <div class="flex gap-4 items-start p-4 border border-[#DDDDDD] rounded-lg">
         <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#1A1A2E] text-white text-xs font-bold">2</span>
         <div>
           <strong class="text-[#1A1A2E] text-sm block mb-0.5">Local runtime (<code style="font-family: var(--font-family-mono); font-size: 0.8125rem;">rtmify-live</code>)</strong>
-          <p class="text-[#555555] text-sm m-0">The core process. Owns SQLite graph persistence, workbook sync, status write-back, repo scanning, test-results ingestion, report generation, and MCP. Binds exclusively to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">127.0.0.1</code>.</p>
+          <p class="text-[#555555] text-sm m-0">The core process. Owns SQLite graph persistence, workbook sync, status write-back, repo scanning, test-results ingestion, report generation, and MCP. Binds exclusively to <code style="font-family: var(--font-family-mono); font-size: 0.8125rem; background: #F5F5F5; padding: 0 0.3rem; border-radius: 0.2rem;">127.0.0.1</code>. On Linux today, this runtime is the distribution path; there is no native shell.</p>
         </div>
       </div>
       <div class="flex gap-4 items-start p-4 border border-[#DDDDDD] rounded-lg">
