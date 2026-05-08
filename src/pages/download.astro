@@ -66,6 +66,8 @@ function productLabel(product: string): string {
 
 function kindLabel(kind: string): string {
   switch (kind) {
+    case 'dmg':
+      return '.dmg disk image';
     case 'pkg':
       return '.pkg installer';
     case 'exe':
@@ -78,11 +80,11 @@ function kindLabel(kind: string): string {
 }
 
 const downloadManifest = loadDownloadManifest();
-const installerKindOrder = { pkg: 0, exe: 1, 'tar.gz': 2 };
+const installerKindOrder = { dmg: 0, pkg: 1, exe: 2, 'tar.gz': 3 };
 const platformOrder = { macos: 0, windows: 1, linux: 2, any: 3 };
 
 const installerAssets = downloadManifest.assets
-  .filter((asset) => ['pkg', 'exe', 'tar.gz'].includes(asset.kind) && ['trace', 'live'].includes(asset.product))
+  .filter((asset) => ['dmg', 'pkg', 'exe', 'tar.gz'].includes(asset.kind) && ['trace', 'live'].includes(asset.product))
   .sort((left, right) => {
     const leftPlatform = platformOrder[left.platform as keyof typeof platformOrder] ?? 9;
     const rightPlatform = platformOrder[right.platform as keyof typeof platformOrder] ?? 9;
