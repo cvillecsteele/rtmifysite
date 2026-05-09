@@ -15,6 +15,14 @@ type DownloadAsset = {
   kind: string;
   sha256: string;
   url: string;
+  plausible?: {
+    eventName?: string;
+    file?: string;
+    product?: string;
+    platform?: string;
+    kind?: string;
+    version?: string;
+  };
 };
 
 type DownloadManifest = {
@@ -77,6 +85,30 @@ function kindLabel(kind: string): string {
     default:
       return kind;
   }
+}
+
+function plausibleValue(value: string): string {
+  return encodeURIComponent(value).replaceAll('%20', '+');
+}
+
+function binaryDownloadTrackingClass(asset: DownloadAsset): string {
+  const plausible = asset.plausible ?? {
+    eventName: plausibleValue('Download Binary'),
+    file: plausibleValue(asset.filename),
+    product: plausibleValue(asset.product),
+    platform: plausibleValue(asset.platform),
+    kind: plausibleValue(asset.kind),
+    version: plausibleValue(asset.version),
+  };
+
+  return [
+    `plausible-event-name=${plausible.eventName ?? plausibleValue('Download Binary')}`,
+    `plausible-event-file=${plausible.file ?? plausibleValue(asset.filename)}`,
+    `plausible-event-product=${plausible.product ?? plausibleValue(asset.product)}`,
+    `plausible-event-platform=${plausible.platform ?? plausibleValue(asset.platform)}`,
+    `plausible-event-kind=${plausible.kind ?? plausibleValue(asset.kind)}`,
+    `plausible-event-version=${plausible.version ?? plausibleValue(asset.version)}`,
+  ].join(' ');
 }
 
 const downloadManifest = loadDownloadManifest();
@@ -172,7 +204,7 @@ const softwareSchema = {
                   </div>
                   <a
                     href={asset.url}
-                    class="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#1A1A2E] text-white font-semibold hover:bg-[#2A2A4E] transition-colors"
+                    class={`inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#1A1A2E] text-white font-semibold hover:bg-[#2A2A4E] transition-colors ${binaryDownloadTrackingClass(asset)}`}
                   >
                     Download
                   </a>
